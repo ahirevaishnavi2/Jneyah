@@ -1,0 +1,687 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Threat Detector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 2.8rem;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+         font-size: 2.5rem;
+         margin-bottom: 10px;
+         color: #00d4ff;  /* Simple color instead of gradient */
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-section, .output-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            font-size: 1.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .message-type {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .type-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .type-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(90deg, #00d4ff, #0099ff);
+            color: white;
+            flex: 1;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .clear-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .clear-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .result-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .threat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #00d4ff;
+        }
+
+        .threat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .threat-category {
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .safe { background: linear-gradient(90deg, #00ff88, #00cc66); }
+        .phishing { background: linear-gradient(90deg, #ff9900, #ff6600); }
+        .scam { background: linear-gradient(90deg, #ff3366, #cc0066); }
+        .harassment { background: linear-gradient(90deg, #ff3333, #cc0000); }
+        .malware { background: linear-gradient(90deg, #9933ff, #6600cc); }
+        .fraud { background: linear-gradient(90deg, #ff33cc, #cc0099); }
+
+        .risk-meter {
+            margin: 25px 0;
+        }
+
+        .risk-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .meter-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .low-risk { background: linear-gradient(90deg, #00ff88, #00cc66); }
+        .medium-risk { background: linear-gradient(90deg, #ff9900, #ff6600); }
+        .high-risk { background: linear-gradient(90deg, #ff3333, #cc0000); }
+
+        .confidence-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .keyword {
+            padding: 8px 15px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .explanation {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .test-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .test-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.7;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .api-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-online {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+        }
+
+        .status-offline {
+            background: rgba(255, 51, 51, 0.2);
+            border: 1px solid #ff3333;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .online { background: #00ff88; box-shadow: 0 0 10px #00ff88; }
+        .offline { background: #ff3333; box-shadow: 0 0 10px #ff3333; }
+    </style>
+</head>
+<body>
+    <!-- API Status Indicator -->
+    <div class="api-status status-online" id="apiStatus">
+        <div class="status-dot online"></div>
+        <span>API Connected</span>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1>Cyber Threat Detector</h1>
+            <p class="tagline">AI-Powered Security for SMS, Email & Social Media Messages</p>
+            <p>Detect phishing, scams, harassment, malware, and fraud in real-time</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h2><i class="fas fa-comment-alt"></i> Enter Your Message</h2>
+                
+                <textarea id="messageInput" placeholder="Paste or type your SMS, WhatsApp, Email, or Social Media message here..."></textarea>
+                
+                <div class="message-type">
+                    <div class="type-btn" onclick="setMessage('SMS')">SMS</div>
+                    <div class="type-btn" onclick="setMessage('WhatsApp')">WhatsApp</div>
+                    <div class="type-btn" onclick="setMessage('Email')">Email</div>
+                    <div class="type-btn" onclick="setMessage('Social Media')">Social Media</div>
+                </div>
+
+                <div class="controls">
+                    <button class="analyze-btn" onclick="analyzeMessage()">
+                        <i class="fas fa-search"></i> Analyze Threat
+                    </button>
+                    <button class="clear-btn" onclick="clearMessage()">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+
+                <!-- Test Messages -->
+                <h3 style="margin-top: 30px; color: #00d4ff;">
+                    <i class="fas fa-vial"></i> Quick Test Messages
+                </h3>
+                <div class="test-buttons">
+                    <div class="test-btn" onclick="loadTestMessage(0)">Phishing</div>
+                    <div class="test-btn" onclick="loadTestMessage(1)">Scam</div>
+                    <div class="test-btn" onclick="loadTestMessage(2)">Harassment</div>
+                    <div class="test-btn" onclick="loadTestMessage(3)">Malware</div>
+                    <div class="test-btn" onclick="loadTestMessage(4)">Fraud</div>
+                    <div class="test-btn" onclick="loadTestMessage(5)">Safe</div>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div class="output-section">
+                <h2><i class="fas fa-chart-bar"></i> Threat Analysis Result</h2>
+                
+                <!-- Loading Spinner -->
+                <div class="loading" id="loadingSpinner">
+                    <div class="spinner"></div>
+                    <p>Analyzing message for threats...</p>
+                    <p style="font-size: 12px; opacity: 0.7; margin-top: 10px;">
+                        Checking for phishing, scams, harassment, malware, and fraud patterns
+                    </p>
+                </div>
+
+                <!-- Results Container -->
+                <div class="result-container" id="resultContainer">
+                    <div class="threat-card">
+                        <div class="threat-header">
+                            <div>
+                                <div class="threat-category" id="threatCategory">SAFE</div>
+                                <div style="margin-top: 10px; font-size: 14px; opacity: 0.8;">
+                                    <i class="fas fa-clock"></i> Analyzed just now
+                                </div>
+                            </div>
+                            <div class="confidence-badge" id="confidenceBadge">
+                                <i class="fas fa-bullseye"></i> 95% Confidence
+                            </div>
+                        </div>
+
+                        <!-- Risk Meter -->
+                        <div class="risk-meter">
+                            <div class="risk-label">
+                                <span>Risk Level</span>
+                                <span id="riskScore">10/100</span>
+                            </div>
+                            <div class="meter-bar">
+                                <div class="meter-fill low-risk" id="riskMeter" style="width: 10%"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 5px;">
+                                <span>Low</span>
+                                <span>Medium</span>
+                                <span>High</span>
+                            </div>
+                        </div>
+
+                        <!-- Keywords Found -->
+                        <div>
+                            <h3 style="color: #00d4ff; margin-bottom: 15px;">
+                                <i class="fas fa-key"></i> Threat Indicators Found
+                            </h3>
+                            <div class="keywords" id="keywordsContainer">
+                                <!-- Keywords will appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Explanation -->
+                        <div class="explanation" id="explanationText">
+                            <strong><i class="fas fa-info-circle"></i> Analysis:</strong><br>
+                            No threats detected. This message appears safe.
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                        <h3 style="color: #00d4ff; margin-bottom: 15px;">
+                            <i class="fas fa-chart-line"></i> Detection Statistics
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                            <div>
+                                <div style="font-size: 12px; opacity: 0.7;">ML Model Accuracy</div>
+                                <div style="font-size: 24px; color: #00ff88;">99.8%</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 12px; opacity: 0.7;">Trained Samples</div>
+                                <div style="font-size: 24px; color: #00d4ff;">5,572</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Initial State -->
+                <div id="initialState" style="text-align: center; padding: 60px 20px;">
+                    <i class="fas fa-search" style="font-size: 60px; color: rgba(255, 255, 255, 0.2); margin-bottom: 20px;"></i>
+                    <h3 style="color: #00d4ff; margin-bottom: 15px;">Ready to Analyze</h3>
+                    <p style="opacity: 0.7;">Enter a message and click "Analyze Threat" to detect phishing, scams, harassment, malware, or fraud.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Cyber Threat Detection System | Powered by Machine Learning & AI</p>
+            <p style="margin-top: 10px; font-size: 12px;">
+                <i class="fas fa-server"></i> API: http://localhost:8000 | 
+                <i class="fas fa-database"></i> Model: 99.8% Accuracy |
+                <i class="fas fa-shield-alt"></i> 6 Threat Categories
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Your API URL - Change if needed
+        const API_URL = 'http://localhost:8000';
+        
+        // Test messages matching your backend test samples
+        const testMessages = [
+            "Free entry to win $1000 prize! Call now",
+            "VERIFY YOUR BANK ACCOUNT NOW: http://bit.ly/bank-secure", 
+            "I will hurt you tomorrow, you worthless piece of garbage",
+            "Download invoice.exe to view your document",
+            "Your SSN 123-45-6789 needs verification immediately",
+            "Hello, meeting at 3pm tomorrow in room 5"
+        ];
+
+        // Check API connection on load
+        window.onload = function() {
+            checkApiConnection();
+        };
+
+        // Check if API is running
+        async function checkApiConnection() {
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    document.getElementById('apiStatus').className = 'api-status status-online';
+                    document.querySelector('#apiStatus .status-dot').className = 'status-dot online';
+                    document.querySelector('#apiStatus span').textContent = 'API Connected';
+                } else {
+                    throw new Error('API not responding');
+                }
+            } catch (error) {
+                document.getElementById('apiStatus').className = 'api-status status-offline';
+                document.querySelector('#apiStatus .status-dot').className = 'status-dot offline';
+                document.querySelector('#apiStatus span').textContent = 'API Disconnected';
+                alert('⚠️ Warning: Backend API is not running!\n\nPlease make sure:\n1. Backend server is running (python main.py)\n2. API is available at: ' + API_URL);
+            }
+        }
+
+        // Load test message
+        function loadTestMessage(index) {
+            if (index >= 0 && index < testMessages.length) {
+                document.getElementById('messageInput').value = testMessages[index];
+            }
+        }
+
+        // Set message type prefix
+        function setMessage(type) {
+            const textarea = document.getElementById('messageInput');
+            const prefixes = {
+                'SMS': '📱 SMS: ',
+                'WhatsApp': '💬 WhatsApp: ',
+                'Email': '📧 Email: ',
+                'Social Media': '🌐 Social Media: '
+            };
+            
+            if (!textarea.value.startsWith(prefixes[type])) {
+                textarea.value = prefixes[type] + textarea.value.replace(/^(📱|💬|📧|🌐)\s*\S+:\s*/, '');
+            }
+        }
+
+        // Clear message
+        function clearMessage() {
+            document.getElementById('messageInput').value = '';
+            showInitialState();
+        }
+
+        // Show initial state
+        function showInitialState() {
+            document.getElementById('initialState').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+        }
+
+        // Show loading
+        function showLoading() {
+            document.getElementById('initialState').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+        }
+
+        // Show results
+        function showResults() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        // Main analysis function
+        async function analyzeMessage() {
+            const message = document.getElementById('messageInput').value.trim();
+            
+            if (!message) {
+                alert('Please enter a message to analyze.');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                // Call YOUR API
+                const response = await fetch(`${API_URL}/analyze?text=${encodeURIComponent(message)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                // Update UI with results
+                updateUI(result);
+                showResults();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('initialState').style.display = 'block';
+                
+                alert('❌ Error analyzing message:\n\n' + error.message + 
+                      '\n\nPlease ensure:\n1. Backend server is running\n2. API is accessible at: ' + API_URL);
+            }
+        }
+
+        // Update UI with analysis results
+        function updateUI(result) {
+            // Threat Category
+            const category = result.threat_category.toUpperCase();
+            document.getElementById('threatCategory').textContent = category;
+            document.getElementById('threatCategory').className = 'threat-category ' + result.threat_category.toLowerCase();
+            
+            // Risk Score
+            const riskScore = result.risk_score;
+            document.getElementById('riskScore').textContent = riskScore + '/100';
+            
+            // Risk Meter
+            const riskMeter = document.getElementById('riskMeter');
+            riskMeter.style.width = riskScore + '%';
+            
+            // Set risk color
+            if (riskScore <= 30) {
+                riskMeter.className = 'meter-fill low-risk';
+            } else if (riskScore <= 70) {
+                riskMeter.className = 'meter-fill medium-risk';
+            } else {
+                riskMeter.className = 'meter-fill high-risk';
+            }
+            
+            // Confidence
+            document.getElementById('confidenceBadge').innerHTML = 
+                `<i class="fas fa-bullseye"></i> ${result.confidence}% Confidence`;
+            
+            // Keywords
+            const keywordsContainer = document.getElementById('keywordsContainer');
+            keywordsContainer.innerHTML = '';
+            
+            if (result.keywords_found && result.keywords_found.length > 0) {
+                result.keywords_found.forEach(keyword => {
+                    const keywordElement = document.createElement('div');
+                    keywordElement.className = 'keyword';
+                    keywordElement.textContent = keyword;
+                    keywordsContainer.appendChild(keywordElement);
+                });
+            } else {
+                keywordsContainer.innerHTML = 
+                    '<div style="opacity: 0.7; font-style: italic;">No specific keywords detected</div>';
+            }
+            
+            // Explanation
+            document.getElementById('explanationText').innerHTML = 
+                `<strong><i class="fas fa-info-circle"></i> Analysis:</strong><br>` + 
+                result.explanation;
+        }
+
+        // Keyboard shortcut: Ctrl+Enter to analyze
+        document.getElementById('messageInput').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                analyzeMessage();
+            }
+        });
+    </script>
+</body>
+</html>
