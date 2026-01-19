@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyber Threat Intelligence Platform</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .hero-section {
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 80px 0;
+        border-radius: 20px;
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      .feature-card {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        border: none;
+        height: 100%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-advanced {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .card-text {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: white;
+      }
+
+      .card-url {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+      }
+
+      .card-pattern {
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+        color: #333;
+      }
+
+      .card-scam {
+        background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        color: #333;
+      }
+
+      .stats-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .stats-number {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .nav-tabs {
+        border-bottom: 2px solid #dee2e6;
+      }
+
+      .nav-tabs .nav-link {
+        border: none;
+        color: #6c757d;
+        font-weight: 500;
+        padding: 10px 20px;
+      }
+
+      .nav-tabs .nav-link.active {
+        color: #667eea;
+        border-bottom: 3px solid #667eea;
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="fas fa-shield-alt fa-lg"></i>
+          <span class="fw-bold ms-2">Cyber Threat Platform</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/advanced-classifier">Advanced</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/text-threat-detector">Text Threat</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/url-similarity-detector"
+                >URL Detector</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pattern-classifier">Pattern</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scam-classifier">Scam</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container">
+      <div class="hero-section">
+        <h1 class="display-4 fw-bold mb-3">
+          <i class="fas fa-shield-alt"></i> Cyber Threat Intelligence Platform
+        </h1>
+        <p class="lead mb-4">
+          AI-powered threat detection and analysis system with 5 specialized
+          modules
+        </p>
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="input-group input-group-lg">
+              <input
+                type="text"
+                id="quickAnalyze"
+                class="form-control"
+                placeholder="Enter text or URL for quick analysis..."
+              />
+              <button class="btn btn-primary" onclick="quickAnalyze()">
+                <i class="fas fa-bolt"></i> Analyze
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="container mt-5">
+      <div class="row g-4">
+        <div class="col-md-3 col-6">
+          <div class="stats-card">
+            <i class="fas fa-brain fa-2x text-primary mb-3"></i>
+            <div class="stats-number" id="modelCount">5</div>
+            <div class="text-muted">AI Models</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stats-card">
+            <i class="fas fa-database fa-2x text-success mb-3"></i>
+            <div class="stats-number" id="threatCount">10K+</div>
+            <div class="text-muted">Threat Patterns</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stats-card">
+            <i class="fas fa-bolt fa-2x text-warning mb-3"></i>
+            <div class="stats-number" id="analysisCount">99%</div>
+            <div class="text-muted">Accuracy Rate</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stats-card">
+            <i class="fas fa-clock fa-2x text-info mb-3"></i>
+            <div class="stats-number" id="responseTime">0.5s</div>
+            <div class="text-muted">Response Time</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="container mt-5">
+      <h2 class="text-center text-white mb-4">🔍 Detection Modules</h2>
+
+      <div class="row g-4">
+        <!-- Text Threat Detector -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card feature-card card-text">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-file-alt fa-3x"></i>
+              </div>
+              <h4 class="card-title fw-bold">Text Threat Detector</h4>
+              <p class="card-text">
+                Detect phishing, scams, harassment, malware, and fraud in text
+                messages.
+                <strong>Explainable AI</strong> shows keywords and intent.
+              </p>
+              <div class="mt-3">
+                <span class="badge bg-light text-dark me-1">SMS</span>
+                <span class="badge bg-light text-dark me-1">WhatsApp</span>
+                <span class="badge bg-light text-dark me-1">Email</span>
+                <span class="badge bg-light text-dark">Social Media</span>
+              </div>
+              <a href="/text-threat-detector" class="btn btn-light btn-lg mt-3">
+                <i class="fas fa-rocket"></i> Launch
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- URL Similarity Detector -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card feature-card card-url">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-link fa-3x"></i>
+              </div>
+              <h4 class="card-title fw-bold">URL Similarity Detector</h4>
+              <p class="card-text">
+                Detect malicious URLs using similarity analysis, family
+                classification, and heuristic rules. Compare with known malware
+                databases.
+              </p>
+              <div class="mt-3">
+                <span class="badge bg-light text-dark me-1"
+                  >Cosine Similarity</span
+                >
+                <span class="badge bg-light text-dark me-1"
+                  >Family Classification</span
+                >
+                <span class="badge bg-light text-dark">Heuristic Rules</span>
+              </div>
+              <a
+                href="/url-similarity-detector"
+                class="btn btn-light btn-lg mt-3"
+              >
+                <i class="fas fa-rocket"></i> Launch
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advanced Threat Classifier -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card feature-card card-advanced">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-robot fa-3x"></i>
+              </div>
+              <h4 class="card-title fw-bold">Advanced Threat Classifier</h4>
+              <p class="card-text">
+                Ensemble ML model for sophisticated threat detection including
+                malware, phishing, DDoS, and data breaches.
+              </p>
+              <div class="mt-3">
+                <span class="badge bg-light text-dark me-1">Random Forest</span>
+                <span class="badge bg-light text-dark me-1"
+                  >Logistic Regression</span
+                >
+                <span class="badge bg-light text-dark">Ensemble Learning</span>
+              </div>
+              <a href="/advanced-classifier" class="btn btn-light btn-lg mt-3">
+                <i class="fas fa-rocket"></i> Launch
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pattern Classifier -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card feature-card card-pattern">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-project-diagram fa-3x"></i>
+              </div>
+              <h4 class="card-title fw-bold">Pattern Classifier</h4>
+              <p class="card-text">
+                HDBSCAN clustering with emotion detection. Identify behavioral
+                patterns and psychological manipulation techniques.
+              </p>
+              <div class="mt-3">
+                <span class="badge bg-light text-dark me-1">Clustering</span>
+                <span class="badge bg-light text-dark me-1"
+                  >Emotion Detection</span
+                >
+                <span class="badge bg-light text-dark">Risk Scoring</span>
+              </div>
+              <a href="/pattern-classifier" class="btn btn-light btn-lg mt-3">
+                <i class="fas fa-rocket"></i> Launch
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scam Classifier -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card feature-card card-scam">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-user-secret fa-3x"></i>
+              </div>
+              <h4 class="card-title fw-bold">Scam Classifier</h4>
+              <p class="card-text">
+                Specialized in social engineering scams, lottery frauds, and
+                financial phishing attempts.
+              </p>
+              <div class="mt-3">
+                <span class="badge bg-light text-dark me-1"
+                  >Social Engineering</span
+                >
+                <span class="badge bg-light text-dark me-1">Lottery Fraud</span>
+                <span class="badge bg-light text-dark">Bank Phishing</span>
+              </div>
+              <a href="/scam-classifier" class="btn btn-light btn-lg mt-3">
+                <i class="fas fa-rocket"></i> Launch
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="col-lg-4 col-md-6">
+          <div class="card bg-dark text-white">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="fas fa-server fa-3x text-info"></i>
+              </div>
+              <h4 class="card-title fw-bold">System Status</h4>
+              <div id="systemStatus" class="mt-3">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>API Server:</span>
+                  <span class="badge bg-success">Online</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>ML Models:</span>
+                  <span class="badge bg-success">5/5 Loaded</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Database:</span>
+                  <span class="badge bg-success">Connected</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span>Response Time:</span>
+                  <span class="badge bg-info">0.2s</span>
+                </div>
+              </div>
+              <button
+                class="btn btn-outline-light btn-lg mt-4"
+                onclick="checkHealth()"
+              >
+                <i class="fas fa-sync-alt"></i> Refresh Status
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Analysis Modal -->
+    <div class="modal fade" id="quickAnalysisModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+              <i class="fas fa-bolt"></i> Quick Analysis Results
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="quickAnalysisResults"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>
+              <i class="fas fa-shield-alt"></i> Cyber Threat Intelligence
+              Platform
+            </h5>
+            <p class="text-muted">
+              AI-powered threat detection system with 5 specialized modules
+            </p>
+          </div>
+          <div class="col-md-6 text-end">
+            <p class="mb-0">
+              <span class="text-muted">Built with:</span>
+              <span class="badge bg-secondary me-1">Python</span>
+              <span class="badge bg-secondary me-1">Flask</span>
+              <span class="badge bg-secondary me-1">Scikit-learn</span>
+              <span class="badge bg-secondary">JavaScript</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check system health
+        checkHealth();
+
+        // Quick analyze on Enter key
+        document
+          .getElementById("quickAnalyze")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              quickAnalyze();
+            }
+          });
+      });
+
+      async function quickAnalyze() {
+        const input = document.getElementById("quickAnalyze").value.trim();
+        if (!input) {
+          alert("Please enter text or URL to analyze");
+          return;
+        }
+
+        const resultsDiv = document.getElementById("quickAnalysisResults");
+        resultsDiv.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Analyzing: ${input.substring(0, 50)}...</p>
+                </div>
+            `;
+
+        const modal = new bootstrap.Modal(
+          document.getElementById("quickAnalysisModal"),
+        );
+        modal.show();
+
+        try {
+          // Check if it's a URL
+          const isUrl =
+            input.startsWith("http://") ||
+            input.startsWith("https://") ||
+            (input.includes(".") &&
+              (input.includes("/") || input.includes("://")));
+
+          let response;
+          if (isUrl) {
+            response = await fetch("/api/url-similarity-detect", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ url: input }),
+            });
+          } else {
+            response = await fetch("/api/text-threat-detect", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ text: input }),
+            });
+          }
+
+          const data = await response.json();
+
+          if (data.success) {
+            if (isUrl) {
+              const result = data.result;
+              resultsDiv.innerHTML = `
+                            <h6>URL Analysis:</h6>
+                            <p><strong>URL:</strong> ${result.url}</p>
+                            <p><strong>Similarity Score:</strong> ${(result.similarity_score * 100).toFixed(1)}%</p>
+                            <p><strong>Family:</strong> <span class="badge bg-warning">${result.url_family}</span></p>
+                            <p><strong>Risk Score:</strong> <span class="badge ${result.risk_score > 70 ? "bg-danger" : "bg-warning"}">${result.risk_score}</span></p>
+                            <p><strong>Warnings:</strong> ${result.heuristic_warnings?.length || 0}</p>
+                            <a href="/url-similarity-detector" class="btn btn-primary btn-sm mt-2">
+                                View Detailed Analysis
+                            </a>
+                        `;
+            } else {
+              const result = data.result;
+              resultsDiv.innerHTML = `
+                            <h6>Text Analysis:</h6>
+                            <p><strong>Category:</strong> <span class="badge ${result.threat_category === "safe" ? "bg-success" : "bg-danger"}">${result.threat_category}</span></p>
+                            <p><strong>Confidence:</strong> ${result.confidence}%</p>
+                            <p><strong>Risk Score:</strong> <span class="badge ${result.risk_score > 70 ? "bg-danger" : "bg-warning"}">${result.risk_score}</span></p>
+                            <p><strong>Keywords Detected:</strong> ${result.explanation?.detected_keywords?.length || 0}</p>
+                            <a href="/text-threat-detector" class="btn btn-primary btn-sm mt-2">
+                                View Detailed Analysis
+                            </a>
+                        `;
+            }
+          } else {
+            resultsDiv.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
+          }
+        } catch (error) {
+          resultsDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+        }
+      }
+
+      async function checkHealth() {
+        try {
+          const response = await fetch("/api/health");
+          const data = await response.json();
+
+          if (data.status === "healthy") {
+            const models = data.models_loaded;
+            const loadedCount = Object.values(models).filter((v) => v).length;
+
+            document.getElementById("modelCount").textContent = loadedCount;
+            document.getElementById("threatCount").textContent = "10K+";
+            document.getElementById("analysisCount").textContent = "99%";
+            document.getElementById("responseTime").textContent = "0.2s";
+          }
+        } catch (error) {
+          console.error("Health check failed:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

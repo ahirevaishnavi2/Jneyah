@@ -1,0 +1,194 @@
+(.venv) PS C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\ml_models> python threat_classifier.py
+[nltk_data] Downloading package punkt to C:\Users\VAISHNAVI
+[nltk_data]     AHIRE\AppData\Roaming\nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package stopwords to C:\Users\VAISHNAVI
+[nltk_data]     AHIRE\AppData\Roaming\nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+📂 Loading CSV datasets...
+✅ Added phishing data to training set
+
+📊 Preparing training data...
+✅ Using label column: label
+C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\ml_models\threat_classifier.py:89: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.dropna(inplace=True)
+✅ Training samples: 7001
+📊 Preparing validation data...
+✅ Using label column: label
+C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\ml_models\threat_classifier.py:89: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.dropna(inplace=True)
+✅ Validation samples: 1460
+📊 Preparing test data...
+✅ Using label column: label
+C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\ml_models\threat_classifier.py:89: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.dropna(inplace=True)
+✅ Test samples: 1460
+
+🔢 Label classes: ['DOMAIN', 'EMAIL', 'FILEPATH', 'IPV4', 'Infrastucture', 'MD5', 'REGISTRYKEY', 'SHA1', 'SHA2', 'SOFTWARE', 'TIME', 'URL', 'attack-pattern', 'campaign', 'identity', 'location', 'malware', 'nan', 'threat-actor', 'tools', 'vulnerability']
+🔢 Training labels distribution: Counter({'nan': 3649, 'malware': 636, 'location': 503, 'attack-pattern': 422, 'SOFTWARE': 411, 'identity': 393, 'threat-actor': 282, 'TIME': 170, 'tools': 132, 'FILEPATH': 106, 'vulnerability': 73, 'SHA2': 51, 'URL': 43, 'campaign': 38, 'IPV4': 22, 'SHA1': 21, 'DOMAIN': 18, 'Infrastucture': 15, 'MD5': 7, 'REGISTRYKEY': 5, 'EMAIL': 4})
+
+🔠 Creating TF-IDF features...
+✅ TF-IDF features created. Vocabulary size: 2708
+
+📊 Class distribution before SMOTE: Counter({np.int64(17): 3649, np.int64(16): 636, np.int64(15): 503, np.int64(12): 422, np.int64(9): 411, np.int64(14): 393, np.int64(18): 282, np.int64(10): 170, np.int64(19): 132, np.int64(2): 106, np.int64(20): 73, np.int64(8): 51, np.int64(11): 43, np.int64(13): 38, np.int64(3): 22, np.int64(7): 21, np.int64(0): 18, np.int64(4): 15, np.int64(5): 7, np.int64(6): 5, np.int64(1): 4})
+📊 Minimum class size: 4
+⚠️ SMOTE skipped (minimum class size = 4 < 5)
+
+🤖 Training Logistic Regression model...
+C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:1184: FutureWarning: 'n_jobs' has no effect since 1.8 and will be removed in 1.10. You provided 'n_jobs=-1', please leave it unspecified.
+  warnings.warn(msg, category=FutureWarning)
+✅ Model training completed!
+
+📈 Evaluating model performance...
+
+📊 Classification Report:
+
+C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\.venv\Lib\site-packages\sklearn\metrics\_classification.py:1833: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\.venv\Lib\site-packages\sklearn\metrics\_classification.py:1833: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\.venv\Lib\site-packages\sklearn\metrics\_classification.py:1833: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", result.shape[0])
+                precision    recall  f1-score   support
+
+        DOMAIN       0.00      0.00      0.00         3
+         EMAIL       0.00      0.00      0.00         4
+      FILEPATH       0.00      0.00      0.00        24
+          IPV4       0.00      0.00      0.00         4
+ Infrastucture       0.00      0.00      0.00         2
+           MD5       0.00      0.00      0.00         1
+   REGISTRYKEY       0.00      0.00      0.00         2
+          SHA1       0.00      0.00      0.00         4
+          SHA2       0.00      0.00      0.00        23
+      SOFTWARE       0.00      0.00      0.00       104
+          TIME       0.02      1.00      0.05        36
+           URL       0.00      0.00      0.00         9
+attack-pattern       0.00      0.00      0.00        80
+      campaign       0.00      0.00      0.00         7
+      identity       0.00      0.00      0.00        79
+      location       0.00      0.00      0.00       103
+       malware       0.00      0.00      0.00       129
+           nan       0.00      0.00      0.00       736
+  threat-actor       0.00      0.00      0.00        67
+         tools       0.00      0.00      0.00        26
+ vulnerability       0.00      0.00      0.00        17
+
+      accuracy                           0.02      1460
+     macro avg       0.00      0.05      0.00      1460
+  weighted avg       0.00      0.02      0.00      1460
+
+
+🎯 Model Accuracy: 0.0247
+
+💾 Saving models and artifacts...
+✅ Model saved to: C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\saved_models\threat_model.pkl
+✅ Vectorizer saved to: C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\saved_models\tfidf.pkl
+✅ Label encoder saved to: C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\saved_models\label_encoder.pkl
+✅ Model metadata saved to: C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\saved_models\model_metadata.json
+
+🎉 Training completed successfully!
+
+
+
+advanced : 
+(.venv) PS C:\Users\VAISHNAVI AHIRE\OneDrive\Desktop\techfest\backend\ml_models> python advanced_classifier.py
+[nltk_data] Downloading package punkt to C:\Users\VAISHNAVI
+[nltk_data]     AHIRE\AppData\Roaming\nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package stopwords to C:\Users\VAISHNAVI
+[nltk_data]     AHIRE\AppData\Roaming\nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+[nltk_data] Downloading package wordnet to C:\Users\VAISHNAVI
+[nltk_data]     AHIRE\AppData\Roaming\nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+
+🚀 Training Advanced Threat Classifier (REAL DATA)
+
+
+📊 Classification Report
+
+                precision    recall  f1-score   support
+
+        DOMAIN       0.18      0.67      0.29         3
+         EMAIL       0.67      0.50      0.57         4
+      FILEPATH       0.42      0.71      0.53        24
+          IPV4       0.50      0.50      0.50         4
+ Infrastucture       0.00      0.00      0.00         2
+           MD5       0.00      0.00      0.00         1
+   REGISTRYKEY       0.40      1.00      0.57         2
+          SHA1       0.33      0.50      0.40         4
+          SHA2       0.40      0.74      0.52        23
+      SOFTWARE       0.54      0.56      0.55       104
+          TIME       0.46      0.58      0.51        36
+           URL       0.55      0.67      0.60         9
+attack-pattern       0.59      0.59      0.59        80
+      campaign       0.27      0.86      0.41         7
+      identity       0.70      0.67      0.68        79
+      location       0.70      0.29      0.41       103
+       malware       0.70      0.48      0.57       129
+  threat-actor       0.59      0.69      0.63        67
+         tools       0.48      0.46      0.47        26
+ vulnerability       0.54      0.88      0.67        17
+
+      accuracy                           0.55       724
+     macro avg       0.45      0.57      0.47       724
+  weighted avg       0.60      0.55      0.55       724
+
+✅ Accuracy: 0.5525
+✅ F1 Score: 0.5520
+
+💾 Model saved successfully
+
+
+
+{
+  "analysis": {
+    "entities_detected": [
+      "FILEPATH"
+    ],
+    "entity": {
+      "all_predictions": {
+        "DOMAIN": 11.193259113646807,
+        "EMAIL": 10.478198998677172,
+        "FILEPATH": 54.55404698109948,
+        "IPV4": 11.805883702077901,
+        "Infrastucture": 11.968611204498641
+      },
+      "confidence": 54.55404698109948,
+      "explanation": "Analysis complete.",
+      "prediction": "FILEPATH",
+      "risk_score": 32,
+      "text": "Your bank account is blocked. Click https://fake-login.com"
+    },
+    "explanation": {
+      "entities_detected": [
+        "⚠️ FILEPATH"
+      ],
+      "highlighted_text": "Your bank account is blocked. Click https://fake-login.com",
+      "reason": "Single suspicious indicator detected"
+    },
+    "risk": {
+      "risk_level": "MEDIUM",
+      "risk_score": 35
+    },
+    "scam": {
+      "confidence": 33.65,
+      "scam_type": "PHISHING"
+    },
+    "text": "Your bank account is blocked. Click https://fake-login.com",
+    "threat_graph": {
+      "edges": [],
+      "nodes": []
+    }
+  },
+  "success": true
+}

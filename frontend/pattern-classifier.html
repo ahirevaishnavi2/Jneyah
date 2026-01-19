@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pattern Classifier</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .emotion-badge {
+        display: inline-block;
+        margin: 2px;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.8em;
+      }
+      .emotion-fear {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .emotion-urgency {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      .emotion-authority {
+        background-color: #d1ecf1;
+        color: #0c5460;
+      }
+      .emotion-reward {
+        background-color: #d4edda;
+        color: #155724;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+      <div class="container">
+        <a class="navbar-brand" href="/">🛡️ Cyber Threat Platform</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/advanced-classifier"
+                >Advanced Classifier</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/pattern-classifier"
+                >Pattern Classifier</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scam-classifier">Scam Classifier</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <div class="card">
+        <div class="card-header bg-warning">
+          <h3 class="mb-0">🎯 Pattern Classifier</h3>
+        </div>
+        <div class="card-body">
+          <p class="text-muted">
+            Cluster analysis with emotion detection and risk scoring
+          </p>
+
+          <div class="mb-3">
+            <label for="inputText" class="form-label"
+              >Enter text for pattern analysis:</label
+            >
+            <textarea
+              id="inputText"
+              class="form-control"
+              rows="5"
+              placeholder="Example: 'Your account will be suspended in 24 hours unless you verify your identity immediately.'"
+            ></textarea>
+          </div>
+
+          <button id="analyzeBtn" class="btn btn-warning">
+            Analyze Pattern
+          </button>
+
+          <div id="result" class="mt-4" style="display: none">
+            <div class="card">
+              <div class="card-header">
+                <h5>Pattern Analysis Results</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Cluster Information</h6>
+                    <table class="table">
+                      <tr>
+                        <th>Cluster:</th>
+                        <td id="clusterResult">-</td>
+                      </tr>
+                      <tr>
+                        <th>Similarity Score:</th>
+                        <td id="similarityResult">-</td>
+                      </tr>
+                      <tr>
+                        <th>Risk Score:</th>
+                        <td id="riskResult">-</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="col-md-6">
+                    <h6>Emotion Detection</h6>
+                    <div id="emotionsResult" class="mt-2"></div>
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <h6>Risk Assessment</h6>
+                  <div class="progress" style="height: 25px">
+                    <div
+                      id="riskBar"
+                      class="progress-bar"
+                      role="progressbar"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                  <small id="riskText" class="text-muted"
+                    >Risk Level: Low</small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="error"
+            class="alert alert-danger mt-3"
+            style="display: none"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const analyzeBtn = document.getElementById("analyzeBtn");
+        const inputText = document.getElementById("inputText");
+        const resultDiv = document.getElementById("result");
+        const errorDiv = document.getElementById("error");
+
+        analyzeBtn.addEventListener("click", async () => {
+          const text = inputText.value.trim();
+          if (!text) {
+            showError("Please enter text to analyze");
+            return;
+          }
+
+          analyzeBtn.disabled = true;
+          analyzeBtn.textContent = "Analyzing...";
+
+          try {
+            const response = await fetch("/api/analyze", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ text }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              displayPatternResults(data);
+            } else {
+              showError(data.error || "Analysis failed");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            showError("Network error. Please try again.");
+          } finally {
+            analyzeBtn.disabled = false;
+            analyzeBtn.textContent = "Analyze Pattern";
+          }
+        });
+
+        function displayPatternResults(data) {
+          console.log("Pattern Analysis Response:", data); // Debug
+
+          const pattern = data.analysis?.pattern || {};
+
+          document.getElementById("clusterResult").textContent =
+            pattern.cluster || "Unknown";
+          document.getElementById("similarityResult").textContent =
+            pattern.similarity || "0";
+          document.getElementById("riskResult").textContent =
+            pattern.risk_score || "0";
+
+          // Display emotions
+          const emotionsDiv = document.getElementById("emotionsResult");
+          const emotions = pattern.detected_emotions || [];
+
+          if (emotions.length > 0) {
+            emotionsDiv.innerHTML = emotions
+              .map(
+                (emotion) =>
+                  `<span class="emotion-badge emotion-${emotion}">${emotion}</span>`,
+              )
+              .join(" ");
+          } else {
+            emotionsDiv.innerHTML =
+              '<span class="text-muted">No strong emotions detected</span>';
+          }
+
+          // Update risk bar
+          const riskScore = pattern.risk_score || 0;
+          const riskBar = document.getElementById("riskBar");
+          const riskText = document.getElementById("riskText");
+
+          riskBar.style.width = `${Math.min(riskScore, 100)}%`;
+
+          if (riskScore > 70) {
+            riskBar.className = "progress-bar bg-danger";
+            riskText.textContent = `Risk Level: Critical (${riskScore})`;
+          } else if (riskScore > 40) {
+            riskBar.className = "progress-bar bg-warning";
+            riskText.textContent = `Risk Level: Medium (${riskScore})`;
+          } else {
+            riskBar.className = "progress-bar bg-success";
+            riskText.textContent = `Risk Level: Low (${riskScore})`;
+          }
+
+          // Show results
+          resultDiv.style.display = "block";
+          errorDiv.style.display = "none";
+        }
+
+        function showError(message) {
+          errorDiv.textContent = message;
+          errorDiv.style.display = "block";
+          resultDiv.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>

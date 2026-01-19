@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Similarity Detector</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --safe: #28a745;
+        --low: #ffc107;
+        --medium: #fd7e14;
+        --high: #dc3545;
+        --critical: #6f42c1;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        min-height: 100vh;
+      }
+
+      .url-card {
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s;
+        border: none;
+      }
+
+      .url-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .similarity-meter {
+        height: 30px;
+        border-radius: 15px;
+        overflow: hidden;
+      }
+
+      .url-family-badge {
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.85em;
+      }
+
+      .family-bank {
+        background: #dc3545;
+        color: white;
+      }
+      .family-crypto {
+        background: #ffc107;
+        color: #000;
+      }
+      .family-job {
+        background: #17a2b8;
+        color: white;
+      }
+      .family-tech {
+        background: #6f42c1;
+        color: white;
+      }
+      .family-phishing {
+        background: #fd7e14;
+        color: white;
+      }
+      .family-malware {
+        background: #343a40;
+        color: white;
+      }
+
+      .warning-badge {
+        background: #ff6b6b;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.75em;
+        margin: 2px;
+      }
+
+      .url-analysis-chip {
+        background: #e9ecef;
+        padding: 8px 15px;
+        margin: 5px;
+        border-radius: 20px;
+        font-size: 0.9em;
+      }
+
+      .domain-part {
+        font-family: "Courier New", monospace;
+        background: #f8f9fa;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin: 0 2px;
+      }
+
+      .similarity-visual {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5em;
+        font-weight: bold;
+        margin: 0 auto;
+      }
+
+      .url-input-group {
+        position: relative;
+      }
+
+      .url-input-group .form-control {
+        padding-left: 45px;
+        font-family: "Courier New", monospace;
+      }
+
+      .url-input-group .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+        z-index: 10;
+      }
+
+      .url-breakdown {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="fas fa-shield-alt"></i> Cyber Threat Platform
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/advanced-classifier">Advanced</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/text-threat-detector">Text Threat</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/url-similarity-detector"
+                >URL Detector</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pattern-classifier">Pattern</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/scam-classifier">Scam</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <!-- Header -->
+      <div class="card bg-dark text-white mb-4">
+        <div class="card-body text-center py-4">
+          <h1 class="display-5 mb-3">
+            <i class="fas fa-link"></i> Malware URL Similarity Detection
+          </h1>
+          <p class="lead mb-0">
+            Detect malicious URLs using similarity analysis, family
+            classification, and heuristic rules
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-8">
+          <!-- URL Input Card -->
+          <div class="card url-card mb-4">
+            <div class="card-header bg-primary text-white">
+              <h4 class="mb-0"><i class="fas fa-search"></i> Analyze URL</h4>
+            </div>
+            <div class="card-body">
+              <div class="mb-4">
+                <label class="form-label fw-bold">Enter suspicious URL:</label>
+                <div class="url-input-group">
+                  <i class="fas fa-link input-icon"></i>
+                  <input
+                    type="text"
+                    id="urlInput"
+                    class="form-control form-control-lg"
+                    placeholder="https://example.com or http://suspicious-site.com/path"
+                  />
+                </div>
+                <div class="mt-2 text-muted small">
+                  <i class="fas fa-info-circle"></i> Supports HTTP, HTTPS, and
+                  common URL formats
+                </div>
+              </div>
+
+              <!-- Batch URL Input -->
+              <div class="mb-4">
+                <label class="form-label fw-bold"
+                  >Or analyze multiple URLs (one per line):</label
+                >
+                <textarea
+                  id="batchUrls"
+                  class="form-control"
+                  rows="3"
+                  placeholder="http://url1.com&#10;https://url2.com&#10;http://url3.com"
+                ></textarea>
+              </div>
+
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="analyzeSingleBtn" class="btn btn-primary btn-lg">
+                  <i class="fas fa-bolt"></i> Analyze Single URL
+                </button>
+                <button
+                  id="analyzeBatchBtn"
+                  class="btn btn-outline-primary btn-lg"
+                >
+                  <i class="fas fa-layer-group"></i> Analyze Batch
+                </button>
+              </div>
+
+              <!-- Loading -->
+              <div id="loading" class="text-center mt-4" style="display: none">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Analyzing URL for malware patterns...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results -->
+          <div id="resultCard" class="card url-card" style="display: none">
+            <div class="card-header bg-success text-white">
+              <h4 class="mb-0">
+                <i class="fas fa-chart-bar"></i> Analysis Results
+              </h4>
+            </div>
+            <div class="card-body">
+              <!-- URL Summary -->
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <div class="p-3 border rounded text-center">
+                    <div class="fw-bold text-muted mb-2">Similarity Score</div>
+                    <div
+                      id="similarityCircle"
+                      class="similarity-visual mx-auto mb-2"
+                    ></div>
+                    <div id="similarityText" class="h5 fw-bold"></div>
+                    <small class="text-muted">vs known malicious URLs</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 border rounded">
+                    <div class="fw-bold text-muted mb-2">
+                      URL Classification
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="me-2">Family:</div>
+                      <div id="urlFamily" class="url-family-badge"></div>
+                    </div>
+                    <div class="mb-2">
+                      <span class="fw-bold">Risk Score:</span>
+                      <span id="riskScore" class="badge ms-2"></span>
+                    </div>
+                    <div class="progress" style="height: 20px">
+                      <div
+                        id="riskBar"
+                        class="progress-bar"
+                        role="progressbar"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- URL Breakdown -->
+              <div class="mb-4">
+                <h5><i class="fas fa-sitemap"></i> URL Structure Breakdown</h5>
+                <div class="url-breakdown">
+                  <span id="urlScheme" class="domain-part"></span>://
+                  <span id="urlSubdomain" class="domain-part"></span>
+                  <span id="urlDomain" class="domain-part fw-bold"></span>.
+                  <span id="urlTld" class="domain-part"></span>
+                  <span id="urlPath" class="domain-part"></span>
+                  <span id="urlQuery" class="domain-part"></span>
+                </div>
+              </div>
+
+              <!-- Heuristic Warnings -->
+              <div class="mb-4">
+                <h5>
+                  <i class="fas fa-exclamation-triangle"></i> Heuristic Warnings
+                </h5>
+                <div id="warningsList" class="d-flex flex-wrap"></div>
+                <div id="noWarnings" class="text-success" style="display: none">
+                  <i class="fas fa-check-circle"></i> No heuristic warnings
+                  detected
+                </div>
+              </div>
+
+              <!-- Similar URLs -->
+              <div class="mb-4">
+                <h5><i class="fas fa-clone"></i> Similar Malicious URLs</h5>
+                <div id="similarUrlsList" class="list-group"></div>
+                <div
+                  id="noSimilarUrls"
+                  class="text-muted"
+                  style="display: none"
+                >
+                  No similar malicious URLs found in database
+                </div>
+              </div>
+
+              <!-- Domain Behavior Analysis -->
+              <div class="mb-4">
+                <h5>
+                  <i class="fas fa-chart-line"></i> Domain Behavior Analysis
+                </h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <table class="table table-sm">
+                      <tr>
+                        <th>SSL Security:</th>
+                        <td id="sslRisk"></td>
+                      </tr>
+                      <tr>
+                        <th>Domain Reputation:</th>
+                        <td id="reputationRisk"></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="col-md-6">
+                    <table class="table table-sm">
+                      <tr>
+                        <th>Typosquatting Risk:</th>
+                        <td id="typoRisk"></td>
+                      </tr>
+                      <tr>
+                        <th>Subdomain Analysis:</th>
+                        <td id="subdomainRisk"></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Technical Analysis -->
+              <div class="mb-4">
+                <h5><i class="fas fa-microscope"></i> Technical Analysis</h5>
+                <div id="technicalAnalysis" class="d-flex flex-wrap"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Batch Results -->
+          <div id="batchResultCard" class="card url-card" style="display: none">
+            <div class="card-header bg-info text-white">
+              <h4 class="mb-0">
+                <i class="fas fa-layer-group"></i> Batch Analysis Results
+              </h4>
+            </div>
+            <div class="card-body">
+              <div id="batchResultsTable"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+          <!-- Sample URLs -->
+          <div class="card url-card mb-4">
+            <div class="card-header bg-warning text-dark">
+              <h5 class="mb-0"><i class="fas fa-vial"></i> Test URLs</h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group">
+                <a
+                  href="#"
+                  class="list-group-item list-group-item-action sample-url"
+                  data-url="http://bank-verify-secure.com/login"
+                >
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Bank Scam</h6>
+                    <small class="text-danger">High Risk</small>
+                  </div>
+                  <small>Fake bank login page</small>
+                </a>
+                <a
+                  href="#"
+                  class="list-group-item list-group-item-action sample-url"
+                  data-url="https://free-bitcoin-generator.com"
+                >
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Crypto Scam</h6>
+                    <small class="text-danger">High Risk</small>
+                  </div>
+                  <small>Fake Bitcoin generator</small>
+                </a>
+                <a
+                  href="#"
+                  class="list-group-item list-group-item-action sample-url"
+                  data-url="http://microsoft-support-center.com/help"
+                >
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Tech Support</h6>
+                    <small class="text-warning">Medium Risk</small>
+                  </div>
+                  <small>Fake Microsoft support</small>
+                </a>
+                <a
+                  href="#"
+                  class="list-group-item list-group-item-action sample-url"
+                  data-url="https://job-hiring-now.com/apply"
+                >
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Job Scam</h6>
+                    <small class="text-warning">Medium Risk</small>
+                  </div>
+                  <small>Fake job application</small>
+                </a>
+                <a
+                  href="#"
+                  class="list-group-item list-group-item-action sample-url"
+                  data-url="bit.ly/suspicious-offer"
+                >
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">URL Shortener</h6>
+                    <small class="text-danger">High Risk</small>
+                  </div>
+                  <small>Shortened malicious link</small>
+                </a>
+                <a
+                  href="#"
+                  class="list-group-item list-group-item-action sample-url"
+                  data-url="https://google.com"
+                >
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Legitimate Site</h6>
+                    <small class="text-success">Low Risk</small>
+                  </div>
+                  <small>Known legitimate domain</small>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- URL Families -->
+          <div class="card url-card">
+            <div class="card-header bg-info text-white">
+              <h5 class="mb-0"><i class="fas fa-tags"></i> URL Families</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <span class="badge family-bank me-1 mb-1">Bank Scam</span>
+                <span class="badge family-crypto me-1 mb-1">Crypto Scam</span>
+                <span class="badge family-job me-1 mb-1">Job Scam</span>
+                <span class="badge family-tech me-1 mb-1">Tech Support</span>
+                <span class="badge family-phishing me-1 mb-1">Phishing</span>
+                <span class="badge family-malware me-1 mb-1">Malware</span>
+              </div>
+              <p class="small text-muted mb-0">
+                <i class="fas fa-lightbulb"></i> Each family has specific
+                patterns and keywords that help identify malicious URLs.
+              </p>
+            </div>
+          </div>
+
+          <!-- Database Info -->
+          <div class="card url-card mt-4">
+            <div class="card-header bg-secondary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-database"></i> Detection Database
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-2">
+                <span>Known Malicious URLs:</span>
+                <span class="fw-bold" id="maliciousCount">Loading...</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>URL Families:</span>
+                <span class="fw-bold">6</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span>Last Updated:</span>
+                <span class="fw-bold">Today</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlInput = document.getElementById("urlInput");
+        const batchUrls = document.getElementById("batchUrls");
+        const analyzeSingleBtn = document.getElementById("analyzeSingleBtn");
+        const analyzeBatchBtn = document.getElementById("analyzeBatchBtn");
+        const resultCard = document.getElementById("resultCard");
+        const batchResultCard = document.getElementById("batchResultCard");
+        const loadingDiv = document.getElementById("loading");
+
+        // Load sample URLs
+        document.querySelectorAll(".sample-url").forEach((item) => {
+          item.addEventListener("click", function (e) {
+            e.preventDefault();
+            urlInput.value = this.getAttribute("data-url");
+            batchUrls.value = "";
+          });
+        });
+
+        // Analyze single URL
+        analyzeSingleBtn.addEventListener("click", async function () {
+          const url = urlInput.value.trim();
+
+          if (!url) {
+            alert("Please enter a URL to analyze");
+            return;
+          }
+
+          analyzeURL(url);
+        });
+
+        // Analyze batch URLs
+        analyzeBatchBtn.addEventListener("click", async function () {
+          const urlsText = batchUrls.value.trim();
+
+          if (!urlsText) {
+            alert("Please enter URLs to analyze");
+            return;
+          }
+
+          const urls = urlsText
+            .split("\n")
+            .filter((url) => url.trim().length > 0);
+
+          if (urls.length === 0) {
+            alert("No valid URLs found");
+            return;
+          }
+
+          if (urls.length > 10) {
+            alert("Maximum 10 URLs allowed for batch analysis");
+            return;
+          }
+
+          analyzeBatchURLs(urls);
+        });
+
+        async function analyzeURL(url) {
+          // Show loading
+          loadingDiv.style.display = "block";
+          resultCard.style.display = "none";
+          batchResultCard.style.display = "none";
+          analyzeSingleBtn.disabled = true;
+          analyzeSingleBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+
+          try {
+            const response = await fetch("/api/url-similarity-detect", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ url: url }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              displayResults(data);
+            } else {
+              throw new Error(data.error || "Analysis failed");
+            }
+          } catch (error) {
+            alert("Error: " + error.message);
+          } finally {
+            loadingDiv.style.display = "none";
+            analyzeSingleBtn.disabled = false;
+            analyzeSingleBtn.innerHTML =
+              '<i class="fas fa-bolt"></i> Analyze Single URL';
+          }
+        }
+
+        async function analyzeBatchURLs(urls) {
+          // Show loading
+          loadingDiv.style.display = "block";
+          resultCard.style.display = "none";
+          batchResultCard.style.display = "none";
+          analyzeBatchBtn.disabled = true;
+          analyzeBatchBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+
+          try {
+            const response = await fetch("/api/url-similarity-batch", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ urls: urls }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              displayBatchResults(data);
+            } else {
+              throw new Error(data.error || "Batch analysis failed");
+            }
+          } catch (error) {
+            alert("Error: " + error.message);
+          } finally {
+            loadingDiv.style.display = "none";
+            analyzeBatchBtn.disabled = false;
+            analyzeBatchBtn.innerHTML =
+              '<i class="fas fa-layer-group"></i> Analyze Batch';
+          }
+        }
+
+        function displayResults(data) {
+          const result = data.result;
+          console.log("URL Analysis Result:", result);
+
+          // Similarity Score
+          const similarity = result.similarity_score || 0;
+          const similarityCircle = document.getElementById("similarityCircle");
+          const similarityText = document.getElementById("similarityText");
+
+          similarityCircle.style.background = getSimilarityColor(similarity);
+          similarityCircle.textContent = (similarity * 100).toFixed(0) + "%";
+          similarityText.textContent =
+            (similarity * 100).toFixed(1) + "% similarity";
+
+          // URL Family
+          const family = result.url_family || "unknown";
+          const familyBadge = document.getElementById("urlFamily");
+          familyBadge.textContent = family.replace("_", " ").toUpperCase();
+          familyBadge.className = "url-family-badge family-" + family;
+
+          // Risk Score
+          const riskScore = result.risk_score || 0;
+          const riskBadge = document.getElementById("riskScore");
+          const riskBar = document.getElementById("riskBar");
+
+          riskBadge.textContent = riskScore;
+          riskBadge.className = "badge " + getRiskClass(riskScore);
+          riskBar.style.width = riskScore + "%";
+          riskBar.className = "progress-bar " + getRiskBarClass(riskScore);
+
+          // URL Breakdown
+          updateURLBreakdown(result.url || urlInput.value);
+
+          // Heuristic Warnings
+          const warningsList = document.getElementById("warningsList");
+          const noWarnings = document.getElementById("noWarnings");
+          const warnings = result.heuristic_warnings || [];
+
+          warningsList.innerHTML = "";
+          if (warnings.length > 0) {
+            warnings.forEach((warning) => {
+              const badge = document.createElement("span");
+              badge.className = "warning-badge";
+              badge.textContent = warning;
+              warningsList.appendChild(badge);
+            });
+            noWarnings.style.display = "none";
+          } else {
+            noWarnings.style.display = "block";
+          }
+
+          // Similar URLs
+          const similarUrlsList = document.getElementById("similarUrlsList");
+          const noSimilarUrls = document.getElementById("noSimilarUrls");
+          const similarUrls = result.similar_urls || [];
+
+          similarUrlsList.innerHTML = "";
+          if (similarUrls.length > 0) {
+            similarUrls.forEach((similar) => {
+              const item = document.createElement("a");
+              item.className = "list-group-item list-group-item-action";
+              item.innerHTML = `
+                            <div class="d-flex w-100 justify-content-between">
+                                <small class="text-muted">${similar.url.substring(0, 50)}...</small>
+                                <span class="badge ${getSimilarityBadgeClass(similar.similarity)}">
+                                    ${(similar.similarity * 100).toFixed(0)}%
+                                </span>
+                            </div>
+                            <small class="text-muted">Family: ${similar.family}</small>
+                        `;
+              similarUrlsList.appendChild(item);
+            });
+            noSimilarUrls.style.display = "none";
+          } else {
+            noSimilarUrls.style.display = "block";
+          }
+
+          // Domain Behavior Analysis
+          const behavior = result.behavior_analysis || {};
+          document.getElementById("sslRisk").innerHTML = getRiskHTML(
+            behavior.ssl_risk || "unknown",
+          );
+          document.getElementById("reputationRisk").innerHTML = getRiskHTML(
+            behavior.reputation_risk || "unknown",
+          );
+          document.getElementById("typoRisk").innerHTML = getRiskHTML(
+            behavior.typosquatting_risk || "low",
+          );
+          document.getElementById("subdomainRisk").innerHTML = getRiskHTML(
+            behavior.subdomain_risk || "low",
+          );
+
+          // Technical Analysis
+          const techAnalysis = document.getElementById("technicalAnalysis");
+          techAnalysis.innerHTML = "";
+
+          const techItems = [
+            { label: "URL Length", value: result.url?.length || 0 },
+            {
+              label: "Has Subdomain",
+              value: behavior.has_subdomain ? "Yes" : "No",
+            },
+            {
+              label: "Uses HTTPS",
+              value: result.url?.startsWith("https") ? "Yes" : "No",
+            },
+            {
+              label: "Contains Query",
+              value: result.url?.includes("?") ? "Yes" : "No",
+            },
+          ];
+
+          techItems.forEach((item) => {
+            const chip = document.createElement("div");
+            chip.className = "url-analysis-chip";
+            chip.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
+            techAnalysis.appendChild(chip);
+          });
+
+          // Show results
+          resultCard.style.display = "block";
+          resultCard.scrollIntoView({ behavior: "smooth" });
+        }
+
+        function displayBatchResults(data) {
+          const results = data.results || [];
+
+          let tableHTML = `
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>URL</th>
+                                <th>Similarity</th>
+                                <th>Family</th>
+                                <th>Risk</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+          results.forEach((result, index) => {
+            const similarity = result.similarity_score || 0;
+            const family = result.url_family || "unknown";
+            const risk = result.risk_score || 0;
+
+            tableHTML += `
+                        <tr>
+                            <td><small>${result.url.substring(0, 40)}...</small></td>
+                            <td><span class="badge ${getSimilarityBadgeClass(similarity)}">
+                                ${(similarity * 100).toFixed(0)}%
+                            </span></td>
+                            <td><span class="badge family-${family}">${family}</span></td>
+                            <td><span class="badge ${getRiskClass(risk)}">${risk}</span></td>
+                            <td>${
+                              similarity > 0.5
+                                ? '<i class="fas fa-exclamation-triangle text-danger"></i>'
+                                : similarity > 0.3
+                                  ? '<i class="fas fa-exclamation-circle text-warning"></i>'
+                                  : '<i class="fas fa-check-circle text-success"></i>'
+                            }</td>
+                        </tr>
+                    `;
+          });
+
+          tableHTML += `</tbody></table>`;
+
+          document.getElementById("batchResultsTable").innerHTML = tableHTML;
+          batchResultCard.style.display = "block";
+          batchResultCard.scrollIntoView({ behavior: "smooth" });
+        }
+
+        function updateURLBreakdown(url) {
+          try {
+            const urlObj = new URL(url);
+            const hostname = urlObj.hostname;
+            const parts = hostname.split(".");
+
+            document.getElementById("urlScheme").textContent =
+              urlObj.protocol.replace(":", "");
+            document.getElementById("urlSubdomain").textContent =
+              parts.length > 2 ? parts.slice(0, -2).join(".") : "";
+            document.getElementById("urlDomain").textContent =
+              parts.length > 1 ? parts[parts.length - 2] : parts[0];
+            document.getElementById("urlTld").textContent =
+              parts.length > 1 ? "." + parts[parts.length - 1] : "";
+            document.getElementById("urlPath").textContent = urlObj.pathname;
+            document.getElementById("urlQuery").textContent = urlObj.search
+              ? "?" + urlObj.search.substring(1)
+              : "";
+          } catch (e) {
+            console.error("Error parsing URL:", e);
+          }
+        }
+
+        function getSimilarityColor(similarity) {
+          if (similarity >= 0.8)
+            return "linear-gradient(135deg, #ff6b6b, #ee5a52)";
+          if (similarity >= 0.6)
+            return "linear-gradient(135deg, #ffa726, #fb8c00)";
+          if (similarity >= 0.4)
+            return "linear-gradient(135deg, #42a5f5, #1976d2)";
+          if (similarity >= 0.2)
+            return "linear-gradient(135deg, #66bb6a, #388e3c)";
+          return "linear-gradient(135deg, #bdbdbd, #757575)";
+        }
+
+        function getRiskClass(score) {
+          if (score >= 80) return "bg-danger";
+          if (score >= 60) return "bg-warning";
+          if (score >= 40) return "bg-info";
+          if (score >= 20) return "bg-success";
+          return "bg-secondary";
+        }
+
+        function getRiskBarClass(score) {
+          if (score >= 80) return "bg-danger";
+          if (score >= 60) return "bg-warning";
+          if (score >= 40) return "bg-info";
+          if (score >= 20) return "bg-success";
+          return "bg-secondary";
+        }
+
+        function getSimilarityBadgeClass(similarity) {
+          if (similarity >= 0.7) return "bg-danger";
+          if (similarity >= 0.5) return "bg-warning";
+          if (similarity >= 0.3) return "bg-info";
+          return "bg-success";
+        }
+
+        function getRiskHTML(risk) {
+          const colors = {
+            high: "danger",
+            medium: "warning",
+            low: "success",
+            unknown: "secondary",
+          };
+          return `<span class="badge bg-${colors[risk] || "secondary"}">${risk.toUpperCase()}</span>`;
+        }
+
+        // Initialize database count
+        fetch("/api/url-database-info")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              document.getElementById("maliciousCount").textContent =
+                data.count;
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

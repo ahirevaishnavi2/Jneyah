@@ -1,0 +1,6 @@
+text,label
+"Your bank account is blocked, click link",PHISHING
+"Download invoice from attached file",MALWARE
+"Congratulations you won a lottery",FRAUD
+"Meeting rescheduled to tomorrow",SAFE
+"Pay ransom in bitcoin or data leaked",EXTORTION

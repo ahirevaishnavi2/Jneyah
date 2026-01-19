@@ -1,0 +1,12 @@
+{
+  "threat_categories": [
+    "harassment",
+    "malware",
+    "phishing",
+    "safe",
+    "scam"
+  ],
+  "model_type": "LogisticRegression",
+  "saved_at": "2026-01-18T21:17:54.599402",
+  "vocabulary_size": 17
+}

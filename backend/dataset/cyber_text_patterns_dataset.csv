@@ -1,0 +1,36 @@
+message,label
+URGENT: Your bank account has been suspended. Click to verify now.,phishing
+Unauthorized login detected. Secure your account immediately.,phishing
+Your KYC is incomplete. Update details to avoid suspension.,phishing
+Account verification needed. Reset your password now.,phishing
+We noticed unusual activity on your card. Confirm transactions.,phishing
+"Congratulations! You have won a lottery of ₹25,00,000.",lottery_scam
+You are selected for a cash prize. Share bank details.,lottery_scam
+Claim your lucky draw reward before midnight.,lottery_scam
+Free gift card waiting for you. Click to claim.,lottery_scam
+You are today’s lucky winner! Act fast.,lottery_scam
+I know where you live. Send money or face consequences.,extortion
+Do not ignore this message. You are being watched.,extortion
+Pay immediately or your data will be leaked.,extortion
+Meet me alone or regret it.,extortion
+Your secrets will be revealed if you don’t comply.,extortion
+Download this critical security update now.,malware
+Install antivirus update from the link provided.,malware
+Your device is infected. Fix immediately.,malware
+System alert! Patch required to avoid damage.,malware
+Update software to protect your computer.,malware
+Huge discounts on electronics this weekend!,marketing
+Limited time offer. Buy 1 get 1 free.,marketing
+Flash sale starts now. Don’t miss out!,marketing
+Subscribe to our newsletter for exclusive deals.,marketing
+Special festival discounts available today.,marketing
+Meeting reminder for tomorrow at 2 PM.,benign
+Lunch is scheduled at 1 PM today.,benign
+Your subscription will renew next week.,benign
+Please find the attached project report.,benign
+Team meeting rescheduled to Friday.,benign
+Your OTP for transaction is 482193. Do not share.,finance
+"₹1,200 debited from your account.",finance
+Transaction successful. Thank you for using our service.,finance
+EMI payment received successfully.,finance
+"Balance update: Available balance ₹5,430.",finance

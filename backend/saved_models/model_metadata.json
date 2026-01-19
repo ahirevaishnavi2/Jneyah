@@ -1,0 +1,29 @@
+{
+  "classes": [
+    "DOMAIN",
+    "EMAIL",
+    "FILEPATH",
+    "IPV4",
+    "Infrastucture",
+    "MD5",
+    "REGISTRYKEY",
+    "SHA1",
+    "SHA2",
+    "SOFTWARE",
+    "TIME",
+    "URL",
+    "attack-pattern",
+    "campaign",
+    "identity",
+    "location",
+    "malware",
+    "nan",
+    "threat-actor",
+    "tools",
+    "vulnerability"
+  ],
+  "vocabulary_size": 2708,
+  "train_samples": 7001,
+  "test_accuracy": 0.024657534246575342,
+  "model_type": "LogisticRegression"
+}
