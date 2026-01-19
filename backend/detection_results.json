@@ -1,0 +1,1286 @@
+[
+  {
+    "input_url": "http://9779.info/%E5%84%BF%E7%AB%A5%E7%AB%8B%E4%BD%93%E7%BA%B8%E8%B4%B4%E7%94%BB/",
+    "similarity_score": 1.0000000000000002,
+    "family_classification": "crypto_scam",
+    "domain_analysis": {
+      "full_domain": "9779.info",
+      "domain": "9779",
+      "suffix": "info",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 81,
+      "num_dots": 1,
+      "num_hyphens": 0,
+      "num_slashes": 4,
+      "path_depth": 2,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.2716049382716049,
+      "letter_ratio": 0.3950617283950617,
+      "hex_ratio": 0.5802469135802469,
+      "entropy": 3.7094387236681907,
+      "is_numeric_domain": true
+    },
+    "heuristic_flags": [],
+    "risk_level": "critical",
+    "confidence": "high",
+    "is_malicious": true,
+    "analysis_time": "2026-01-18T21:58:48.779854",
+    "features": {
+      "full_domain": "9779.info",
+      "domain": "9779",
+      "suffix": "info",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 81,
+      "num_dots": 1,
+      "num_hyphens": 0,
+      "num_slashes": 4,
+      "path_depth": 2,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.2716049382716049,
+      "letter_ratio": 0.3950617283950617,
+      "hex_ratio": 0.5802469135802469,
+      "entropy": 3.7094387236681907,
+      "is_numeric_domain": true
+    },
+    "top_matches": [
+      {
+        "url": "http://9779.info/%E5%84%BF%E7%AB%A5%E7%AB%8B%E4%BD%93%E7%BA%B8%E8%B4%B4%E7%94%BB...",
+        "family": "crypto_scam",
+        "similarity": 1.0000000000000002,
+        "family_display": "Crypto Scam"
+      },
+      {
+        "url": "http://9779.info/%E5%84%BF%E7%AB%A5%E7%AB%8B%E4%BD%93%E7%BA%B8%E8%B4%B4%E7%94%BB...",
+        "family": "crypto_scam",
+        "similarity": 1.0000000000000002,
+        "family_display": "Crypto Scam"
+      },
+      {
+        "url": "http://9779.info/%E5%84%BF%E7%AB%A5%E7%AB%8B%E4%BD%93%E7%BA%B8%E8%B4%B4%E7%94%BB...",
+        "family": "crypto_scam",
+        "similarity": 1.0000000000000002,
+        "family_display": "Crypto Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {}
+    },
+    "family_display": {
+      "name": "Crypto Scam",
+      "icon": "₿",
+      "color": "#f59e0b",
+      "description": "Malware & wallet drainer attacks"
+    },
+    "similarity_percentage": "100.0%",
+    "timestamp_display": "2026-01-18 21:58:48"
+  },
+  {
+    "input_url": "https://secure-login-bank-verify.paypal.tk/login.php?id=12345",
+    "similarity_score": 0.5836942042738195,
+    "family_classification": "bank_scam",
+    "domain_analysis": {
+      "full_domain": "paypal.tk",
+      "domain": "paypal",
+      "suffix": "tk",
+      "subdomain": "secure-login-bank-verify",
+      "has_https": true,
+      "url_length": 61,
+      "num_dots": 3,
+      "num_hyphens": 3,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 1,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.08196721311475409,
+      "letter_ratio": 0.7213114754098361,
+      "hex_ratio": 0.2459016393442623,
+      "entropy": 4.756167821304776,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "bank_scam",
+        "pattern": "(login|signin|secure|verify|account|bank",
+        "matched": "secure",
+        "family_name": "Bank Scam",
+        "icon": "🏦",
+        "color": "#0ea5e9"
+      },
+      {
+        "family": "bank_scam",
+        "pattern": "(paypal|chase|wellsfargo|bankofamerica|c",
+        "matched": "paypal",
+        "family_name": "Bank Scam",
+        "icon": "🏦",
+        "color": "#0ea5e9"
+      }
+    ],
+    "risk_level": "critical",
+    "confidence": "high",
+    "is_malicious": true,
+    "analysis_time": "2026-01-18T21:58:48.901280",
+    "features": {
+      "full_domain": "paypal.tk",
+      "domain": "paypal",
+      "suffix": "tk",
+      "subdomain": "secure-login-bank-verify",
+      "has_https": true,
+      "url_length": 61,
+      "num_dots": 3,
+      "num_hyphens": 3,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 1,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.08196721311475409,
+      "letter_ratio": 0.7213114754098361,
+      "hex_ratio": 0.2459016393442623,
+      "entropy": 4.756167821304776,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "http://www.greathck.org/paypalverify/login.php",
+        "family": "bank_scam",
+        "similarity": 0.5836942042738195,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "https://vensyemall.com/sgl/login/dbs/in/log/login.php?cmd=login_submit&id=c02ea6...",
+        "family": "bank_scam",
+        "similarity": 0.4773739509470486,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "https://secure.runescape.com-zx.ru/m=weblogin/loginform327,782,261,86974582,2462",
+        "family": "bank_scam",
+        "similarity": 0.4733298853911587,
+        "family_display": "Bank Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "bank_scam": 0.3
+      }
+    },
+    "family_display": {
+      "name": "Bank Scam",
+      "icon": "🏦",
+      "color": "#0ea5e9",
+      "description": "Phishing & credential theft attacks"
+    },
+    "similarity_percentage": "58.4%",
+    "timestamp_display": "2026-01-18 21:58:48"
+  },
+  {
+    "input_url": "http://chase-online-banking-secure-auth.ga/account/verify",
+    "similarity_score": 0.5873965013584261,
+    "family_classification": "bank_scam",
+    "domain_analysis": {
+      "full_domain": "chase-online-banking-secure-auth.ga",
+      "domain": "chase-online-banking-secure-auth",
+      "suffix": "ga",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 57,
+      "num_dots": 1,
+      "num_hyphens": 4,
+      "num_slashes": 4,
+      "path_depth": 2,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8245614035087719,
+      "hex_ratio": 0.2807017543859649,
+      "entropy": 4.269844682062971,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "bank_scam",
+        "pattern": "(login|signin|secure|verify|account|bank",
+        "matched": "bank",
+        "family_name": "Bank Scam",
+        "icon": "🏦",
+        "color": "#0ea5e9"
+      },
+      {
+        "family": "bank_scam",
+        "pattern": "(paypal|chase|wellsfargo|bankofamerica|c",
+        "matched": "chase",
+        "family_name": "Bank Scam",
+        "icon": "🏦",
+        "color": "#0ea5e9"
+      },
+      {
+        "family": "job_scam",
+        "pattern": "(workfromhome|wfh|remote|online|flexible",
+        "matched": "online",
+        "family_name": "Job Scam",
+        "icon": "💼",
+        "color": "#10b981"
+      }
+    ],
+    "risk_level": "critical",
+    "confidence": "high",
+    "is_malicious": true,
+    "analysis_time": "2026-01-18T21:58:48.953478",
+    "features": {
+      "full_domain": "chase-online-banking-secure-auth.ga",
+      "domain": "chase-online-banking-secure-auth",
+      "suffix": "ga",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 57,
+      "num_dots": 1,
+      "num_hyphens": 4,
+      "num_slashes": 4,
+      "path_depth": 2,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8245614035087719,
+      "hex_ratio": 0.2807017543859649,
+      "entropy": 4.269844682062971,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "account1ocked-secure-myverify.com",
+        "family": "bank_scam",
+        "similarity": 0.5873965013584261,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "secure.bankofamerica.verify.account.bealonlineservice.com",
+        "family": "bank_scam",
+        "similarity": 0.5381123903682067,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "http://greentechenterprises.org/8secure/security/confirmation/accountonlinesecur...",
+        "family": "bank_scam",
+        "similarity": 0.5097946014279602,
+        "family_display": "Bank Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "bank_scam": 0.3,
+        "job_scam": 0.12
+      }
+    },
+    "family_display": {
+      "name": "Bank Scam",
+      "icon": "🏦",
+      "color": "#0ea5e9",
+      "description": "Phishing & credential theft attacks"
+    },
+    "similarity_percentage": "58.7%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "http://free-bitcoin-miner-download.exe.xyz/walletconnect",
+    "similarity_score": 0.5539922938834843,
+    "family_classification": "crypto_scam",
+    "domain_analysis": {
+      "full_domain": "exe.xyz",
+      "domain": "exe",
+      "suffix": "xyz",
+      "subdomain": "free-bitcoin-miner-download",
+      "has_https": false,
+      "url_length": 56,
+      "num_dots": 2,
+      "num_hyphens": 3,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8392857142857143,
+      "hex_ratio": 0.2857142857142857,
+      "entropy": 4.260119155734494,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "crypto_scam",
+        "pattern": "(crypto|bitcoin|btc|eth|ethereum|wallet|",
+        "matched": "bitcoin",
+        "family_name": "Crypto Scam",
+        "icon": "₿",
+        "color": "#f59e0b"
+      },
+      {
+        "family": "crypto_scam",
+        "pattern": "(mining|airdrop|defi|nft|blockchain|toke",
+        "matched": "coin",
+        "family_name": "Crypto Scam",
+        "icon": "₿",
+        "color": "#f59e0b"
+      },
+      {
+        "family": "crypto_scam",
+        "pattern": "(free|bonus|reward|claim|giveaway|limite",
+        "matched": "free",
+        "family_name": "Crypto Scam",
+        "icon": "₿",
+        "color": "#f59e0b"
+      },
+      {
+        "family": "crypto_scam",
+        "pattern": "(walletconnect|metamask|trustwallet|coin",
+        "matched": "walletconnect",
+        "family_name": "Crypto Scam",
+        "icon": "₿",
+        "color": "#f59e0b"
+      }
+    ],
+    "risk_level": "critical",
+    "confidence": "high",
+    "is_malicious": true,
+    "analysis_time": "2026-01-18T21:58:49.003379",
+    "features": {
+      "full_domain": "exe.xyz",
+      "domain": "exe",
+      "suffix": "xyz",
+      "subdomain": "free-bitcoin-miner-download",
+      "has_https": false,
+      "url_length": 56,
+      "num_dots": 2,
+      "num_hyphens": 3,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8392857142857143,
+      "hex_ratio": 0.2857142857142857,
+      "entropy": 4.260119155734494,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "http://freesoftpage.de/download-server/view.download/14/1066.html",
+        "family": "job_scam",
+        "similarity": 0.5539922938834843,
+        "family_display": "Job Scam"
+      },
+      {
+        "url": "http://freesoftpage.de/download-server/view.download/32/1065.html",
+        "family": "job_scam",
+        "similarity": 0.5535343687860464,
+        "family_display": "Job Scam"
+      },
+      {
+        "url": "ca09.download",
+        "family": "bank_scam",
+        "similarity": 0.5391189200917895,
+        "family_display": "Bank Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "crypto_scam": 0.6
+      }
+    },
+    "family_display": {
+      "name": "Crypto Scam",
+      "icon": "₿",
+      "color": "#f59e0b",
+      "description": "Malware & wallet drainer attacks"
+    },
+    "similarity_percentage": "55.4%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "https://claim-free-eth-airdrop-now.cf/?ref=0xabc123",
+    "similarity_score": 0.5156371215049029,
+    "family_classification": "crypto_scam",
+    "domain_analysis": {
+      "full_domain": "claim-free-eth-airdrop-now.cf",
+      "domain": "claim-free-eth-airdrop-now",
+      "suffix": "cf",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 51,
+      "num_dots": 1,
+      "num_hyphens": 4,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 1,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0784313725490196,
+      "letter_ratio": 0.7058823529411765,
+      "hex_ratio": 0.37254901960784315,
+      "entropy": 4.578808920190765,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "crypto_scam",
+        "pattern": "(crypto|bitcoin|btc|eth|ethereum|wallet|",
+        "matched": "eth",
+        "family_name": "Crypto Scam",
+        "icon": "₿",
+        "color": "#f59e0b"
+      },
+      {
+        "family": "crypto_scam",
+        "pattern": "(mining|airdrop|defi|nft|blockchain|toke",
+        "matched": "airdrop",
+        "family_name": "Crypto Scam",
+        "icon": "₿",
+        "color": "#f59e0b"
+      },
+      {
+        "family": "crypto_scam",
+        "pattern": "(free|bonus|reward|claim|giveaway|limite",
+        "matched": "claim",
+        "family_name": "Crypto Scam",
+        "icon": "₿",
+        "color": "#f59e0b"
+      }
+    ],
+    "risk_level": "critical",
+    "confidence": "high",
+    "is_malicious": true,
+    "analysis_time": "2026-01-18T21:58:49.052750",
+    "features": {
+      "full_domain": "claim-free-eth-airdrop-now.cf",
+      "domain": "claim-free-eth-airdrop-now",
+      "suffix": "cf",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 51,
+      "num_dots": 1,
+      "num_hyphens": 4,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 1,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0784313725490196,
+      "letter_ratio": 0.7058823529411765,
+      "hex_ratio": 0.37254901960784315,
+      "entropy": 4.578808920190765,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "https://csgo-freecase.ml/",
+        "family": "bank_scam",
+        "similarity": 0.5156371215049029,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "https://d.pr/free/f/E7q9Lz",
+        "family": "bank_scam",
+        "similarity": 0.48415109201363155,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "https://z.zz.ht/GNpZM.txt",
+        "family": "crypto_scam",
+        "similarity": 0.4502965381037835,
+        "family_display": "Crypto Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "crypto_scam": 0.44999999999999996
+      }
+    },
+    "family_display": {
+      "name": "Crypto Scam",
+      "icon": "₿",
+      "color": "#f59e0b",
+      "description": "Malware & wallet drainer attacks"
+    },
+    "similarity_percentage": "51.6%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "https://work-from-home-immediate-hiring-job.site/apply-now",
+    "similarity_score": 0.3869792732228947,
+    "family_classification": "job_scam",
+    "domain_analysis": {
+      "full_domain": "work-from-home-immediate-hiring-job.site",
+      "domain": "work-from-home-immediate-hiring-job",
+      "suffix": "site",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 58,
+      "num_dots": 1,
+      "num_hyphens": 6,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8103448275862069,
+      "hex_ratio": 0.15517241379310345,
+      "entropy": 4.310591237164564,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "job_scam",
+        "pattern": "(career|job|hiring|vacancy|opportunity|a",
+        "matched": "hiring",
+        "family_name": "Job Scam",
+        "icon": "💼",
+        "color": "#10b981"
+      },
+      {
+        "family": "job_scam",
+        "pattern": "(urgent|immediate|required|needed|asap)",
+        "matched": "immediate",
+        "family_name": "Job Scam",
+        "icon": "💼",
+        "color": "#10b981"
+      }
+    ],
+    "risk_level": "low",
+    "confidence": "low",
+    "is_malicious": false,
+    "analysis_time": "2026-01-18T21:58:49.101041",
+    "features": {
+      "full_domain": "work-from-home-immediate-hiring-job.site",
+      "domain": "work-from-home-immediate-hiring-job",
+      "suffix": "site",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 58,
+      "num_dots": 1,
+      "num_hyphens": 6,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8103448275862069,
+      "hex_ratio": 0.15517241379310345,
+      "entropy": 4.310591237164564,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "https://hediye-internet.site/hediye20gb.apk",
+        "family": "crypto_scam",
+        "similarity": 0.3869792732228947,
+        "family_display": "Crypto Scam"
+      },
+      {
+        "url": "https://uldkh.weblium.site/",
+        "family": "bank_scam",
+        "similarity": 0.37069825432788056,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "https://www.alertastelecredito.site/",
+        "family": "bank_scam",
+        "similarity": 0.33546678521975126,
+        "family_display": "Bank Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "job_scam": 0.24
+      }
+    },
+    "family_display": {
+      "name": "Job Scam",
+      "icon": "💼",
+      "color": "#10b981",
+      "description": "Defacement & recruitment fraud"
+    },
+    "similarity_percentage": "38.7%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "http://online-data-entry-jobs-urgent-required.work/registration",
+    "similarity_score": 0.38215861588678635,
+    "family_classification": "job_scam",
+    "domain_analysis": {
+      "full_domain": "online-data-entry-jobs-urgent-required.work",
+      "domain": "online-data-entry-jobs-urgent-required",
+      "suffix": "work",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 63,
+      "num_dots": 1,
+      "num_hyphens": 5,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8412698412698413,
+      "hex_ratio": 0.19047619047619047,
+      "entropy": 4.206775163716837,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "job_scam",
+        "pattern": "(career|job|hiring|vacancy|opportunity|a",
+        "matched": "job",
+        "family_name": "Job Scam",
+        "icon": "💼",
+        "color": "#10b981"
+      },
+      {
+        "family": "job_scam",
+        "pattern": "(workfromhome|wfh|remote|online|flexible",
+        "matched": "online",
+        "family_name": "Job Scam",
+        "icon": "💼",
+        "color": "#10b981"
+      },
+      {
+        "family": "job_scam",
+        "pattern": "(urgent|immediate|required|needed|asap)",
+        "matched": "urgent",
+        "family_name": "Job Scam",
+        "icon": "💼",
+        "color": "#10b981"
+      }
+    ],
+    "risk_level": "low",
+    "confidence": "low",
+    "is_malicious": false,
+    "analysis_time": "2026-01-18T21:58:49.150330",
+    "features": {
+      "full_domain": "online-data-entry-jobs-urgent-required.work",
+      "domain": "online-data-entry-jobs-urgent-required",
+      "suffix": "work",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 63,
+      "num_dots": 1,
+      "num_hyphens": 5,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8412698412698413,
+      "hex_ratio": 0.19047619047619047,
+      "entropy": 4.206775163716837,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "gjhf.online",
+        "family": "bank_scam",
+        "similarity": 0.38215861588678635,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "http://www.smslonline.com/2011-registration-form/who-has-signed-up/player/1/803....",
+        "family": "job_scam",
+        "similarity": 0.3721494958429306,
+        "family_display": "Job Scam"
+      },
+      {
+        "url": "http://www.smslonline.com/2011-registration-form/who-has-signed-up/player/1/808....",
+        "family": "job_scam",
+        "similarity": 0.3721494958429306,
+        "family_display": "Job Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "job_scam": 0.36
+      }
+    },
+    "family_display": {
+      "name": "Job Scam",
+      "icon": "💼",
+      "color": "#10b981",
+      "description": "Defacement & recruitment fraud"
+    },
+    "similarity_percentage": "38.2%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "https://www.google.com/search?q=python",
+    "similarity_score": 0.7484198835371384,
+    "family_classification": "crypto_scam",
+    "domain_analysis": {
+      "full_domain": "google.com",
+      "domain": "google",
+      "suffix": "com",
+      "subdomain": "www",
+      "has_https": true,
+      "url_length": 38,
+      "num_dots": 2,
+      "num_hyphens": 0,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 1,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.7894736842105263,
+      "hex_ratio": 0.13157894736842105,
+      "entropy": 4.221097250057957,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [],
+    "risk_level": "critical",
+    "confidence": "high",
+    "is_malicious": true,
+    "analysis_time": "2026-01-18T21:58:49.198356",
+    "features": {
+      "full_domain": "google.com",
+      "domain": "google",
+      "suffix": "com",
+      "subdomain": "www",
+      "has_https": true,
+      "url_length": 38,
+      "num_dots": 2,
+      "num_hyphens": 0,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 1,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.7894736842105263,
+      "hex_ratio": 0.13157894736842105,
+      "entropy": 4.221097250057957,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "www.google.com/sms/",
+        "family": "bank_scam",
+        "similarity": 0.7484198835371384,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "www.google.com/postini/",
+        "family": "bank_scam",
+        "similarity": 0.6362404156022272,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "www.google.com/press/",
+        "family": "bank_scam",
+        "similarity": 0.6040998243049113,
+        "family_display": "Bank Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {}
+    },
+    "family_display": {
+      "name": "Crypto Scam",
+      "icon": "₿",
+      "color": "#f59e0b",
+      "description": "Malware & wallet drainer attacks"
+    },
+    "similarity_percentage": "74.8%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "https://github.com/microsoft/vscode",
+    "similarity_score": 0.4479250392755441,
+    "family_classification": "legitimate",
+    "domain_analysis": {
+      "full_domain": "github.com",
+      "domain": "github",
+      "suffix": "com",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 35,
+      "num_dots": 1,
+      "num_hyphens": 0,
+      "num_slashes": 4,
+      "path_depth": 2,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8285714285714286,
+      "hex_ratio": 0.2,
+      "entropy": 4.000432302535624,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [],
+    "risk_level": "very_low",
+    "confidence": "medium",
+    "is_malicious": false,
+    "analysis_time": "2026-01-18T21:58:49.246978",
+    "features": {
+      "full_domain": "github.com",
+      "domain": "github",
+      "suffix": "com",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 35,
+      "num_dots": 1,
+      "num_hyphens": 0,
+      "num_slashes": 4,
+      "path_depth": 2,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8285714285714286,
+      "hex_ratio": 0.2,
+      "entropy": 4.000432302535624,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "http://microsofts-login.dynv6.net/microsoft/support",
+        "family": "bank_scam",
+        "similarity": 0.4479250392755441,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "https://gulfcrossings.com/yas28.dll",
+        "family": "crypto_scam",
+        "similarity": 0.44295633556197145,
+        "family_display": "Crypto Scam"
+      },
+      {
+        "url": "https://mytim-telecom20gb.com/mytim.apk",
+        "family": "crypto_scam",
+        "similarity": 0.4160749932003294,
+        "family_display": "Crypto Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {}
+    },
+    "family_display": {
+      "name": "Legitimate",
+      "icon": "✅",
+      "color": "#06d6a0",
+      "description": "Safe & legitimate websites"
+    },
+    "similarity_percentage": "44.8%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "https://stackoverflow.com/questions",
+    "similarity_score": 0.4835653338518993,
+    "family_classification": "legitimate",
+    "domain_analysis": {
+      "full_domain": "stackoverflow.com",
+      "domain": "stackoverflow",
+      "suffix": "com",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 35,
+      "num_dots": 1,
+      "num_hyphens": 0,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8571428571428571,
+      "hex_ratio": 0.17142857142857143,
+      "entropy": 4.1934290883117225,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [],
+    "risk_level": "very_low",
+    "confidence": "medium",
+    "is_malicious": false,
+    "analysis_time": "2026-01-18T21:58:49.295389",
+    "features": {
+      "full_domain": "stackoverflow.com",
+      "domain": "stackoverflow",
+      "suffix": "com",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 35,
+      "num_dots": 1,
+      "num_hyphens": 0,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8571428571428571,
+      "hex_ratio": 0.17142857142857143,
+      "entropy": 4.1934290883117225,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "https://s.id/hcE6E",
+        "family": "bank_scam",
+        "similarity": 0.4835653338518993,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "https://soo.gd/l6Rg",
+        "family": "bank_scam",
+        "similarity": 0.4786130205171405,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "https://steamche.cf/",
+        "family": "bank_scam",
+        "similarity": 0.43661302761046394,
+        "family_display": "Bank Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {}
+    },
+    "family_display": {
+      "name": "Legitimate",
+      "icon": "✅",
+      "color": "#06d6a0",
+      "description": "Safe & legitimate websites"
+    },
+    "similarity_percentage": "48.4%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "http://185.162.128.43/login.php",
+    "similarity_score": 0.6237618807069815,
+    "family_classification": "bank_scam",
+    "domain_analysis": {
+      "full_domain": "185.162.128.43.",
+      "domain": "185.162.128.43",
+      "suffix": "",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 31,
+      "num_dots": 4,
+      "num_hyphens": 0,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": true,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.3548387096774194,
+      "letter_ratio": 0.3870967741935484,
+      "hex_ratio": 0.3548387096774194,
+      "entropy": 3.9779168746936358,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "bank_scam",
+        "pattern": "(login|signin|secure|verify|account|bank",
+        "matched": "login",
+        "family_name": "Bank Scam",
+        "icon": "🏦",
+        "color": "#0ea5e9"
+      },
+      {
+        "family": "bank_scam",
+        "pattern": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
+        "matched": "185.162.128.43",
+        "family_name": "Bank Scam",
+        "icon": "🏦",
+        "color": "#0ea5e9"
+      }
+    ],
+    "risk_level": "critical",
+    "confidence": "high",
+    "is_malicious": true,
+    "analysis_time": "2026-01-18T21:58:49.342524",
+    "features": {
+      "full_domain": "185.162.128.43.",
+      "domain": "185.162.128.43",
+      "suffix": "",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 31,
+      "num_dots": 4,
+      "num_hyphens": 0,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": true,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.3548387096774194,
+      "letter_ratio": 0.3870967741935484,
+      "hex_ratio": 0.3548387096774194,
+      "entropy": 3.9779168746936358,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "http://webmail1.sonapost.bf/login.php",
+        "family": "bank_scam",
+        "similarity": 0.6237618807069815,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "http://peaceau.org/aubis/nuc/login.php",
+        "family": "bank_scam",
+        "similarity": 0.6224008295511996,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "http://www.pret.im/9cd6034f7faea19f4fde6b7ab95e258d/login.php",
+        "family": "bank_scam",
+        "similarity": 0.6183135490806847,
+        "family_display": "Bank Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "bank_scam": 0.3
+      }
+    },
+    "family_display": {
+      "name": "Bank Scam",
+      "icon": "🏦",
+      "color": "#0ea5e9",
+      "description": "Phishing & credential theft attacks"
+    },
+    "similarity_percentage": "62.4%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "https://download-soft-update.biz/get.exe",
+    "similarity_score": 0.5862571490388597,
+    "family_classification": "legitimate",
+    "domain_analysis": {
+      "full_domain": "download-soft-update.biz",
+      "domain": "download-soft-update",
+      "suffix": "biz",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 40,
+      "num_dots": 2,
+      "num_hyphens": 2,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8,
+      "hex_ratio": 0.275,
+      "entropy": 4.225070520364182,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "bank_scam",
+        "pattern": "(update|confirm|validate|authorize|authe",
+        "matched": "update",
+        "family_name": "Bank Scam",
+        "icon": "🏦",
+        "color": "#0ea5e9"
+      }
+    ],
+    "risk_level": "very_low",
+    "confidence": "medium",
+    "is_malicious": false,
+    "analysis_time": "2026-01-18T21:58:49.390789",
+    "features": {
+      "full_domain": "download-soft-update.biz",
+      "domain": "download-soft-update",
+      "suffix": "biz",
+      "subdomain": "",
+      "has_https": true,
+      "url_length": 40,
+      "num_dots": 2,
+      "num_hyphens": 2,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.8,
+      "hex_ratio": 0.275,
+      "entropy": 4.225070520364182,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "http://download.ningzhidata.com/download/IDG-FEILONGV1.0-20200310.exe",
+        "family": "crypto_scam",
+        "similarity": 0.5862571490388597,
+        "family_display": "Crypto Scam"
+      },
+      {
+        "url": "http://download.xp666.com/xzqswf/DTPageSet.exe",
+        "family": "crypto_scam",
+        "similarity": 0.5744132283916615,
+        "family_display": "Crypto Scam"
+      },
+      {
+        "url": "https://savefile.download/downloader-einsteion_back_from_galactica.exe",
+        "family": "crypto_scam",
+        "similarity": 0.5572393645830381,
+        "family_display": "Crypto Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "bank_scam": 0.15
+      }
+    },
+    "family_display": {
+      "name": "Legitimate",
+      "icon": "✅",
+      "color": "#06d6a0",
+      "description": "Safe & legitimate websites"
+    },
+    "similarity_percentage": "58.6%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  },
+  {
+    "input_url": "http://best-online-casino-bonus.win/play-now",
+    "similarity_score": 0.45914973956558386,
+    "family_classification": "legitimate",
+    "domain_analysis": {
+      "full_domain": "best-online-casino-bonus.win",
+      "domain": "best-online-casino-bonus",
+      "suffix": "win",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 44,
+      "num_dots": 1,
+      "num_hyphens": 4,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.7954545454545454,
+      "hex_ratio": 0.1590909090909091,
+      "entropy": 4.038310595615006,
+      "is_numeric_domain": false
+    },
+    "heuristic_flags": [
+      {
+        "family": "crypto_scam",
+        "pattern": "(free|bonus|reward|claim|giveaway|limite",
+        "matched": "bonus",
+        "family_name": "Crypto Scam",
+        "icon": "₿",
+        "color": "#f59e0b"
+      },
+      {
+        "family": "job_scam",
+        "pattern": "(workfromhome|wfh|remote|online|flexible",
+        "matched": "online",
+        "family_name": "Job Scam",
+        "icon": "💼",
+        "color": "#10b981"
+      }
+    ],
+    "risk_level": "very_low",
+    "confidence": "low",
+    "is_malicious": false,
+    "analysis_time": "2026-01-18T21:58:49.439410",
+    "features": {
+      "full_domain": "best-online-casino-bonus.win",
+      "domain": "best-online-casino-bonus",
+      "suffix": "win",
+      "subdomain": "",
+      "has_https": false,
+      "url_length": 44,
+      "num_dots": 1,
+      "num_hyphens": 4,
+      "num_slashes": 3,
+      "path_depth": 1,
+      "num_params": 0,
+      "has_ip": false,
+      "is_shortened": false,
+      "suspicious_tld": false,
+      "digit_ratio": 0.0,
+      "letter_ratio": 0.7954545454545454,
+      "hex_ratio": 0.1590909090909091,
+      "entropy": 4.038310595615006,
+      "is_numeric_domain": false
+    },
+    "top_matches": [
+      {
+        "url": "gjhf.online",
+        "family": "bank_scam",
+        "similarity": 0.45914973956558386,
+        "family_display": "Bank Scam"
+      },
+      {
+        "url": "http://www.flordeazar.com/casinos-online/littlewoods-casino.html",
+        "family": "job_scam",
+        "similarity": 0.44211763381576774,
+        "family_display": "Job Scam"
+      },
+      {
+        "url": "http://www.majestic.com.tr/onlineticket/44-onlinebilet/59-online-bilet.html",
+        "family": "job_scam",
+        "similarity": 0.43559078197557,
+        "family_display": "Job Scam"
+      }
+    ],
+    "metadata": {
+      "heuristic_scores": {
+        "crypto_scam": 0.15,
+        "job_scam": 0.12
+      }
+    },
+    "family_display": {
+      "name": "Legitimate",
+      "icon": "✅",
+      "color": "#06d6a0",
+      "description": "Safe & legitimate websites"
+    },
+    "similarity_percentage": "45.9%",
+    "timestamp_display": "2026-01-18 21:58:49"
+  }
+]
