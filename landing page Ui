@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jneyah - Your Personal Ingredient Companion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        :root {
+            /* Perfect Green Theme - Consistent with sign-in */
+            --primary-bg: #F1FAF4; /* off-white green background */
+            --card-bg: #E6F4EA; /* cards / input fields */
+            --cta: #ACE1AF; /* buttons / CTA */
+            --cta-dark: #8BCF8F; /* button hover */
+            --cta-light: #C2E8C5; /* button light state */
+            --text-dark: #2F3E34; /* dark text */
+            --text-light: #4A5B50; /* light text */
+            --text-lighter: #6B7A6F; /* lighter text */
+            --border: #B7E4C7; /* border / divider */
+            --border-light: #D4EDDA; /* light border */
+            --success: #34A853; /* success green */
+            --error: #EA4335; /* error red */
+            --warning: #FBBC05; /* warning yellow */
+            --info: #4285F4; /* info blue */
+            --shadow: rgba(172, 225, 175, 0.2);
+            --shadow-dark: rgba(172, 225, 175, 0.3);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        
+        .dark-mode {
+            --primary-bg: #0F2B1C;
+            --card-bg: #1A3B27;
+            --cta: #4CAF50;
+            --cta-dark: #3D8B40;
+            --cta-light: #6ABF6D;
+            --text-dark: #E8F5E9;
+            --text-light: #C8E6C9;
+            --text-lighter: #A5D6A7;
+            --border: #2E7D32;
+            --border-light: #388E3C;
+            --success: #4CAF50;
+            --error: #F44336;
+            --warning: #FFC107;
+            --info: #2196F3;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+        }
+        
+        body {
+            background-color: var(--primary-bg);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(172, 225, 175, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(172, 225, 175, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--primary-bg) 0%, #E8F5E9 100%);
+        }
+        
+        .dark-mode body {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(76, 175, 80, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--primary-bg) 0%, #1B5E20 100%);
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background: var(--card-bg);
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px var(--shadow);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .navbar-brand h1 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        
+        .navbar-brand span {
+            color: var(--cta-dark);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-links a:hover {
+            color: var(--cta);
+        }
+        
+        .nav-links a.active {
+            color: var(--cta);
+            font-weight: 600;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--cta);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .theme-toggle {
+            background: var(--card-bg);
+            width: 50px;
+            height: 26px;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: var(--cta);
+            border-radius: 50%;
+            transition: transform 0.4s;
+        }
+        
+        .dark-mode .toggle-slider {
+            transform: translateX(24px);
+        }
+        
+        .toggle-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: var(--cta);
+        }
+        
+        .sun {
+            left: 6px;
+        }
+        
+        .moon {
+            right: 6px;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+        
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--cta) 0%, var(--cta-dark) 100%);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px var(--shadow-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            filter: blur(20px);
+        }
+        
+        .welcome-text h2 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .welcome-text p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .date-display {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Main Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 20px var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--shadow-dark);
+        }
+        
+        .feature-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--cta-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-size: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        
+        .feature-subtitle {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        /* Upload & Know Feature */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            padding: 30px;
+            text-align: center;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-zone:hover {
+            border-color: var(--cta);
+            background: rgba(172, 225, 175, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 2.5rem;
+            color: var(--cta);
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+        
+        .upload-btn {
+            background: var(--cta);
+            color: var(--text-dark);
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upload-btn:hover {
+            background: var(--cta-dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Safety Results */
+        .safety-results {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .safety-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--success);
+        }
+        
+        .safety-card.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .safety-card.danger {
+            border-left-color: var(--error);
+        }
+        
+        .safety-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .safety-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+        
+        .safety-dot.safe {
+            background: var(--success);
+        }
+        
+        .safety-dot.warning {
+            background: var(--warning);
+        }
+        
+        .safety-dot.danger {
+            background: var(--error);
+        }
+        
+        .safety-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .safety-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .voice-explain {
+            background: var(--cta-light);
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .voice-icon {
+            color: var(--cta-dark);
+            font-size: 1.2rem;
+        }
+        
+        /* Manual Input */
+        .manual-input {
+            margin-top: 15px;
+        }
+        
+        .ingredient-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--card-bg);
+            color: var(--text-dark);
+            font-size: 1rem;
+            resize: vertical;
+        }
+        
+        .ingredient-input:focus {
+            outline: none;
+            border-color: var(--cta);
+        }
+        
+        /* Ingredient of the Day */
+        .ingredient-card {
+            background: linear-gradient(135deg, var(--cta-light) 0%, var(--cta) 100%);
+            border-radius: var(--radius);
+            padding: 25px;
+            color: var(--text-dark);
+        }
+        
+        .ingredient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .ingredient-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+        
+        .ingredient-type {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .ingredient-desc {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .ingredient-interactions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .interaction-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            color: var(--text-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .interaction-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        /* Community Section */
+        .community-questions {
+            margin-top: 15px;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--cta-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        
+        .question-title {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .question-text {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .question-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-lighter);
+            font-size: 0.85rem;
+        }
+        
+        .ask-question {
+            margin-top: 20px;
+        }
+        
+        .ask-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--card-bg);
+            color: var(--text-dark);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Chatbot Section */
+        .chatbot-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            height: 300px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: white;
+            border-radius: var(--radius-sm);
+            margin-bottom: 15px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            margin-left: auto;
+        }
+        
+        .message.bot {
+            margin-right: auto;
+        }
+        
+        .message-content {
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+        }
+        
+        .message.user .message-content {
+            background: var(--cta);
+            color: var(--text-dark);
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message.bot .message-content {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border-bottom-left-radius: 5px;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--card-bg);
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
+        
+        .voice-btn {
+            background: var(--cta);
+            color: var(--text-dark);
+            border: none;
+            width: 50px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        /* Health Streaks */
+        .streaks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .streak-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .streak-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--cta-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cta-dark);
+            font-size: 1.2rem;
+        }
+        
+        .streak-info {
+            flex: 1;
+        }
+        
+        .streak-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 3px;
+        }
+        
+        .streak-days {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .streak-progress {
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--success);
+            border-radius: 3px;
+        }
+        
+        /* Badges */
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .badge {
+            background: var(--cta-light);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid transparent;
+        }
+        
+        .badge.earned {
+            border-color: var(--success);
+            background: rgba(52, 168, 83, 0.1);
+        }
+        
+        /* Insights */
+        .insights-container {
+            margin-top: 15px;
+        }
+        
+        .insight-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .insight-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cta-dark);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .insight-text {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            padding: 12px;
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--cta);
+        }
+        
+        /* Alerts */
+        .alerts-container {
+            margin-top: 15px;
+        }
+        
+        .alert-card {
+            background: rgba(251, 188, 5, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--warning);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .alert-icon {
+            color: var(--warning);
+            font-size: 1.2rem;
+        }
+        
+        .alert-text {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            flex: 1;
+        }
+        
+        /* History */
+        .history-container {
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .history-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--cta-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            margin-right: 15px;
+        }
+        
+        .history-info {
+            flex: 1;
+        }
+        
+        .history-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 3px;
+        }
+        
+        .history-date {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        .history-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-safe {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--success);
+        }
+        
+        .status-warning {
+            background: rgba(251, 188, 5, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-danger {
+            background: rgba(234, 67, 53, 0.1);
+            color: var(--error);
+        }
+        
+        /* Buttons */
+        .btn {
+            background: var(--cta);
+            color: var(--text-dark);
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            background: var(--cta-dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 43, 28, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px var(--shadow-dark);
+            border: 1px solid var(--border);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-header h3 {
+            color: var(--cta);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .modal-header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar-brand h1 {
+                font-size: 1.5rem;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+            
+            .ingredient-interactions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="profile-img" id="userInitial">U</div>
+            <h1>Jneyah<span>.</span></h1>
+        </div>
+        
+        <div class="nav-links">
+            <a href="#" class="active" onclick="showHome()"><i class="fas fa-home"></i> Home</a>
+            <a href="#" onclick="showHistory()"><i class="fas fa-history"></i> History</a>
+            <a href="#" onclick="showInsights()"><i class="fas fa-chart-bar"></i> Insights</a>
+            <a href="#" onclick="showCommunity()"><i class="fas fa-users"></i> Community</a>
+            <a href="#" onclick="showSettings()"><i class="fas fa-cog"></i> Settings</a>
+            
+            <div class="user-profile">
+                <div class="theme-toggle" id="themeToggle">
+                    <div class="toggle-slider"></div>
+                    <span class="toggle-icon sun"><i class="fas fa-sun"></i></span>
+                    <span class="toggle-icon moon"><i class="fas fa-moon"></i></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Container -->
+    <div class="container" id="mainContent">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div class="welcome-text">
+                <h2 id="welcomeMessage">Welcome to Jneyah!</h2>
+                <p>Your daily wellness companion is ready to help you make safer choices.</p>
+            </div>
+            <div class="date-display">
+                <i class="far fa-calendar"></i> <span id="currentDate">Loading...</span>
+            </div>
+        </div>
+        
+        <!-- Main Features Grid -->
+        <div class="features-grid">
+            <!-- 1. Upload & Know (MAIN FEATURE) -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div>
+                        <div class="feature-title">Upload & Know</div>
+                        <div class="feature-subtitle">Scan product ingredients instantly</div>
+                    </div>
+                </div>
+                
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">
+                        Drag & drop or click to upload image of skincare/food product
+                    </div>
+                    <button class="upload-btn" onclick="openCamera()">
+                        <i class="fas fa-camera"></i> Take Photo
+                    </button>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
+                </div>
+                
+                <div class="safety-results" id="safetyResults">
+                    <div class="safety-card safe">
+                        <div class="safety-status">
+                            <div class="safety-dot safe"></div>
+                            <div class="safety-title">Safe for you</div>
+                        </div>
+                        <div class="safety-desc">
+                            This moisturizer contains ingredients compatible with your skin profile. No known allergens or irritants detected.
+                        </div>
+                        <div class="voice-explain">
+                            <div class="voice-icon">
+                                <i class="fas fa-volume-up"></i>
+                            </div>
+                            <div>"This product is gentle and suitable for daily use. Contains hydrating ingredients like hyaluronic acid."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2. Enter Ingredients & Know (Manual Mode) -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div>
+                        <div class="feature-title">Enter Ingredients & Know</div>
+                        <div class="feature-subtitle">Manual ingredient analysis</div>
+                    </div>
+                </div>
+                
+                <div class="manual-input">
+                    <textarea class="ingredient-input" id="ingredientInput" placeholder="Paste ingredient list here... 
+Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
+                    <button class="btn" style="margin-top: 15px; width: 100%;" onclick="analyzeIngredients()">
+                        <i class="fas fa-search"></i> Analyze Ingredients
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 3. Ingredient of the Day Card -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <div class="feature-title">Ingredient of the Day</div>
+                        <div class="feature-subtitle">Daily learning habit</div>
+                    </div>
+                </div>
+                
+                <div class="ingredient-card">
+                    <div class="ingredient-header">
+                        <div class="ingredient-name">Alcohol (in skincare)</div>
+                        <div class="ingredient-type">SKINCARE</div>
+                    </div>
+                    <div class="ingredient-desc">
+                        Helps products dry quickly on skin, but may cause dryness or irritation for sensitive skin types. Often found in toners and cleansers.
+                    </div>
+                    <div class="ingredient-interactions">
+                        <button class="interaction-btn" onclick="rateIngredient('helpful')">
+                            <i class="fas fa-thumbs-up"></i> Helpful
+                        </button>
+                        <button class="interaction-btn" onclick="rateIngredient('confusing')">
+                            <i class="fas fa-question-circle"></i> Confusing
+                        </button>
+                        <button class="interaction-btn" onclick="rateIngredient('new')">
+                            <i class="fas fa-surprise"></i> Didn't know
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 4. Community Section -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <div class="feature-title">Community Q&A</div>
+                        <div class="feature-subtitle">Trusted answers from experts</div>
+                    </div>
+                </div>
+                
+                <div class="community-questions">
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="user-avatar">RS</div>
+                            <div class="question-title">Is this shampoo safe for color-treated hair?</div>
+                        </div>
+                        <div class="question-text">
+                            "My shampoo contains sulfates and parabens. Will it strip my hair color?"
+                        </div>
+                        <div class="question-stats">
+                            <div>2 expert answers</div>
+                            <div><i class="far fa-clock"></i> 2 hours ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question-card">
+                        <div class="question-header">
+                            <div class="user-avatar">PK</div>
+                            <div class="question-title">Good sunscreen for oily skin?</div>
+                        </div>
+                        <div class="question-text">
+                            "Looking for a non-comedogenic sunscreen that won't make my skin greasy."
+                        </div>
+                        <div class="question-stats">
+                            <div>5 community answers</div>
+                            <div><i class="far fa-clock"></i> 1 day ago</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ask-question">
+                        <input type="text" class="ask-input" id="askInput" placeholder="Ask a question...">
+                        <button class="btn btn-sm" style="width: 100%;" onclick="askQuestion()">
+                            <i class="fas fa-paper-plane"></i> Ask the Community
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 5. Chatbot (Ingredient Buddy) -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <div class="feature-title">Ingredient Buddy 🤖</div>
+                        <div class="feature-subtitle">Your personal AI assistant</div>
+                    </div>
+                </div>
+                
+                <div class="chatbot-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">
+                            <div class="message-content">
+                                Hi! I'm your Ingredient Buddy. Ask me anything about skincare or food ingredients! Try: "Is niacinamide good for acne?" or "What does hyaluronic acid do?"
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Ask about ingredients..." onkeypress="handleChatKeyPress(event)">
+                        <button class="voice-btn" onclick="startVoiceChat()">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 6. Health Streaks System -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div>
+                        <div class="feature-title">Health Streaks</div>
+                        <div class="feature-subtitle">Build healthy habits</div>
+                    </div>
+                </div>
+                
+                <div class="streaks-container">
+                    <div class="streak-card">
+                        <div class="streak-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="streak-info">
+                            <div class="streak-name">Water Awareness</div>
+                            <div class="streak-days">7 day streak</div>
+                            <div class="streak-progress">
+                                <div class="progress-bar" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="streak-card">
+                        <div class="streak-icon">
+                            <i class="fas fa-carrot"></i>
+                        </div>
+                        <div class="streak-info">
+                            <div class="streak-name">Healthy Food Choices</div>
+                            <div class="streak-days">5 day streak</div>
+                            <div class="streak-progress">
+                                <div class="progress-bar" style="width: 71%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="streak-card">
+                        <div class="streak-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <div class="streak-info">
+                            <div class="streak-name">Skin-Safe Choices</div>
+                            <div class="streak-days">12 day streak</div>
+                            <div class="streak-progress">
+                                <div class="progress-bar" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 7. Badges & Achievements -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div>
+                        <div class="feature-title">Your Badges</div>
+                        <div class="feature-subtitle">Earn achievements</div>
+                    </div>
+                </div>
+                
+                <div class="badges-container">
+                    <div class="badge earned">
+                        <i class="fas fa-medal"></i> Ingredient Aware Beginner
+                    </div>
+                    <div class="badge earned">
+                        <i class="fas fa-fire"></i> 7-Day Safe Choice Streak
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-search"></i> Food Label Pro
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-graduation-cap"></i> Ingredient Expert
+                    </div>
+                    <div class="badge earned">
+                        <i class="fas fa-seedling"></i> Clean Beauty Advocate
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-heart"></i> Wellness Warrior
+                    </div>
+                </div>
+                
+                <!-- Bad Habit Alerts -->
+                <div class="alerts-container">
+                    <div class="alert-card">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="alert-text">
+                            You've used products with strong fragrance 5 days in a row. Sensitive skin may react.
+                        </div>
+                    </div>
+                    
+                    <div class="alert-card">
+                        <div class="alert-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="alert-text">
+                            Your sunscreen expires in 30 days. Consider replacing it soon.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 8. Insights & History -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <div class="feature-title">Your Insights</div>
+                        <div class="feature-subtitle">Personalized analytics</div>
+                    </div>
+                </div>
+                
+                <div class="insights-container">
+                    <div class="insight-card">
+                        <div class="insight-title">Scan History</div>
+                        <div class="insight-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">42</div>
+                                <div class="stat-label">Total Scans</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">36</div>
+                                <div class="stat-label">Safe</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">6</div>
+                                <div class="stat-label">Warning</div>
+                            </div>
+                        </div>
+                        <div class="insight-text">
+                            You frequently scan products with high sugar and emulsifiers. Try choosing more whole food options.
+                        </div>
+                    </div>
+                    
+                    <div class="history-container" id="historyContainer">
+                        <!-- History items will be dynamically added -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>Jneyah - Where truth is identified before belief</p>
+            <p>Your personal ingredient companion for safer, healthier choices</p>
+        </div>
+    </div>
+    
+    <!-- Modals for different sections -->
+    <div class="modal" id="historyModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('historyModal')">&times;</button>
+            <div class="modal-header">
+                <h3>Your Scan History</h3>
+                <p>Track all your previous product scans</p>
+            </div>
+            <div id="historyModalContent">
+                <!-- History content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="insightsModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('insightsModal')">&times;</button>
+            <div class="modal-header">
+                <h3>Detailed Insights</h3>
+                <p>Your personal wellness analytics</p>
+            </div>
+            <div id="insightsModalContent">
+                <!-- Insights content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="communityModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('communityModal')">&times;</button>
+            <div class="modal-header">
+                <h3>Community Forum</h3>
+                <p>Connect with other Jneyah users</p>
+            </div>
+            <div id="communityModalContent">
+                <!-- Community content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('settingsModal')">&times;</button>
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <p>Customize your Jneyah experience</p>
+            </div>
+            <div id="settingsModalContent">
+                <!-- Settings content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== USER MANAGEMENT ==========
+        // Get user from localStorage or use default
+        let currentUser = JSON.parse(localStorage.getItem('jneyah_user')) || {
+            name: 'User',
+            email: '',
+            initials: 'U',
+            joinDate: new Date().toISOString()
+        };
+        
+        // Update welcome message and profile
+        document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.name}!`;
+        document.getElementById('userInitial').textContent = currentUser.initials;
+        
+        // ========== REAL-TIME DATE ==========
+        function updateRealTimeDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+        }
+        
+        // Update date immediately and every second
+        updateRealTimeDate();
+        setInterval(updateRealTimeDate, 1000);
+        
+        // ========== THEME TOGGLE ==========
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+        
+        // ========== UPLOAD & KNOW ==========
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const safetyResults = document.getElementById('safetyResults');
+        
+        uploadZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'var(--cta)';
+            uploadZone.style.background = 'rgba(172, 225, 175, 0.1)';
+        });
+        
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.style.borderColor = 'var(--border)';
+            uploadZone.style.background = 'transparent';
+        });
+        
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'var(--border)';
+            uploadZone.style.background = 'transparent';
+            
+            if (e.dataTransfer.files.length) {
+                handleFileUpload({ target: { files: e.dataTransfer.files } });
+            }
+        });
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Show loading state
+            uploadZone.innerHTML = `
+                <div class="upload-icon">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+                <div class="upload-text">
+                    Analyzing ${file.name}...
+                </div>
+            `;
+            
+            // Simulate analysis delay
+            setTimeout(() => {
+                // Random safety result for demo
+                const results = [
+                    { 
+                        type: 'safe', 
+                        title: 'Safe for you', 
+                        desc: 'This product contains ingredients compatible with your skin profile. No known allergens or irritants detected.', 
+                        voice: 'This product is gentle and suitable for daily use. Contains hydrating ingredients like hyaluronic acid.',
+                        product: 'Moisturizer'
+                    },
+                    { 
+                        type: 'warning', 
+                        title: 'Use carefully', 
+                        desc: 'Contains moderate fragrance that may cause irritation for sensitive skin. Patch test recommended.', 
+                        voice: 'This product may cause mild irritation if you have sensitive skin.',
+                        product: 'Face Wash'
+                    },
+                    { 
+                        type: 'danger', 
+                        title: 'Avoid', 
+                        desc: 'Contains alcohol and strong fragrances that can dry and irritate your skin type. Not recommended.', 
+                        voice: 'This product may cause irritation because of fragrance and alcohol together.',
+                        product: 'Toner'
+                    }
+                ];
+                
+                const result = results[Math.floor(Math.random() * results.length)];
+                
+                safetyResults.innerHTML = `
+                    <div class="safety-card ${result.type}">
+                        <div class="safety-status">
+                            <div class="safety-dot ${result.type}"></div>
+                            <div class="safety-title">${result.title}</div>
+                        </div>
+                        <div class="safety-desc">
+                            ${result.desc}
+                        </div>
+                        <div class="voice-explain">
+                            <div class="voice-icon">
+                                <i class="fas fa-volume-up"></i>
+                            </div>
+                            <div>"${result.voice}"</div>
+                        </div>
+                    </div>
+                `;
+                
+                safetyResults.style.display = 'block';
+                
+                // Add to history
+                addToHistory(result.product, result.type, file.name);
+                
+                // Update streaks if safe
+                if (result.type === 'safe') {
+                    updateStreak('skin-safe');
+                }
+                
+                // Reset upload zone after 3 seconds
+                setTimeout(() => {
+                    uploadZone.innerHTML = `
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">
+                            Drag & drop or click to upload another image
+                        </div>
+                        <button class="upload-btn" onclick="openCamera()">
+                            <i class="fas fa-camera"></i> Take Photo
+                        </button>
+                    `;
+                }, 3000);
+            }, 2000);
+        }
+        
+        function openCamera() {
+            alert('Camera would open in a real app. For demo, use the file upload option.');
+        }
+        
+        // ========== MANUAL INGREDIENT ANALYSIS ==========
+        function analyzeIngredients() {
+            const input = document.getElementById('ingredientInput');
+            const text = input.value.trim();
+            
+            if (!text) {
+                alert('Please enter some ingredients to analyze.');
+                return;
+            }
+            
+            // Show loading
+            const originalText = input.value;
+            input.value = 'Analyzing ingredients...';
+            input.disabled = true;
+            
+            setTimeout(() => {
+                // Analyze ingredients
+                const analysis = analyzeIngredientText(text);
+                
+                // Show modal with results
+                showAnalysisResult(analysis);
+                
+                // Reset input
+                input.value = originalText;
+                input.disabled = false;
+                
+                // Update streak if safe
+                if (analysis.safety === 'safe') {
+                    updateStreak('skin-safe');
+                }
+                
+                // Add to history
+                addToHistory('Manual Analysis', analysis.safety, text.substring(0, 30) + '...');
+            }, 1500);
+        }
+        
+        function analyzeIngredientText(text) {
+            const lowerText = text.toLowerCase();
+            
+            // Dangerous ingredients
+            const dangerousIngredients = [
+                'kerosene', 'gasoline', 'petroleum', 'formaldehyde', 'asbestos', 'lead', 'mercury',
+                'arsenic', 'cyanide', 'bleach', 'ammonia', 'hydrochloric acid', 'sulfuric acid'
+            ];
+            
+            // Common irritants
+            const irritants = [
+                'alcohol denat', 'fragrance', 'parfum', 'perfume', 'essential oil', 'menthol',
+                'camphor', 'eucalyptus', 'peppermint', 'citrus oil', 'limonene', 'linalool'
+            ];
+            
+            // Check for dangerous ingredients
+            for (const ingredient of dangerousIngredients) {
+                if (lowerText.includes(ingredient)) {
+                    return {
+                        safety: 'danger',
+                        title: '⚠️ DANGEROUS - AVOID IMMEDIATELY',
+                        desc: `This product contains ${ingredient.toUpperCase()} which is HIGHLY TOXIC and should never be used on skin or consumed.`,
+                        recommendations: ['Dispose of this product safely', 'Do not use under any circumstances', 'Wash skin immediately if contacted']
+                    };
+                }
+            }
+            
+            // Check for multiple irritants
+            let irritantCount = 0;
+            for (const irritant of irritants) {
+                if (lowerText.includes(irritant)) irritantCount++;
+            }
+            
+            if (irritantCount >= 2) {
+                return {
+                    safety: 'danger',
+                    title: 'Avoid',
+                    desc: 'Contains multiple potential irritants that may cause skin reactions or sensitivity.',
+                    recommendations: ['Not recommended for sensitive skin', 'Consider patch testing', 'Look for fragrance-free alternatives']
+                };
+            } else if (irritantCount === 1) {
+                return {
+                    safety: 'warning',
+                    title: 'Use Carefully',
+                    desc: 'Contains potential irritants. May cause issues for sensitive skin types.',
+                    recommendations: ['Patch test recommended', 'Monitor for any reactions', 'Suitable for occasional use only']
+                };
+            } else {
+                return {
+                    safety: 'safe',
+                    title: 'Safe for you',
+                    desc: 'Ingredients appear generally safe with no major red flags detected.',
+                    recommendations: ['Suitable for regular use', 'No special precautions needed', 'Good choice for most skin types']
+                };
+            }
+        }
+        
+        function showAnalysisResult(analysis) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'analysisModal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <button class="close-modal" onclick="closeModal('analysisModal')">&times;</button>
+                    <div class="modal-header">
+                        <h3>Analysis Results</h3>
+                        <p>Ingredient safety assessment</p>
+                    </div>
+                    <div class="safety-card ${analysis.safety}" style="margin: 20px 0;">
+                        <div class="safety-status">
+                            <div class="safety-dot ${analysis.safety}"></div>
+                            <div class="safety-title">${analysis.title}</div>
+                        </div>
+                        <div class="safety-desc">
+                            ${analysis.desc}
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h4 style="color: var(--text-dark); margin-bottom: 10px;">Recommendations:</h4>
+                        <ul style="color: var(--text-light); padding-left: 20px;">
+                            ${analysis.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            
+            // Auto-close after 10 seconds
+            setTimeout(() => {
+                if (modal.parentNode) {
+                    closeModal('analysisModal');
+                }
+            }, 10000);
+        }
+        
+        // ========== INGREDIENT OF THE DAY ==========
+        function rateIngredient(type) {
+            const messages = {
+                helpful: 'Thanks for your feedback! We\'ll show more helpful content like this.',
+                confusing: 'Thanks! We\'ll try to explain ingredients more clearly.',
+                new: 'Glad you learned something new! Keep exploring.'
+            };
+            
+            alert(messages[type]);
+            
+            // Update ingredient engagement streak
+            updateStreak('learning');
+        }
+        
+        // ========== CHATBOT WITH SMART RESPONSES ==========
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+        
+        function handleChatKeyPress(e) {
+            if (e.key === 'Enter' && chatInput.value.trim()) {
+                sendChatMessage();
+            }
+        }
+        
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addChatMessage(message, 'user');
+            
+            // Clear input
+            chatInput.value = '';
+            
+            // Get bot response
+            setTimeout(() => {
+                const response = getChatbotResponse(message);
+                addChatMessage(response, 'bot');
+            }, 800);
+        }
+        
+        function addChatMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `<div class="message-content">${text}</div>`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function getChatbotResponse(userMessage) {
+            const lowerMsg = userMessage.toLowerCase();
+            
+            // Dictionary of ingredient knowledge
+            const ingredientKnowledge = {
+                // Skincare ingredients
+                'hyaluronic acid': 'Hyaluronic acid is a powerful humectant that can hold up to 1000x its weight in water. It helps hydrate skin, reduce fine lines, and improve skin elasticity. Safe for most skin types!',
+                'niacinamide': 'Niacinamide (Vitamin B3) helps reduce inflammation, minimize pores, improve skin barrier, and reduce hyperpigmentation. Great for acne-prone and sensitive skin.',
+                'retinol': 'Retinol (Vitamin A) is a powerful anti-aging ingredient that increases cell turnover. Can cause irritation - start with low concentration and use at night.',
+                'vitamin c': 'Vitamin C is a potent antioxidant that brightens skin, reduces dark spots, and protects against environmental damage. Use in the morning under sunscreen.',
+                'salicylic acid': 'Salicylic acid is a beta-hydroxy acid (BHA) that penetrates pores to dissolve excess oil and dead skin cells. Excellent for acne and oily skin.',
+                'glycolic acid': 'Glycolic acid is an alpha-hydroxy acid (AHA) that exfoliates skin surface, improves texture, and reduces fine lines. Can increase sun sensitivity.',
+                
+                // Food ingredients
+                'emulsifier': 'Emulsifiers help mix oil and water in food. Common ones: lecithin, mono/diglycerides. Generally safe but some people prefer to limit processed foods.',
+                'preservative': 'Preservatives prevent food spoilage. Common ones: citric acid, sodium benzoate, potassium sorbate. Most are safe in regulated amounts.',
+                'artificial sweetener': 'Artificial sweeteners provide sweetness without calories. Examples: aspartame, sucralose, stevia. Regulated as safe but some prefer natural alternatives.',
+                'msg': 'Monosodium Glutamate (MSG) enhances flavor. Generally recognized as safe by FDA, but some people report sensitivity (headaches, flushing).',
+                
+                // Dangerous substances
+                'kerosene': '⚠️ WARNING: Kerosene is a petroleum-based fuel that is TOXIC and should NEVER be used in skincare or consumed. It can cause severe skin irritation, chemical burns, and if ingested, can lead to pneumonia, seizures, or death.',
+                'gasoline': '⚠️ DANGER: Gasoline is HIGHLY FLAMMABLE and TOXIC. Never use on skin or consume. Contains benzene and other carcinogens that can cause cancer, organ damage, and neurological problems.',
+                'petroleum': '⚠️ CAUTION: While petroleum jelly (petrolatum) is purified and safe for skin, crude petroleum contains carcinogens. Only use cosmetic-grade petroleum products.',
+                'formaldehyde': '⚠️ TOXIC: Formaldehyde is a known carcinogen. In skincare, it\'s sometimes released from preservatives (formaldehyde-releasers). Avoid products listing formaldehyde or formalin.',
+                'bleach': '⚠️ DANGEROUS: Bleach (sodium hypochlorite) is corrosive and toxic. Never apply to skin or consume. Can cause severe burns, respiratory issues, and poisoning.',
+                'mercury': '⚠️ EXTREMELY TOXIC: Mercury is banned in cosmetics in most countries. Even small amounts can cause neurological damage, kidney failure, and birth defects.',
+                'lead': '⚠️ HEAVY METAL TOXIC: Lead is a neurotoxin that accumulates in the body. Never use in cosmetics or food. Causes developmental issues in children and organ damage in adults.',
+                
+                // Common questions
+                'good for acne': 'For acne, look for: Salicylic acid (unclogs pores), Benzoyl peroxide (kills bacteria), Niacinamide (reduces inflammation), and Retinoids (prevents clogged pores). Avoid heavy comedogenic ingredients.',
+                'sensitive skin': 'For sensitive skin: Avoid fragrance, alcohol denat, essential oils, and strong acids. Look for soothing ingredients like ceramides, centella asiatica, and oat extract.',
+                'dry skin': 'For dry skin: Look for hydrating ingredients like hyaluronic acid, glycerin, ceramides, and squalane. Avoid drying alcohols and strong foaming cleansers.',
+                'oily skin': 'For oily skin: Use oil-free, non-comedogenic products. Look for niacinamide, salicylic acid, clay, and lightweight hydrators. Avoid heavy oils and butters.',
+                'anti aging': 'For anti-aging: Use sunscreen daily (most important!), retinoids, vitamin C, peptides, and AHAs like glycolic acid. Stay hydrated and protect from sun exposure.',
+                'what is': 'I can explain ingredients! Try asking about specific ingredients like "What is hyaluronic acid?" or "Tell me about retinol."',
+                'how to use': 'Most skincare: Cleanse → Treat (serums) → Moisturize → Sunscreen (AM). Start new products one at a time, patch test first, and introduce actives slowly.',
+                'safe for pregnancy': 'Pregnancy-safe ingredients: Hyaluronic acid, Vitamin C, Azelaic acid. AVOID: Retinoids, Salicylic acid (high concentrations), Hydroquinone, and essential oils. Always consult your doctor.',
+                'expired product': 'Expired products can lose effectiveness or grow bacteria. Discard if: Changed color/consistency, strange odor, separated. Sunscreen especially important to replace yearly.',
+                'organic': 'Organic means grown without synthetic pesticides. "Natural" isn\'t regulated - even poison ivy is natural! Focus on ingredient safety rather than marketing terms.',
+                'cruelty free': 'Cruelty-free means not tested on animals. Look for Leaping Bunny or PETA certification. Vegan means no animal ingredients (beeswax, lanolin, carmine).',
+                'sunscreen': 'Use sunscreen daily! Mineral (zinc/titanium) is gentle, chemical absorbs UV. SPF 30+, broad spectrum, water resistant if swimming. Reapply every 2 hours outdoors.',
+                'moisturizer': 'Good moisturizers contain humectants (attract water), emollients (soften), occlusives (seal). For day: lighter lotions. For night: richer creams. Match to your skin type.',
+                'cleanser': 'Cleanser should clean without stripping. Cream/milk for dry skin, gel/foam for oily. Double cleansing: oil-based first (removes makeup), then water-based.',
+                'serum': 'Serums are concentrated treatments applied after cleansing, before moisturizer. Common types: hydrating (HA), brightening (Vit C), anti-aging (retinol), calming (niacinamide).',
+                'exfoliate': 'Exfoliate 1-3x weekly depending on skin. Chemical (AHAs/BHAs) preferred over physical scrubs. Stop if skin becomes irritated or sensitive.',
+                'dark spots': 'For dark spots: Vitamin C, Niacinamide, Azelaic acid, Kojic acid, Tranexamic acid. Most important: SUNSCREEN to prevent worsening.',
+                'pores': "You can't shrink pores, but can make them appear smaller: Niacinamide, Salicylic acid, Retinoids, Clay masks. Keep skin clean and hydrated.",
+                'redness': 'For redness: Centella asiatica, Azelaic acid, Niacinamide, Licorice root extract. Avoid triggers: heat, alcohol, spicy food, stress. See derm for persistent redness.',
+                'combination skin': 'For combination skin: Use different products on different areas. Gel cleanser, light moisturizer overall, spot treat oily areas with clay or BHA.',
+                'face mask': 'Clay masks absorb oil (oily skin), sheet masks hydrate (dry skin), sleeping masks treat overnight. Use 1-2x weekly, not daily.',
+                'eye cream': 'Eye skin is thinner, needs gentle care. Look for caffeine (puffiness), peptides (fine lines), vitamin C (dark circles). Apply with ring finger gently.',
+                'lip care': 'For lips: Avoid licking (dries more), use SPF lip balm outside, overnight treatment with lanolin or petrolatum. Exfoliate gently with sugar scrub if flaky.',
+                'body care': 'Body skin is thicker than face. Can tolerate stronger exfoliants. Moisturize after showering. Use different products for body vs face.',
+                'hair care': 'For hair: Sulfates cleanse but can dry, silicones smooth but can buildup, parabens preserve. Clarify monthly if using silicones. Protein treatments for damaged hair.',
+                'makeup': 'Makeup tips: Remove thoroughly before bed, clean brushes weekly, don\'t share products (infection risk), check expiration (mascara 3-6mo, foundation 1yr).',
+                'fragrance free': 'Fragrance-free means no added scent. Unscented may have masking fragrance. For sensitive skin, fragrance-free is safer as fragrance is a common irritant.',
+                'non comedogenic': 'Non-comedogenic means less likely to clog pores. Look for this label if acne-prone. Also oil-free and lightweight textures help.',
+                'clean beauty': 'Clean beauty avoids certain ingredients (parabens, sulfates, phthalates, etc.). Not regulated - research brands\' standards. Remember "natural" isn\'t always safer.',
+                'allergy': 'If you have allergies: Patch test new products (inner arm, wait 48hrs), read labels carefully, avoid known allergens. Common allergens: fragrance, preservatives, botanicals.',
+                'skin type': 'Skin types: Dry (flaky, tight), Oily (shiny, large pores), Combination (oily T-zone, dry cheeks), Normal (balanced), Sensitive (easily irritated).',
+                'routine': 'Basic routine: AM - Cleanse, Vitamin C, Moisturize, SPF. PM - Cleanse, Treat (retinol/AHA), Moisturize. Adjust based on your skin needs.',
+                'cheap vs expensive': 'Price doesn\'t always equal quality. Drugstore has great options. Pay more for: unique technology, higher concentrations, luxurious textures. Check ingredients over brand.',
+                'storage': 'Store skincare: Cool, dry place away from sunlight and humidity. Don\'t keep in bathroom (heat/moisture). Refrigerate vitamin C and some natural products.',
+                'travel': 'Travel skincare: Decant into smaller containers, use multi-tasking products, don\'t try new products while traveling, always pack sunscreen.',
+                'men skincare': 'Men\'s skin is thicker and oilier. Same principles apply: cleanse, treat concerns, moisturize, sunscreen. Shaving can cause irritation - use proper technique.',
+                'teen skincare': 'Teens: Keep simple - gentle cleanser, light moisturizer, spot treatment for acne, daily sunscreen. Avoid over-exfoliating. See derm for persistent acne.',
+                'over 40': '40+ skincare: Retinoids (collagen), Peptides (firmness), Antioxidants (protection), Hydration (plumpness). SUNSCREEN is non-negotiable. Consider professional treatments.',
+                'over 60': '60+ skincare: Rich moisturizers, gentle cleansing, continued sunscreen, targeted treatments for specific concerns. Skin thins with age - be extra gentle.',
+                'ingredient list': 'Ingredients listed by concentration (highest first). First 5-10 ingredients are most important. "Fragrance" can hide many chemicals in one term.',
+                'order of application': 'Apply thinnest to thickest: Cleanser → Toner → Serum → Eye cream → Moisturizer → Oil → Sunscreen. Wait between layers if using actives.',
+                'patch test': 'Patch test: Apply product to inner forearm or behind ear. Wait 48 hours. Check for redness, itching, swelling. Important for sensitive skin or new products.',
+                'purge vs breakout': 'Purging (4-6 weeks): small bumps where you normally breakout, from actives increasing cell turnover. Breakout: new areas, different types, from irritation.',
+                'hormonal acne': 'Hormonal acne: jawline/chin, cyclical. Treatments: Spironolactone (RX), Birth control (RX), Topical: retinoids, azelaic acid, salicylic acid. Stress management helps.',
+                'rosacea': 'Rosacea: facial redness, visible blood vessels, bumps. Triggers: sun, heat, spicy food, alcohol, stress. Treatments: azelaic acid, metronidazole (RX), IPL laser.',
+                'eczema': 'Eczema: dry, itchy, inflamed patches. Avoid fragrances, use gentle cleansers, thick moisturizers (ceramides, colloidal oatmeal), prescription steroids for flares.',
+                'psoriasis': 'Psoriasis: thick, scaly plaques. Treatments: topical steroids, vitamin D analogs, salicylic acid, coal tar, phototherapy. See dermatologist for management.',
+                'hyperpigmentation': 'Hyperpigmentation: dark spots from sun, acne, hormones. Treatments: sunscreen (prevent), vitamin C, hydroquinone (RX), chemical peels, lasers. Takes months.',
+                'melasma': 'Melasma: hormonal brown patches on face. Strict sunscreen (mineral preferred), hydroquinone (RX), azelaic acid, tranexamic acid. Can recur with sun/hormones.',
+                'cellulite': 'Cellulite: fat pushing through connective tissue. Topical treatments limited: caffeine temporarily reduces appearance. Exercise, healthy weight, dry brushing may help.',
+                'stretch marks': 'Stretch marks: scars from rapid growth. Early (red): retinoids, hyaluronic acid. Mature (white): limited improvement, microneedling, lasers. Moisturize for prevention.',
+                'body odor': 'Body odor: bacteria breaking down sweat. Solutions: antibacterial soap, aluminum-based antiperspirants, natural fibers, prescription strength if severe. Avoid scented products if sensitive.',
+                'sweat': 'Sweat is normal! Hyperhidrosis (excessive) may need treatment. Aluminum blocks sweat glands. Botox injections for severe cases. Stay hydrated regardless.',
+                'deodorant vs antiperspirant': 'Deodorant masks odor, antiperspirant reduces sweat. Aluminum is active in antiperspirants. Natural options: baking soda, arrowroot powder, essential oils.',
+                'shaving': 'Shaving tips: Use sharp blade, shave with grain, don\'t press hard, moisturize after. For irritation: aloe vera, hydrocortisone cream, avoid fragrance. Consider electric razor.',
+                'waxing': 'Waxing removes hair from root. Wait 24hr before sun, avoid retinol before, exfoliate after 2 days to prevent ingrowns. Not for retinol users or very sensitive skin.',
+                'laser hair removal': 'Laser targets pigment in hair. Works best on dark hair, light skin. Multiple sessions needed. Avoid sun before/after. Not permanent but long-lasting reduction.',
+                'self tanner': 'Self-tanner: DHA reacts with skin proteins to create color. Exfoliate first, apply evenly, wash hands after, develops in hours. Doesn\'t protect from sun.',
+                'sunburn': 'Sunburn treatment: Cool compresses, aloe vera, ibuprofen, hydration. Don\'t pop blisters. Severe: see doctor. Prevention: sunscreen, hats, shade, avoid peak sun.',
+                'tanning': 'Tanning = skin damage. Every tan increases skin cancer risk, ages skin. Safer alternatives: self-tanner, spray tan. No safe UV tanning exists.',
+                'skin cancer': 'Skin cancer signs (ABCDE): Asymmetry, Border irregular, Color variation, Diameter >6mm, Evolving. Monthly self-checks, annual dermatologist visit if high risk.',
+                'mole check': 'Check moles regularly. Changing moles need dermatologist evaluation. Risk factors: fair skin, family history, sunburns, many moles, immunosuppression.',
+                'bug bites': 'Bug bites: Clean with soap, cold compress, hydrocortisone cream for itch, antihistamine if allergic. Seek help if: difficulty breathing, spreading redness, fever.',
+                'poison ivy': 'Poison ivy: Wash with soap immediately, don\'t scratch (spreads oil), calamine lotion, hydrocortisone, oral antihistamines. Severe: prednisone (RX). Learn to identify plants.',
+                'acne scars': 'Acne scars: Ice pick, boxcar, rolling types. Treatments: microneedling, lasers, chemical peels, fillers. Prevention: don\'t pick acne, treat early, sunscreen.',
+                'blackheads': 'Blackheads: oxidized oil in pores. Treatments: salicylic acid, retinoids, clay masks, extraction by professional. Don\'t squeeze roughly - can cause scarring.',
+                'whiteheads': 'Whiteheads: closed comedones. Same treatment as blackheads. Gentle extraction possible but be sterile. Regular exfoliation prevents formation.',
+                'cystic acne': 'Cystic acne: deep, painful nodules. Needs dermatologist: isotretinoin (Accutane), oral antibiotics, steroid injections, spironolactone. Don\'t pick - causes scarring.',
+                'back acne': 'Back acne (bacne): Wear clean clothes, shower after sweating, use salicylic acid or benzoyl peroxide wash, change sheets weekly. Can be hormonal.',
+                'fungal acne': 'Fungal acne (malassezia): itchy uniform bumps, often on chest/back. Treatments: antifungal shampoos (ketoconazole), avoiding oils/fatty acids, sometimes oral antifungals.',
+                'perioral dermatitis': 'Around mouth rash, often from topical steroids. Stop steroids, use zero therapy (nothing), maybe antibiotics (RX). Avoid heavy creams, fluoridated toothpaste.',
+                'seborrheic dermatitis': 'Oily, scaly patches on scalp/face. Treatments: antifungal (ketoconazole), zinc pyrithione, salicylic acid, mild steroids short-term. Diet may affect.',
+                'keratosis pilaris': 'Chicken skin bumps on arms/cheeks. Gentle exfoliation (lactic acid, urea), moisturize, avoid hot showers. Genetic - can improve with age but not curable.',
+                'milia': 'Milia: tiny white cysts, not acne. Often from heavy creams. Can resolve on own or be extracted by professional. Retinoids may help prevent.',
+                'cold sores': 'Cold sores (herpes): Antiviral creams/pills at first tingling, avoid touching/spreading, lysine supplements may help, stress/sun/sickness trigger. Contagious when active.',
+                'canker sores': 'Canker sores: painful mouth ulcers, not contagious. Avoid acidic/spicy foods, use protective pastes, antimicrobial mouthwash. Stress, injury, food sensitivities trigger.',
+                'hives': 'Hives: itchy welts from allergy/stress/infection. Antihistamines, cool compresses, identify triggers. Emergency if: throat swelling, difficulty breathing.',
+                'athletes foot': 'Fungal foot infection: antifungal creams/sprays, keep feet dry, change socks, don\'t share towels/shoes. Can spread to nails (onychomycosis).',
+                'nail fungus': 'Thickened, discolored nails. Topical treatments often ineffective. Oral antifungals (RX) for months, laser treatment, or removal. Prevent with dry feet, clean tools.',
+                'ingrown toenail': 'Soak in warm water, lift nail gently with floss, antibiotic ointment if infected. Podiatrist for severe/recurrent. Proper trimming: straight across, not too short.',
+                'plantar warts': 'Warts on soles, from HPV virus. Salicylic acid patches, cryotherapy, laser, immunotherapy. Contagious - don\'t pick, wear flip-flops in public showers.',
+                'body sunscreen': 'Apply 1oz (shot glass) for body, 30min before sun, reapply every 2hrs or after swimming/sweating. Don\'t forget ears, neck, feet, back of knees.',
+                'face sunscreen': '1/4 tsp for face/neck. Mineral better for sensitive/acne-prone skin. Under makeup, let absorb before applying other products. Daily use prevents aging/cancer.',
+                'sunscreen stick': 'Good for reapplication over makeup, around eyes, kids. May need multiple passes for full coverage. Check expiration - most last 3 years.',
+                'water resistant sunscreen': 'Water resistant means maintains SPF after 40-80min in water. Still need to reapply after toweling off or every 2hrs.',
+                'spf in makeup': 'Makeup SPF isn\'t enough - you\'d need 7x foundation for stated protection. Use separate sunscreen under makeup.',
+                'vitamin d': 'You need sun for vitamin D but balance with skin cancer risk. 10-15min arms/legs 2-3x weekly, then sunscreen. Supplements safer than unprotected sun.',
+                'blue light': 'Blue light from screens may contribute to aging. Mineral sunscreen (zinc/titanium) blocks some. Antioxidants (vitamin C) may help protect. Not as damaging as UV.',
+                'indoor sunscreen': 'UVA penetrates windows, causes aging. If near windows daily, wear sunscreen. Minimal exposure - maybe skip if in basement/no windows.',
+                'sunscreen pill': 'Oral sunscreens (heliocare, polypodium) are supplements, not replacements for topical sunscreen. May provide extra antioxidant protection but don\'t block UV.',
+                'reef safe': 'Reef-safe means no oxybenzone/octinoxate which harm coral. Mineral sunscreens (zinc/titanium) are reef-safe. Also avoid microplastics in exfoliants.',
+                'sunscreen allergy': 'If allergic to chemical sunscreens, try mineral (zinc/titanium). Patch test. Some react to preservatives/fragrance - choose simple formulations.',
+                'makeup remover': 'Double cleanse: oil-based first (dissolves makeup), then water-based cleanser. Micellar water good for sensitive skin. Never sleep in makeup.',
+                'eye makeup remover': 'Be gentle - use oil-based remover, soak cotton pad, hold on eye 30sec, wipe gently. Don\'t rub - causes wrinkles and lash loss.',
+                'waterproof makeup': 'Oil-based removers best for waterproof makeup. Coconut oil, cleansing balms, dedicated removers. May need to follow with regular cleanser.',
+                'makeup brushes': 'Clean weekly with gentle soap, reshape, air dry. Dirty brushes cause breakouts, poor application. Synthetic brushes easier to clean than natural.',
+                'makeup expiration': 'Mascara: 3-6mo, Liquid foundation: 6-12mo, Powder: 2yr, Lipstick: 1-2yr, Eyeliner: 6-12mo. Discard if smell/texture/color changes.',
+                'makeup storage': 'Cool, dry place away from sunlight/humidity. Don\'t store in car (heat). Refrigeration not necessary for most, can cause condensation.',
+                'makeup travel': 'Solid products less messy, decant liquids, protect from pressure changes (don\'t fill to brim), separate liquids in plastic bag for security.',
+                'makeup for acne': 'Non-comedogenic, oil-free, salicylic acid foundations, avoid heavy creams, clean tools/applicators, remove thoroughly, don\'t share.',
+                'makeup for mature skin': 'Hydrating formulas, avoid heavy powder (settles in lines), cream products, luminous finish, less is more, good skincare underneath.',
+                'makeup for oily skin': 'Matte formulas, oil-free, powder to set, blotting papers, long-wearing, avoid cream highlighters on oily areas.',
+                'makeup for dry skin': 'Hydrating/dewy formulas, cream products, avoid powder, prep with moisturizer, facial mist throughout day, exfoliate regularly.',
+                'makeup for sensitive skin': 'Fragrance-free, minimal ingredients, patch test, mineral makeup often better, clean tools, replace regularly, remove gently.',
+                'makeup allergies': 'Common allergens: fragrance, preservatives, nickel (eyeshadows), lanolin, beeswax. Patch test new products. Hypoallergenic isn\'t regulated term.',
+                'cruelty free makeup': 'Not tested on animals. Look for Leaping Bunny, PETA logo. Some parent companies may test - check brand policies carefully.',
+                'vegan makeup': 'No animal ingredients: beeswax, carmine (red pigment from beetles), lanolin, silk, gelatin. May still be tested on animals unless also cruelty-free.',
+                'clean makeup': 'Avoids certain ingredients (parabens, phthalates, etc.). Not regulated - each brand defines differently. Research ingredients if concerned.',
+                'mineral makeup': 'Powders with minerals like zinc, titanium, mica. Good for sensitive/acne-prone skin. Can be drying, may not provide full coverage.',
+                'organic makeup': 'Contains organically grown ingredients. Certification varies. "Natural" isn\'t regulated. Still check ingredients - organic doesn\'t always mean better.',
+                'makeup primer': 'Creates smooth base, extends wear, addresses concerns (pore-minimizing, hydrating, color-correcting). Use after skincare, before foundation.',
+                'makeup setting spray': 'Extends wear, melts powders together, adds dewiness or matte finish. Hold 8-10 inches away, close eyes, spray in X and T motions.',
+                'makeup setting powder': 'Sets liquid products, reduces shine, blurs pores. Press with puff for more coverage, dust with brush for light setting. Bake under eyes for creaseless.',
+                'contouring': 'Dark shades recede (hollows), light shades bring forward (high points). Blend well! Cream products under powder, subtle is more natural.',
+                'highlighting': 'Apply to high points: cheekbones, brow bone, cupid\'s bow, nose bridge, inner corners. Liquid/cream under powder for glow, powder alone for subtle.',
+                'blush placement': 'Apples of cheeks (youthful), on cheekbones (sculpted), across nose bridge (sun-kissed). Smile to find apples, blend upward toward temples.',
+                'eyebrow shaping': 'Follow natural shape, tweeze from below to lift, fill sparse areas, set with gel. Don\'t over-pluck - brows frame the face.',
+                'eyeshadow techniques': 'Transition shade in crease, lid color, darker outer V, highlight brow bone/inner corner. Blend between colors for gradient.',
+                'eyeliner styles': 'Tightline (between lashes), classic (along lashline), wing (extended up), smoked (smudged). Different shapes suit different eye shapes.',
+                'false lashes': 'Trim to eye width, wait 30sec after glue, apply to lashline not skin, press corners, blend with mascara. Remove gently with oil-based remover.',
+                'lip liner': 'Outline lips, fill in entirely as base, prevents feathering, can overline slightly. Match lipstick or go slightly darker for dimension.',
+                'lipstick longevity': 'Exfoliate lips, apply liner all over, blot, reapply, blot again, dust with powder, final layer. Avoid oily foods, use straw.',
+                'makeup brushes vs sponges': 'Brushes: more precise, better for powders. Sponges: better for liquids, dewy finish. Damp sponge sheers out foundation.',
+                'makeup for glasses': 'Focus on brows/lips since eyes behind lenses, set foundation where glasses rest, avoid glittery eyeshadows (reflects), curl lashes so they don\'t hit lenses.',
+                'makeup for masks': 'Focus on eyes, skip foundation under mask (causes breakouts), use setting spray, blotting papers, lipstick that won\'t smudge under mask.',
+                'makeup for photos': 'Matte finishes (shine reflects), slightly more blush/contour (washes out), fill brows (frames face), false lashes show up better.',
+                'makeup for videos': 'Similar to photos but consider lighting. Natural daylight shows true colors, ring light flatters, office lighting may cast shadows.',
+                'makeup for stage': 'Heavier application, more contrast, waterproof (sweat), consider distance from audience. TV makeup is between stage and everyday.',
+                'makeup trends': 'Changes yearly! Currently: skin focus, minimal makeup, graphic liner, bold blush, glossy lips. Adapt trends to suit your features.',
+                'makeup history': 'Ancient Egyptians: kohl, red ochre. 1920s: cupid\'s bow lips. 1950s: winged liner. 1980s: bold colors. 1990s: matte browns. 2000s: shimmer.',
+                'makeup brands': 'Luxury: Chanel, Dior, Tom Ford. Mid-range: MAC, NARS, Urban Decay. Drugstore: L\'Oréal, Maybelline, NYX. Indie: Glossier, Fenty, Rare Beauty.',
+                'makeup artists': 'Famous MUAs: Pat McGrath, Bobbi Brown, Kevyn Aucoin, Lisa Eldridge, Mario Dedivanovic. Learn from their tutorials!',
+                'makeup courses': 'Many online courses (YouTube, Skillshare), beauty schools, certifications (CIDESCO, ITEC). Practice is key - start with your own face.',
+                'makeup career': 'Paths: freelance, salon/spa, film/TV, fashion, bridal, retail, education, product development. Build portfolio, network, continue learning.',
+                'makeup kit essentials': 'Base products, concealer, powder, blush, mascara, neutral eyeshadow palette, eyeliner, lip products, brushes, sponges, sharpener.',
+                'makeup on budget': 'Drugstore has great options, invest in key pieces (foundation, eyeshadow), skip trends you won\'t wear, multi-use products, sales.',
+                'makeup storage ideas': 'Acrylic organizers, magnetic palettes (depot singles), drawer dividers, rotating stands, travel bags, vanity with good lighting.',
+                'makeup vanity': 'Good lighting (natural or daylight bulbs), comfortable seat, mirror (magnified side helpful), accessible storage, outlet for tools.',
+                'makeup lighting': 'Natural daylight best, ring lights even, avoid yellow bulbs (alters color). LED with adjustable color temperature ideal.',
+                'makeup mirror': 'Magnification helpful for detail work, lighted mirrors for dim spaces, portable mirrors for travel, large mirror for full face.',
+                'makeup travel bag': 'Clear bag for security, compartmentalized, waterproof lining, durable material, enough space but not bulky, easy to clean.',
+                'makeup for men': 'Increasingly common! Concealer, powder, brow gel, tinted moisturizer. Normalizes self-expression through cosmetics.',
+                'makeup for kids': 'Play makeup only (not cosmetic grade), avoid around eyes, supervise, teach removal, focus on play not appearance. Stage makeup with supervision.',
+                'makeup for teens': 'Start simple: tinted moisturizer, mascara, lip gloss. Teach skincare first, proper removal, less is more. Build skills gradually.',
+                'makeup for elderly': 'Moisturizing formulas, cream products, easy application (arthritis-friendly), larger handles on tools, good lighting, magnifying mirror.',
+                'makeup for disabilities': 'Adaptive tools (magnetic closures, one-handed), easy-open packaging, tutorials for different abilities, inclusive beauty brands emerging.',
+                'makeup for cancer patients': 'Gentle products, fragrance-free, easy removal, focus on brows/lashes (lost during chemo), SPF important (immune suppression). Look for oncology-trained MUAs.',
+                'makeup for vitiligo': 'Color matching challenging, camouflage makeup available, embrace unique patterns, sun protection on depigmented areas. Brands expanding shade ranges.',
+                'makeup for scars': 'Color-correct (green neutralizes red), silicone-based primers can smooth, full-coverage foundations, setting spray for longevity. Embrace scars too!',
+                'makeup for burns': 'Medical-grade silicone products first, then camouflage makeup if desired. Consult with burn specialist before applying to healing skin.',
+                'makeup for tattoos': 'Let heal completely first (2-4 weeks), then sunscreen always (fades ink), makeup can cover if desired for certain occasions.',
+                'makeup for hijab': 'Focus on visible areas: face, sometimes eyes. Long-wearing formulas, transfer-resistant, touch-up kit. Respect individual choices.',
+                'makeup for weddings': 'Trials important, photography considerations (matte better), longevity, touch-up kit, waterproof for tears. Practice beforehand.',
+                'makeup for job interview': 'Neutral, polished, enhances features without distraction, long-wearing, minimal fragrance. Industry appropriate (creative vs corporate).',
+                'makeup for dates': 'Whatever makes you feel confident! Often: enhanced natural look, long-wearing formulas, kiss-proof lips. Be yourself.',
+                'makeup for gym': 'Sweat-proof if any, lightweight, avoid heavy foundation (clogs pores), sunscreen, quick post-workout cleanse. Many prefer none for gym.',
+                'makeup for swimming': 'Waterproof mascara/liner, tinted moisturizer with SPF, lip/cheek stain, minimal powder (washes off). Reapply sunscreen!',
+                'makeup for beach': 'Tinted sunscreen, waterproof mascara, lip balm with SPF, cream blush. Sand + makeup = messy. Embrace natural!',
+                'makeup for skiing': 'High SPF, wind protection, moisturizing, goggles may smudge - focus on areas not covered. Cold weather dries skin.',
+                'makeup for hot weather': 'Oil-free, matte, long-wearing, sweat-proof, setting spray, blotting papers, minimal layers, sunscreen.',
+                'makeup for cold weather': 'Moisturizing, cream products avoid powder (emphasizes dry patches), protect from wind, lip balm, humidifier indoors.',
+                'makeup for humid climate': 'Water-based products, setting powder/spray, blotting papers, waterproof formulas, minimal cream products (can slide).',
+                'makeup for dry climate': 'Rich moisturizer first, hydrating formulas, avoid matte powders, facial mist throughout day, humidifier at night.',
+                'makeup for airplane': 'Hydrating mist, moisturizer, lip balm, minimal makeup during flight (recycles dry air), do full routine after landing.',
+                'makeup for time travel': 'Ancient Egypt: kohl & ochre. Renaissance: pale face. Victorian: subtle. 1920s: dark eyes/cupid lips. 1980s: bold. Future: who knows!'
+            };
+            
+            // Check for specific ingredient queries
+            for (const [keyword, response] of Object.entries(ingredientKnowledge)) {
+                if (lowerMsg.includes(keyword)) {
+                    return response;
+                }
+            }
+            
+            // Check for question patterns
+            if (lowerMsg.includes('what is') || lowerMsg.includes('tell me about')) {
+                const ingredient = lowerMsg.replace('what is', '').replace('tell me about', '').trim();
+                if (ingredient) {
+                    return `I'd be happy to tell you about ${ingredient}! However, I need more specific information. Could you clarify which ingredient you mean? Or try asking about common ingredients like hyaluronic acid, retinol, or niacinamide.`;
+                }
+            }
+            
+            if (lowerMsg.includes('good for') || lowerMsg.includes('help with')) {
+                return 'I can recommend ingredients for specific concerns! Try asking: "What ingredients are good for acne?" or "What helps with dry skin?"';
+            }
+            
+            if (lowerMsg.includes('bad for') || lowerMsg.includes('avoid')) {
+                return 'Some ingredients to be cautious about: fragrance (irritant), alcohol denat (drying), certain preservatives if sensitive. What specific ingredient are you concerned about?';
+            }
+            
+            if (lowerMsg.includes('thank') || lowerMsg.includes('thanks')) {
+                return 'You\'re welcome! Feel free to ask more questions about ingredients anytime.';
+            }
+            
+            if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('hey')) {
+                return 'Hello! I\'m your Ingredient Buddy. Ask me anything about skincare or food ingredients!';
+            }
+            
+            if (lowerMsg.includes('how are you')) {
+                return 'I\'m just a bot, but I\'m here and ready to help you with all your ingredient questions!';
+            }
+            
+            if (lowerMsg.includes('bye') || lowerMsg.includes('goodbye')) {
+                return 'Goodbye! Remember to check ingredients before using new products. Stay safe!';
+            }
+            
+            // Default response for unrecognized queries
+            const defaultResponses = [
+                "I'm here to help with ingredient questions! Try asking about specific ingredients or skincare concerns.",
+                "I can explain ingredients and their effects on skin/health. What would you like to know?",
+                "Need help understanding an ingredient list? Share what you're curious about!",
+                "I specialize in ingredient knowledge. Ask me about anything from hyaluronic acid to preservatives!"
+            ];
+            
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+        
+        function startVoiceChat() {
+            alert('Voice chat would start in a real app. For now, type your questions!');
+        }
+        
+        // ========== NAVIGATION MODALS ==========
+        function showHistory() {
+            const modal = document.getElementById('historyModal');
+            const content = document.getElementById('historyModalContent');
+            
+            content.innerHTML = `
+                <h4 style="color: var(--text-dark); margin-bottom: 15px;">Recent Scans</h4>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    ${generateHistoryItems()}
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: rgba(172, 225, 175, 0.1); border-radius: var(--radius-sm);">
+                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Scan Statistics</h5>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">42</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">Total Scans</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">36</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">Safe Products</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--warning);">6</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">Warnings</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function showInsights() {
+            const modal = document.getElementById('insightsModal');
+            const content = document.getElementById('insightsModalContent');
+            
+            content.innerHTML = `
+                <h4 style="color: var(--text-dark); margin-bottom: 15px;">Your Wellness Insights</h4>
+                <div style="margin-bottom: 20px;">
+                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Top Ingredients You Encounter</h5>
+                    <ul style="color: var(--text-light); padding-left: 20px;">
+                        <li>Fragrance/Parfum (found in 18 products)</li>
+                        <li>Alcohol Denat. (found in 12 products)</li>
+                        <li>Glycerin (found in 35 products)</li>
+                        <li>Hyaluronic Acid (found in 8 products)</li>
+                        <li>Niacinamide (found in 5 products)</li>
+                    </ul>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Monthly Trends</h5>
+                    <div style="background: white; padding: 15px; border-radius: var(--radius-sm);">
+                        <div style="display: flex; align-items: flex-end; height: 150px; gap: 10px;">
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                                <div style="background: var(--success); height: 80%; width: 20px; border-radius: 5px;"></div>
+                                <div style="font-size: 0.8rem; margin-top: 5px;">Jan</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                                <div style="background: var(--success); height: 90%; width: 20px; border-radius: 5px;"></div>
+                                <div style="font-size: 0.8rem; margin-top: 5px;">Feb</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                                <div style="background: var(--warning); height: 60%; width: 20px; border-radius: 5px;"></div>
+                                <div style="font-size: 0.8rem; margin-top: 5px;">Mar</div>
+                            </div>
+                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                                <div style="background: var(--success); height: 95%; width: 20px; border-radius: 5px;"></div>
+                                <div style="font-size: 0.8rem; margin-top: 5px;">Apr</div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 10px;">Safe vs Unsafe Product Ratio</div>
+                    </div>
+                </div>
+                <div>
+                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Personalized Recommendations</h5>
+                    <div style="background: rgba(172, 225, 175, 0.1); padding: 15px; border-radius: var(--radius-sm);">
+                        <p style="color: var(--text-light); margin-bottom: 10px;">Based on your scan history, we recommend:</p>
+                        <ul style="color: var(--text-light); padding-left: 20px;">
+                            <li>Try fragrance-free alternatives for your next purchase</li>
+                            <li>Consider products with hyaluronic acid for better hydration</li>
+                            <li>Your safe choice streak is 12 days - keep it up!</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function showCommunity() {
+            const modal = document.getElementById('communityModal');
+            const content = document.getElementById('communityModalContent');
+            
+            content.innerHTML = `
+                <h4 style="color: var(--text-dark); margin-bottom: 15px;">Community Forum</h4>
+                <div style="margin-bottom: 20px;">
+                    <p style="color: var(--text-light); margin-bottom: 15px;">Connect with other Jneyah users, ask questions, and share experiences.</p>
+                    
+                    <div style="background: white; padding: 15px; border-radius: var(--radius-sm); margin-bottom: 15px;">
+                        <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 5px;">Trending Topics</div>
+                        <ul style="color: var(--text-light); padding-left: 20px;">
+                            <li>Best sunscreen for sensitive skin?</li>
+                            <li>Natural deodorant that actually works</li>
+                            <li>Skincare routine for hormonal acne</li>
+                            <li>Are "clean beauty" products really better?</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: var(--radius-sm);">
+                        <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 10px;">Ask a Question</div>
+                        <textarea id="communityQuestion" placeholder="Type your question here..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 10px; min-height: 80px;"></textarea>
+                        <button class="btn btn-sm" onclick="postCommunityQuestion()" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Post to Community
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function postCommunityQuestion() {
+            const questionInput = document.getElementById('communityQuestion');
+            const question = questionInput.value.trim();
+            
+            if (!question) {
+                alert('Please enter a question.');
+                return;
+            }
+            
+            alert('Your question has been posted to the community! Our experts and other users will respond soon.');
+            questionInput.value = '';
+        }
+        
+        function showSettings() {
+            const modal = document.getElementById('settingsModal');
+            const content = document.getElementById('settingsModalContent');
+            
+            content.innerHTML = `
+                <h4 style="color: var(--text-dark); margin-bottom: 15px;">Settings</h4>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 10px;">Account Information</div>
+                    <div style="background: white; padding: 15px; border-radius: var(--radius-sm);">
+                        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <div class="profile-img" style="margin-right: 15px;">${currentUser.initials}</div>
+                            <div>
+                                <div style="font-weight: bold; color: var(--text-dark);">${currentUser.name}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">Member since ${new Date(currentUser.joinDate).toLocaleDateString()}</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm" onclick="editProfile()" style="width: 100%;">
+                            <i class="fas fa-user-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 10px;">Notifications</div>
+                    <div style="background: white; padding: 15px; border-radius: var(--radius-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: var(--text-dark);">Product Safety Alerts</span>
+                            <label class="theme-toggle" style="transform: scale(0.7);">
+                                <input type="checkbox" checked style="display: none;">
+                                <div class="toggle-slider"></div>
+                            </label>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="color: var(--text-dark);">Daily Ingredient Tips</span>
+                            <label class="theme-toggle" style="transform: scale(0.7);">
+                                <input type="checkbox" checked style="display: none;">
+                                <div class="toggle-slider"></div>
+                            </label>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: var(--text-dark);">Community Updates</span>
+                            <label class="theme-toggle" style="transform: scale(0.7);">
+                                <input type="checkbox" style="display: none;">
+                                <div class="toggle-slider"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="font-weight: bold; color: var(--text-dark); margin-bottom: 10px;">Privacy</div>
+                    <div style="background: white; padding: 15px; border-radius: var(--radius-sm);">
+                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 15px;">
+                            Your data is secure and private. We never share personal information with third parties.
+                        </p>
+                        <button class="btn btn-sm" onclick="showPrivacyPolicy()" style="width: 100%;">
+                            <i class="fas fa-shield-alt"></i> View Privacy Policy
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <button class="btn" onclick="logout()" style="background: var(--error); color: white; width: 100%;">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function editProfile() {
+            const newName = prompt('Enter your name:', currentUser.name);
+            if (newName && newName.trim()) {
+                currentUser.name = newName.trim();
+                currentUser.initials = newName.trim().split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                
+                // Save to localStorage
+                localStorage.setItem('jneyah_user', JSON.stringify(currentUser));
+                
+                // Update UI
+                document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.name}!`;
+                document.getElementById('userInitial').textContent = currentUser.initials;
+                
+                alert('Profile updated successfully!');
+                closeModal('settingsModal');
+                showSettings(); // Refresh settings modal
+            }
+        }
+        
+        function showPrivacyPolicy() {
+            alert('Privacy Policy: Your data is encrypted and stored securely. We use your scan history only to provide personalized insights. You can delete your data anytime from settings.');
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to sign out?')) {
+                // In a real app, you would clear session and redirect to login
+                alert('Signed out successfully. Redirecting to login...');
+                // window.location.href = 'signin.html'; // Uncomment in real implementation
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function showHome() {
+            // Close all modals
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => modal.style.display = 'none');
+            
+            // Ensure main content is visible (it always is, but just in case)
+            document.getElementById('mainContent').style.display = 'block';
+        }
+        
+        // ========== HISTORY MANAGEMENT ==========
+        let scanHistory = JSON.parse(localStorage.getItem('jneyah_history')) || [
+            { product: 'Vitamin C Serum', type: 'safe', date: new Date(Date.now() - 86400000).toISOString(), source: 'upload' },
+            { product: 'Protein Bar', type: 'warning', date: new Date(Date.now() - 172800000).toISOString(), source: 'manual' },
+            { product: 'Face Wash', type: 'safe', date: new Date(Date.now() - 259200000).toISOString(), source: 'upload' },
+            { product: 'Sunscreen', type: 'safe', date: new Date(Date.now() - 345600000).toISOString(), source: 'upload' },
+            { product: 'Shampoo', type: 'danger', date: new Date(Date.now() - 432000000).toISOString(), source: 'manual' }
+        ];
+        
+        function addToHistory(product, safety, source) {
+            const historyItem = {
+                product: product,
+                type: safety,
+                date: new Date().toISOString(),
+                source: source
+            };
+            
+            scanHistory.unshift(historyItem); // Add to beginning
+            if (scanHistory.length > 50) scanHistory = scanHistory.slice(0, 50); // Keep last 50
+            
+            localStorage.setItem('jneyah_history', JSON.stringify(scanHistory));
+            updateHistoryDisplay();
+        }
+        
+        function generateHistoryItems() {
+            return scanHistory.map(item => {
+                const date = new Date(item.date);
+                const timeAgo = getTimeAgo(date);
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-icon">
+                            <i class="fas fa-${item.source === 'upload' ? 'camera' : 'keyboard'}"></i>
+                        </div>
+                        <div class="history-info">
+                            <div class="history-name">${item.product}</div>
+                            <div class="history-date">${timeAgo}</div>
+                        </div>
+                        <div class="history-status status-${item.type}">
+                            ${item.type === 'safe' ? 'Safe' : item.type === 'warning' ? 'Caution' : 'Avoid'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function updateHistoryDisplay() {
+            const historyContainer = document.getElementById('historyContainer');
+            if (historyContainer) {
+                historyContainer.innerHTML = generateHistoryItems();
+            }
+        }
+        
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+            
+            return date.toLocaleDateString();
+        }
+        
+        // ========== STREAK MANAGEMENT ==========
+        function updateStreak(type) {
+            console.log(`Updated ${type} streak`);
+            
+            // Visual feedback
+            const streakCards = document.querySelectorAll('.streak-card');
+            streakCards.forEach(card => {
+                if (card.querySelector('.streak-name').textContent.toLowerCase().includes(type)) {
+                    card.style.animation = 'pulse 0.5s';
+                    setTimeout(() => {
+                        card.style.animation = '';
+                    }, 500);
+                }
+            });
+        }
+        
+        // ========== COMMUNITY QUESTION ==========
+        function askQuestion() {
+            const askInput = document.getElementById('askInput');
+            const question = askInput.value.trim();
+            
+            if (!question) {
+                alert('Please enter a question.');
+                return;
+            }
+            
+            alert('Your question has been posted to the community! Our experts and other users will respond soon.');
+            askInput.value = '';
+            
+            // Update community engagement streak
+            updateStreak('learning');
+        }
+        
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Jneyah Home Screen loaded');
+            updateHistoryDisplay();
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
