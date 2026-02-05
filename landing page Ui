@@ -415,9 +415,29 @@
             gap: 15px;
         }
         
-        .voice-icon {
-            color: var(--cta-dark);
-            font-size: 1.2rem;
+        .voice-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .voice-btn-small {
+            background: var(--cta);
+            color: var(--text-dark);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .voice-btn-small:hover {
+            background: var(--cta-dark);
+            transform: scale(1.1);
         }
         
         /* Manual Input */
@@ -709,21 +729,22 @@
         }
         
         .badge {
-            background: var(--cta-light);
+            background: var(--card-bg);
             border-radius: 20px;
             padding: 8px 15px;
             font-size: 0.8rem;
             font-weight: 600;
-            color: var(--text-dark);
+            color: var(--text-light);
             display: flex;
             align-items: center;
             gap: 8px;
-            border: 2px solid transparent;
+            border: 2px solid var(--border);
         }
         
         .badge.earned {
             border-color: var(--success);
-            background: rgba(52, 168, 83, 0.1);
+            background: var(--cta-light);
+            color: var(--text-dark);
         }
         
         /* Insights */
@@ -793,9 +814,18 @@
             gap: 15px;
         }
         
+        .alert-card.expiry {
+            background: rgba(234, 67, 53, 0.1);
+            border-left: 4px solid var(--error);
+        }
+        
         .alert-icon {
             color: var(--warning);
             font-size: 1.2rem;
+        }
+        
+        .alert-icon.expiry {
+            color: var(--error);
         }
         
         .alert-text {
@@ -958,6 +988,33 @@
             cursor: pointer;
         }
         
+        /* Water Reminder */
+        .water-reminder {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(66, 133, 244, 0.1);
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--info);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .water-text {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .water-check {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -967,6 +1024,12 @@
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
         
         /* Responsive */
@@ -1094,8 +1157,13 @@
                             This moisturizer contains ingredients compatible with your skin profile. No known allergens or irritants detected.
                         </div>
                         <div class="voice-explain">
-                            <div class="voice-icon">
-                                <i class="fas fa-volume-up"></i>
+                            <div class="voice-controls">
+                                <button class="voice-btn-small" onclick="speakAnalysis('This product is gentle and suitable for daily use. Contains hydrating ingredients like hyaluronic acid.')">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                                <button class="voice-btn-small" onclick="stopSpeaking()">
+                                    <i class="fas fa-stop"></i>
+                                </button>
                             </div>
                             <div>"This product is gentle and suitable for daily use. Contains hydrating ingredients like hyaluronic acid."</div>
                         </div>
@@ -1117,10 +1185,15 @@
                 
                 <div class="manual-input">
                     <textarea class="ingredient-input" id="ingredientInput" placeholder="Paste ingredient list here... 
-Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
+Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance, Alcohol Denat., Parabens"></textarea>
                     <button class="btn" style="margin-top: 15px; width: 100%;" onclick="analyzeIngredients()">
                         <i class="fas fa-search"></i> Analyze Ingredients
                     </button>
+                </div>
+                
+                <div class="water-reminder">
+                    <div class="water-text">💧 Did you drink enough water today?</div>
+                    <button class="water-check" onclick="logWater()">Yes, I did!</button>
                 </div>
             </div>
             
@@ -1138,11 +1211,11 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                 
                 <div class="ingredient-card">
                     <div class="ingredient-header">
-                        <div class="ingredient-name">Alcohol (in skincare)</div>
+                        <div class="ingredient-name">Alcohol Denat. (in skincare)</div>
                         <div class="ingredient-type">SKINCARE</div>
                     </div>
                     <div class="ingredient-desc">
-                        Helps products dry quickly on skin, but may cause dryness or irritation for sensitive skin types. Often found in toners and cleansers.
+                        Helps products dry quickly on skin, but may cause dryness or irritation for sensitive skin types. Often found in toners and cleansers. Can be harsh for dry skin.
                     </div>
                     <div class="ingredient-interactions">
                         <button class="interaction-btn" onclick="rateIngredient('helpful')">
@@ -1257,9 +1330,9 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                         </div>
                         <div class="streak-info">
                             <div class="streak-name">Water Awareness</div>
-                            <div class="streak-days">7 day streak</div>
+                            <div class="streak-days"><span id="waterStreak">0</span> day streak</div>
                             <div class="streak-progress">
-                                <div class="progress-bar" style="width: 100%"></div>
+                                <div class="progress-bar" id="waterProgress" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
@@ -1270,9 +1343,9 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                         </div>
                         <div class="streak-info">
                             <div class="streak-name">Healthy Food Choices</div>
-                            <div class="streak-days">5 day streak</div>
+                            <div class="streak-days"><span id="foodStreak">0</span> day streak</div>
                             <div class="streak-progress">
-                                <div class="progress-bar" style="width: 71%"></div>
+                                <div class="progress-bar" id="foodProgress" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
@@ -1283,10 +1356,30 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                         </div>
                         <div class="streak-info">
                             <div class="streak-name">Skin-Safe Choices</div>
-                            <div class="streak-days">12 day streak</div>
+                            <div class="streak-days"><span id="skinStreak">0</span> day streak</div>
                             <div class="streak-progress">
-                                <div class="progress-bar" style="width: 85%"></div>
+                                <div class="progress-bar" id="skinProgress" style="width: 0%"></div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alerts-container">
+                    <div class="alert-card">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="alert-text" id="fragranceAlert">
+                            You've used products with strong fragrance 5 days in a row. Sensitive skin may react.
+                        </div>
+                    </div>
+                    
+                    <div class="alert-card expiry">
+                        <div class="alert-icon expiry">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="alert-text">
+                            Your sunscreen expires in 30 days. Consider replacing it soon.
                         </div>
                     </div>
                 </div>
@@ -1300,49 +1393,21 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                     </div>
                     <div>
                         <div class="feature-title">Your Badges</div>
-                        <div class="feature-subtitle">Earn achievements</div>
+                        <div class="feature-subtitle">Earn achievements based on your performance</div>
                     </div>
                 </div>
                 
-                <div class="badges-container">
-                    <div class="badge earned">
-                        <i class="fas fa-medal"></i> Ingredient Aware Beginner
-                    </div>
-                    <div class="badge earned">
-                        <i class="fas fa-fire"></i> 7-Day Safe Choice Streak
-                    </div>
-                    <div class="badge">
-                        <i class="fas fa-search"></i> Food Label Pro
-                    </div>
-                    <div class="badge">
-                        <i class="fas fa-graduation-cap"></i> Ingredient Expert
-                    </div>
-                    <div class="badge earned">
-                        <i class="fas fa-seedling"></i> Clean Beauty Advocate
-                    </div>
-                    <div class="badge">
-                        <i class="fas fa-heart"></i> Wellness Warrior
-                    </div>
+                <div class="badges-container" id="badgesContainer">
+                    <!-- Badges will be dynamically generated -->
                 </div>
                 
-                <!-- Bad Habit Alerts -->
-                <div class="alerts-container">
-                    <div class="alert-card">
-                        <div class="alert-icon">
-                            <i class="fas fa-exclamation-triangle"></i>
+                <div style="margin-top: 15px; padding: 12px; background: var(--card-bg); border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <div style="font-weight: 600; color: var(--text-dark); margin-bottom: 8px;">Next Badge to Earn:</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="badge">
+                            <i class="fas fa-search"></i> Food Label Pro
                         </div>
-                        <div class="alert-text">
-                            You've used products with strong fragrance 5 days in a row. Sensitive skin may react.
-                        </div>
-                    </div>
-                    
-                    <div class="alert-card">
-                        <div class="alert-icon">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="alert-text">
-                            Your sunscreen expires in 30 days. Consider replacing it soon.
-                        </div>
+                        <div style="font-size: 0.9rem; color: var(--text-light);">Scan 10 food items to unlock</div>
                     </div>
                 </div>
             </div>
@@ -1364,20 +1429,20 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                         <div class="insight-title">Scan History</div>
                         <div class="insight-stats">
                             <div class="stat-item">
-                                <div class="stat-value">42</div>
+                                <div class="stat-value" id="totalScans">0</div>
                                 <div class="stat-label">Total Scans</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value">36</div>
+                                <div class="stat-value" id="safeScans">0</div>
                                 <div class="stat-label">Safe</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value">6</div>
+                                <div class="stat-value" id="warningScans">0</div>
                                 <div class="stat-label">Warning</div>
                             </div>
                         </div>
-                        <div class="insight-text">
-                            You frequently scan products with high sugar and emulsifiers. Try choosing more whole food options.
+                        <div class="insight-text" id="personalizedInsight">
+                            Start scanning products to get personalized insights!
                         </div>
                     </div>
                     
@@ -1450,7 +1515,6 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
 
     <script>
         // ========== USER MANAGEMENT ==========
-        // Get user from localStorage or use default
         let currentUser = JSON.parse(localStorage.getItem('jneyah_user')) || {
             name: 'User',
             email: '',
@@ -1458,9 +1522,83 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
             joinDate: new Date().toISOString()
         };
         
-        // Update welcome message and profile
-        document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.name}!`;
-        document.getElementById('userInitial').textContent = currentUser.initials;
+        // ========== APP STATE ==========
+        let userData = JSON.parse(localStorage.getItem('jneyah_user_data')) || {
+            streaks: {
+                water: { current: 0, max: 0, lastUpdated: null },
+                food: { current: 0, max: 0, lastUpdated: null },
+                skin: { current: 0, max: 0, lastUpdated: null }
+            },
+            badges: {
+                beginner: false,
+                safeStreak: false,
+                foodPro: false,
+                ingredientExpert: false,
+                cleanBeauty: false,
+                wellnessWarrior: false
+            },
+            scanStats: {
+                total: 0,
+                safe: 0,
+                warning: 0,
+                danger: 0,
+                commonIngredients: {},
+                lastScanDate: null
+            },
+            history: []
+        };
+        
+        let currentSpeech = null;
+        
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Jneyah Home Screen loaded');
+            
+            // Update UI with saved data
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.name}!`;
+            document.getElementById('userInitial').textContent = currentUser.initials;
+            
+            // Initialize streaks
+            updateStreakUI();
+            
+            // Initialize badges
+            updateBadgesUI();
+            
+            // Initialize scan stats
+            updateScanStatsUI();
+            
+            // Initialize history
+            updateHistoryDisplay();
+            
+            // Check and update streaks based on last activity
+            checkStreakContinuity();
+            
+            // Set up real-time date
+            updateRealTimeDate();
+            setInterval(updateRealTimeDate, 1000);
+            
+            // Set up theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // ========== THEME TOGGLE ==========
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
         
         // ========== REAL-TIME DATE ==========
         function updateRealTimeDate() {
@@ -1471,35 +1609,14 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                 month: 'long', 
                 day: 'numeric',
                 hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
+                minute: '2-digit'
             };
             document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
-        }
-        
-        // Update date immediately and every second
-        updateRealTimeDate();
-        setInterval(updateRealTimeDate, 1000);
-        
-        // ========== THEME TOGGLE ==========
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
-        });
-        
-        // Check for saved theme preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            body.classList.add('dark-mode');
         }
         
         // ========== UPLOAD & KNOW ==========
         const uploadZone = document.getElementById('uploadZone');
         const fileInput = document.getElementById('fileInput');
-        const safetyResults = document.getElementById('safetyResults');
         
         uploadZone.addEventListener('click', () => {
             fileInput.click();
@@ -1542,62 +1659,44 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
             
             // Simulate analysis delay
             setTimeout(() => {
-                // Random safety result for demo
-                const results = [
-                    { 
-                        type: 'safe', 
-                        title: 'Safe for you', 
-                        desc: 'This product contains ingredients compatible with your skin profile. No known allergens or irritants detected.', 
-                        voice: 'This product is gentle and suitable for daily use. Contains hydrating ingredients like hyaluronic acid.',
-                        product: 'Moisturizer'
-                    },
-                    { 
-                        type: 'warning', 
-                        title: 'Use carefully', 
-                        desc: 'Contains moderate fragrance that may cause irritation for sensitive skin. Patch test recommended.', 
-                        voice: 'This product may cause mild irritation if you have sensitive skin.',
-                        product: 'Face Wash'
-                    },
-                    { 
-                        type: 'danger', 
-                        title: 'Avoid', 
-                        desc: 'Contains alcohol and strong fragrances that can dry and irritate your skin type. Not recommended.', 
-                        voice: 'This product may cause irritation because of fragrance and alcohol together.',
-                        product: 'Toner'
-                    }
-                ];
+                const result = analyzeUploadedProduct();
                 
-                const result = results[Math.floor(Math.random() * results.length)];
-                
-                safetyResults.innerHTML = `
-                    <div class="safety-card ${result.type}">
+                document.getElementById('safetyResults').innerHTML = `
+                    <div class="safety-card ${result.safety}">
                         <div class="safety-status">
-                            <div class="safety-dot ${result.type}"></div>
+                            <div class="safety-dot ${result.safety}"></div>
                             <div class="safety-title">${result.title}</div>
                         </div>
                         <div class="safety-desc">
                             ${result.desc}
                         </div>
                         <div class="voice-explain">
-                            <div class="voice-icon">
-                                <i class="fas fa-volume-up"></i>
+                            <div class="voice-controls">
+                                <button class="voice-btn-small" onclick="speakAnalysis('${result.voice}')">
+                                    <i class="fas fa-volume-up"></i>
+                                </button>
+                                <button class="voice-btn-small" onclick="stopSpeaking()">
+                                    <i class="fas fa-stop"></i>
+                                </button>
                             </div>
                             <div>"${result.voice}"</div>
                         </div>
                     </div>
                 `;
                 
-                safetyResults.style.display = 'block';
+                document.getElementById('safetyResults').style.display = 'block';
                 
-                // Add to history
-                addToHistory(result.product, result.type, file.name);
+                // Add to history and update stats
+                addToHistory(result.product, result.safety, 'upload');
                 
-                // Update streaks if safe
-                if (result.type === 'safe') {
-                    updateStreak('skin-safe');
+                // Update skin-safe streak if safe
+                if (result.safety === 'safe') {
+                    updateStreakCount('skin', true);
+                } else {
+                    updateStreakCount('skin', false);
                 }
                 
-                // Reset upload zone after 3 seconds
+                // Reset upload zone
                 setTimeout(() => {
                     uploadZone.innerHTML = `
                         <div class="upload-icon">
@@ -1611,7 +1710,70 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                         </button>
                     `;
                 }, 3000);
+                
+                // Update fragrance alert
+                updateFragranceAlert(result.safety);
+                
             }, 2000);
+        }
+        
+        function analyzeUploadedProduct() {
+            const products = [
+                { 
+                    product: 'Moisturizer',
+                    safety: Math.random() > 0.3 ? 'safe' : Math.random() > 0.5 ? 'warning' : 'danger',
+                    type: 'skincare'
+                },
+                { 
+                    product: 'Face Wash',
+                    safety: Math.random() > 0.4 ? 'safe' : Math.random() > 0.5 ? 'warning' : 'danger',
+                    type: 'skincare'
+                },
+                { 
+                    product: 'Sunscreen',
+                    safety: Math.random() > 0.2 ? 'safe' : Math.random() > 0.5 ? 'warning' : 'danger',
+                    type: 'skincare'
+                },
+                { 
+                    product: 'Protein Bar',
+                    safety: Math.random() > 0.5 ? 'safe' : Math.random() > 0.5 ? 'warning' : 'danger',
+                    type: 'food'
+                },
+                { 
+                    product: 'Shampoo',
+                    safety: Math.random() > 0.3 ? 'safe' : Math.random() > 0.5 ? 'warning' : 'danger',
+                    type: 'haircare'
+                }
+            ];
+            
+            const selected = products[Math.floor(Math.random() * products.length)];
+            
+            const safetyDetails = {
+                safe: {
+                    title: 'Safe for you',
+                    desc: 'This product contains ingredients compatible with your skin profile. No known allergens or irritants detected.',
+                    voice: 'This product is gentle and suitable for daily use. Contains hydrating ingredients like hyaluronic acid.'
+                },
+                warning: {
+                    title: 'Use carefully',
+                    desc: 'Contains moderate fragrance that may cause irritation for sensitive skin. Patch test recommended.',
+                    voice: 'This product may cause mild irritation if you have sensitive skin. Consider patch testing before full use.'
+                },
+                danger: {
+                    title: 'Avoid',
+                    desc: 'Contains alcohol and strong fragrances that can dry and irritate your skin type. Not recommended.',
+                    voice: 'This product may cause irritation because of fragrance and alcohol together. Better to avoid if you have sensitive skin.'
+                }
+            };
+            
+            return {
+                product: selected.product,
+                safety: selected.safety,
+                type: selected.type,
+                title: safetyDetails[selected.safety].title,
+                desc: safetyDetails[selected.safety].desc,
+                voice: safetyDetails[selected.safety].voice
+            };
         }
         
         function openCamera() {
@@ -1634,39 +1796,54 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
             input.disabled = true;
             
             setTimeout(() => {
-                // Analyze ingredients
                 const analysis = analyzeIngredientText(text);
                 
                 // Show modal with results
                 showAnalysisResult(analysis);
                 
+                // Add to history and update stats
+                addToHistory('Manual Analysis', analysis.safety, text.substring(0, 30) + '...');
+                
+                // Update streaks
+                if (analysis.safety === 'safe') {
+                    updateStreakCount('skin', true);
+                } else {
+                    updateStreakCount('skin', false);
+                }
+                
                 // Reset input
                 input.value = originalText;
                 input.disabled = false;
                 
-                // Update streak if safe
-                if (analysis.safety === 'safe') {
-                    updateStreak('skin-safe');
-                }
-                
-                // Add to history
-                addToHistory('Manual Analysis', analysis.safety, text.substring(0, 30) + '...');
             }, 1500);
         }
         
         function analyzeIngredientText(text) {
             const lowerText = text.toLowerCase();
             
-            // Dangerous ingredients
+            // Comprehensive ingredient database
             const dangerousIngredients = [
-                'kerosene', 'gasoline', 'petroleum', 'formaldehyde', 'asbestos', 'lead', 'mercury',
-                'arsenic', 'cyanide', 'bleach', 'ammonia', 'hydrochloric acid', 'sulfuric acid'
+                'kerosene', 'gasoline', 'petroleum (crude)', 'formaldehyde', 'asbestos', 'lead', 'mercury',
+                'arsenic', 'cyanide', 'bleach', 'ammonia', 'hydrochloric acid', 'sulfuric acid',
+                'methylisothiazolinone', 'triclosan', 'hydroquinone', 'coal tar', 'toluene',
+                'phthalates', 'parabens', 'sodium lauryl sulfate', 'sodium laureth sulfate',
+                'alcohol denat.', 'ethanol', 'isopropyl alcohol', 'sd alcohol',
+                'fragrance', 'parfum', 'perfume', 'essential oil', 'limonene', 'linalool',
+                'menthol', 'camphor', 'eucalyptus oil', 'peppermint oil', 'citrus oil'
             ];
             
-            // Common irritants
             const irritants = [
-                'alcohol denat', 'fragrance', 'parfum', 'perfume', 'essential oil', 'menthol',
-                'camphor', 'eucalyptus', 'peppermint', 'citrus oil', 'limonene', 'linalool'
+                'alcohol denat.', 'ethanol', 'isopropyl alcohol', 'sd alcohol',
+                'fragrance', 'parfum', 'perfume', 'essential oil',
+                'menthol', 'camphor', 'eucalyptus', 'peppermint', 'citrus oil',
+                'limonene', 'linalool', 'citral', 'geraniol', 'citronellol'
+            ];
+            
+            const safeIngredients = [
+                'water', 'glycerin', 'hyaluronic acid', 'niacinamide',
+                'ceramides', 'peptides', 'squalane', 'vitamin e', 'vitamin c',
+                'green tea extract', 'centella asiatica', 'aloe vera',
+                'oat extract', 'chamomile', 'licorice root extract'
             ];
             
             // Check for dangerous ingredients
@@ -1674,41 +1851,77 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                 if (lowerText.includes(ingredient)) {
                     return {
                         safety: 'danger',
-                        title: '⚠️ DANGEROUS - AVOID IMMEDIATELY',
-                        desc: `This product contains ${ingredient.toUpperCase()} which is HIGHLY TOXIC and should never be used on skin or consumed.`,
-                        recommendations: ['Dispose of this product safely', 'Do not use under any circumstances', 'Wash skin immediately if contacted']
+                        title: '⚠️ DANGEROUS - AVOID',
+                        desc: `This product contains ${ingredient.toUpperCase()} which is potentially harmful. ${getIngredientWarning(ingredient)}`,
+                        recommendations: ['Do not use this product', 'Dispose of it safely', 'Consult a doctor if already used'],
+                        foundIngredients: [ingredient]
                     };
                 }
             }
             
-            // Check for multiple irritants
-            let irritantCount = 0;
+            // Check for irritants
+            let foundIrritants = [];
             for (const irritant of irritants) {
-                if (lowerText.includes(irritant)) irritantCount++;
+                if (lowerText.includes(irritant)) {
+                    foundIrritants.push(irritant);
+                }
             }
             
-            if (irritantCount >= 2) {
+            // Check for safe ingredients
+            let foundSafe = [];
+            for (const safe of safeIngredients) {
+                if (lowerText.includes(safe)) {
+                    foundSafe.push(safe);
+                }
+            }
+            
+            if (foundIrritants.length >= 3) {
                 return {
                     safety: 'danger',
-                    title: 'Avoid',
-                    desc: 'Contains multiple potential irritants that may cause skin reactions or sensitivity.',
-                    recommendations: ['Not recommended for sensitive skin', 'Consider patch testing', 'Look for fragrance-free alternatives']
+                    title: 'Multiple Irritants Detected',
+                    desc: `Contains ${foundIrritants.length} potential irritants including ${foundIrritants.slice(0, 3).join(', ')}. High risk of skin reaction.`,
+                    recommendations: ['Not recommended for sensitive skin', 'Patch test absolutely required', 'Consider fragrance-free alternatives'],
+                    foundIngredients: foundIrritants
                 };
-            } else if (irritantCount === 1) {
+            } else if (foundIrritants.length >= 1) {
                 return {
                     safety: 'warning',
-                    title: 'Use Carefully',
-                    desc: 'Contains potential irritants. May cause issues for sensitive skin types.',
-                    recommendations: ['Patch test recommended', 'Monitor for any reactions', 'Suitable for occasional use only']
+                    title: 'Potential Irritants Present',
+                    desc: `Contains ${foundIrritants.length} potential irritant${foundIrritants.length > 1 ? 's' : ''}. May cause issues for sensitive skin.`,
+                    recommendations: ['Patch test recommended', 'Monitor for any reactions', 'Suitable for occasional use only'],
+                    foundIngredients: foundIrritants
+                };
+            } else if (foundSafe.length >= 3) {
+                return {
+                    safety: 'safe',
+                    title: 'Generally Safe',
+                    desc: `Contains beneficial ingredients like ${foundSafe.slice(0, 3).join(', ')}. Appears suitable for most skin types.`,
+                    recommendations: ['Suitable for regular use', 'No special precautions needed', 'Good formulation'],
+                    foundIngredients: foundSafe
                 };
             } else {
                 return {
                     safety: 'safe',
-                    title: 'Safe for you',
-                    desc: 'Ingredients appear generally safe with no major red flags detected.',
-                    recommendations: ['Suitable for regular use', 'No special precautions needed', 'Good choice for most skin types']
+                    title: 'No Major Red Flags',
+                    desc: 'Ingredients appear generally safe with no major concerning ingredients detected.',
+                    recommendations: ['Suitable for most users', 'As always, patch test if you have sensitive skin', 'Follow product instructions'],
+                    foundIngredients: []
                 };
             }
+        }
+        
+        function getIngredientWarning(ingredient) {
+            const warnings = {
+                'parabens': 'Parabens are preservatives that may disrupt hormones. Consider paraben-free alternatives.',
+                'fragrance': 'Fragrance is a common irritant and allergen. Fragrance-free products are better for sensitive skin.',
+                'alcohol denat.': 'Denatured alcohol can be very drying and damaging to skin barrier.',
+                'sodium lauryl sulfate': 'SLS can strip natural oils and cause irritation, especially for sensitive skin.',
+                'phthalates': 'Phthalates are plasticizers linked to hormonal disruption. Avoid in personal care products.',
+                'formaldehyde': 'Formaldehyde is a known carcinogen and strong irritant. Strictly avoid.',
+                'hydroquinone': 'Hydroquinone can cause ochronosis (skin darkening) with prolonged use.'
+            };
+            
+            return warnings[ingredient] || 'This ingredient has potential health concerns.';
         }
         
         function showAnalysisResult(analysis) {
@@ -1730,6 +1943,14 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                         <div class="safety-desc">
                             ${analysis.desc}
                         </div>
+                        ${analysis.foundIngredients.length > 0 ? `
+                            <div style="margin-top: 15px;">
+                                <strong>Ingredients detected:</strong>
+                                <div style="color: var(--text-light); font-size: 0.9rem; margin-top: 5px;">
+                                    ${analysis.foundIngredients.join(', ')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                     <div style="margin-top: 20px;">
                         <h4 style="color: var(--text-dark); margin-bottom: 10px;">Recommendations:</h4>
@@ -1737,6 +1958,17 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                             ${analysis.recommendations.map(rec => `<li>${rec}</li>`).join('')}
                         </ul>
                     </div>
+                    ${analysis.safety === 'danger' ? `
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(234, 67, 53, 0.1); border-radius: var(--radius-sm); border-left: 4px solid var(--error);">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-exclamation-triangle" style="color: var(--error);"></i>
+                                <strong style="color: var(--error);">Safety Warning:</strong>
+                            </div>
+                            <div style="color: var(--text-dark); margin-top: 5px; font-size: 0.9rem;">
+                                This product contains ingredients that may be harmful to your health. Consider safer alternatives.
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
             `;
             
@@ -1751,21 +1983,66 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
             }, 10000);
         }
         
-        // ========== INGREDIENT OF THE DAY ==========
-        function rateIngredient(type) {
-            const messages = {
-                helpful: 'Thanks for your feedback! We\'ll show more helpful content like this.',
-                confusing: 'Thanks! We\'ll try to explain ingredients more clearly.',
-                new: 'Glad you learned something new! Keep exploring.'
-            };
-            
-            alert(messages[type]);
-            
-            // Update ingredient engagement streak
-            updateStreak('learning');
+        // ========== VOICE FEATURES ==========
+        function speakAnalysis(text) {
+            stopSpeaking(); // Stop any current speech
+    
+            // Check if browser supports speech synthesis
+            if ('speechSynthesis' in window) {
+                currentSpeech = new SpeechSynthesisUtterance(text);
+                
+                // Configure voice
+                currentSpeech.rate = 1.0;
+                currentSpeech.pitch = 1.0;
+                currentSpeech.volume = 1.0;
+                
+                // Try to find a female voice for better user experience
+                const voices = speechSynthesis.getVoices();
+                const femaleVoice = voices.find(voice => 
+                    voice.name.includes('Female') || 
+                    voice.name.includes('female') ||
+                    voice.name.includes('Google UK English Female') ||
+                    voice.name.includes('Microsoft Zira Desktop')
+                );
+                
+                if (femaleVoice) {
+                    currentSpeech.voice = femaleVoice;
+                }
+                
+                // Add event listeners for better UX
+                currentSpeech.onstart = function() {
+                    console.log('Speech started');
+                };
+                
+                currentSpeech.onend = function() {
+                    console.log('Speech ended');
+                    currentSpeech = null;
+                };
+                
+                currentSpeech.onerror = function(event) {
+                    console.error('Speech synthesis error:', event);
+                    currentSpeech = null;
+                    // Fallback to alert if speech fails
+                    alert("Text-to-speech failed. Here's the analysis:\n\n" + text);
+                };
+                
+                // Speak the text
+                speechSynthesis.speak(currentSpeech);
+                
+            } else {
+                // Fallback for browsers that don't support speech synthesis
+                alert("Your browser doesn't support text-to-speech. Here's the analysis:\n\n" + text);
+            }
         }
         
-        // ========== CHATBOT WITH SMART RESPONSES ==========
+        function stopSpeaking() {
+            if ('speechSynthesis' in window && speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+            currentSpeech = null;
+        }
+        
+        // ========== CHATBOT IMPROVEMENTS ==========
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
         
@@ -1803,251 +2080,564 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
         function getChatbotResponse(userMessage) {
             const lowerMsg = userMessage.toLowerCase();
             
-            // Dictionary of ingredient knowledge
+            // Expanded ingredient knowledge base
             const ingredientKnowledge = {
                 // Skincare ingredients
                 'hyaluronic acid': 'Hyaluronic acid is a powerful humectant that can hold up to 1000x its weight in water. It helps hydrate skin, reduce fine lines, and improve skin elasticity. Safe for most skin types!',
                 'niacinamide': 'Niacinamide (Vitamin B3) helps reduce inflammation, minimize pores, improve skin barrier, and reduce hyperpigmentation. Great for acne-prone and sensitive skin.',
-                'retinol': 'Retinol (Vitamin A) is a powerful anti-aging ingredient that increases cell turnover. Can cause irritation - start with low concentration and use at night.',
-                'vitamin c': 'Vitamin C is a potent antioxidant that brightens skin, reduces dark spots, and protects against environmental damage. Use in the morning under sunscreen.',
-                'salicylic acid': 'Salicylic acid is a beta-hydroxy acid (BHA) that penetrates pores to dissolve excess oil and dead skin cells. Excellent for acne and oily skin.',
-                'glycolic acid': 'Glycolic acid is an alpha-hydroxy acid (AHA) that exfoliates skin surface, improves texture, and reduces fine lines. Can increase sun sensitivity.',
+                'retinol': 'Retinol (Vitamin A) is a powerful anti-aging ingredient that increases cell turnover. Can cause irritation - start with low concentration (0.25-0.5%) and use at night.',
+                'vitamin c': 'Vitamin C (ascorbic acid) is a potent antioxidant that brightens skin, reduces dark spots, and protects against environmental damage. Use in the morning under sunscreen.',
+                'salicylic acid': 'Salicylic acid is a beta-hydroxy acid (BHA) that penetrates pores to dissolve excess oil and dead skin cells. Excellent for acne and oily skin (2% concentration typical).',
+                'glycolic acid': 'Glycolic acid is an alpha-hydroxy acid (AHA) that exfoliates skin surface, improves texture, and reduces fine lines (5-10% typical). Can increase sun sensitivity.',
+                'ceramides': 'Ceramides are lipids that strengthen skin barrier, prevent moisture loss, and protect against irritants. Essential for dry/sensitive skin.',
+                'peptides': 'Peptides are amino acid chains that signal skin to produce more collagen, reducing wrinkles and improving firmness.',
+                'squalane': 'Squalane is a lightweight, non-comedogenic oil that moisturizes without greasiness. Derived from olives or sugarcane.',
+                'azelaic acid': 'Azelaic acid (10-20%) reduces inflammation, unclogs pores, and treats hyperpigmentation. Safe for rosacea and pregnancy.',
+                'benzoyl peroxide': 'Benzoyl peroxide (2.5-10%) kills acne-causing bacteria. Can be drying and bleach fabrics.',
+                
+                // Dangerous skincare ingredients
+                'mercury': '⚠️ MERCURY is BANNED in cosmetics worldwide. It causes kidney damage, neurological problems, and is especially dangerous for pregnant women.',
+                'lead': '⚠️ LEAD is a neurotoxin that accumulates in body. Found in some lipsticks/kajal. Causes developmental issues in children.',
+                'formaldehyde': '⚠️ FORMALDEHYDE is a known carcinogen. In cosmetics, sometimes released from preservatives like DMDM hydantoin.',
+                'asbestos': '⚠️ ASBESTOS is linked to talc contamination. Causes mesothelioma cancer. Strictly avoid.',
+                'coal tar': '⚠️ COAL TAR is carcinogenic. Used in dandruff shampoos (banned in EU).',
+                'hydroquinone': '⚠️ HYDROQUINONE (>4%) can cause ochronosis (skin darkening). Banned in EU, Rx-only in US.',
+                'phthalates': '⚠️ PHTHALATES (DBP, DEHP) disrupt hormones. Banned in EU, often hidden under "fragrance".',
                 
                 // Food ingredients
-                'emulsifier': 'Emulsifiers help mix oil and water in food. Common ones: lecithin, mono/diglycerides. Generally safe but some people prefer to limit processed foods.',
-                'preservative': 'Preservatives prevent food spoilage. Common ones: citric acid, sodium benzoate, potassium sorbate. Most are safe in regulated amounts.',
-                'artificial sweetener': 'Artificial sweeteners provide sweetness without calories. Examples: aspartame, sucralose, stevia. Regulated as safe but some prefer natural alternatives.',
-                'msg': 'Monosodium Glutamate (MSG) enhances flavor. Generally recognized as safe by FDA, but some people report sensitivity (headaches, flushing).',
+                'monosodium glutamate': 'MSG enhances flavor. Generally recognized as safe by FDA, but some report sensitivity (headaches, flushing).',
+                'high fructose corn syrup': 'HFCS is linked to obesity, diabetes, and fatty liver when consumed in excess.',
+                'artificial sweeteners': 'Aspartame, sucralose, saccharin are FDA-approved but some prefer natural alternatives like stevia.',
+                'trans fats': 'Trans fats (hydrogenated oils) increase heart disease risk. Banned in many countries.',
+                'sodium nitrate': 'Sodium nitrate (preservative in processed meats) linked to cancer risk in high amounts.',
+                'carrageenan': 'Carrageenan (thickener) may cause inflammation in sensitive individuals.',
+                'soy lecithin': 'Soy lecithin (emulsifier) is generally safe unless allergic to soy.',
+                'xanthan gum': 'Xanthan gum (thickener) is generally safe, can cause digestive issues in large amounts.',
+                'citric acid': 'Citric acid (preservative) is generally safe, derived from citrus or fermentation.',
+                'natural flavors': '"Natural flavors" can mean many things - not necessarily healthier than artificial.',
                 
-                // Dangerous substances
-                'kerosene': '⚠️ WARNING: Kerosene is a petroleum-based fuel that is TOXIC and should NEVER be used in skincare or consumed. It can cause severe skin irritation, chemical burns, and if ingested, can lead to pneumonia, seizures, or death.',
-                'gasoline': '⚠️ DANGER: Gasoline is HIGHLY FLAMMABLE and TOXIC. Never use on skin or consume. Contains benzene and other carcinogens that can cause cancer, organ damage, and neurological problems.',
-                'petroleum': '⚠️ CAUTION: While petroleum jelly (petrolatum) is purified and safe for skin, crude petroleum contains carcinogens. Only use cosmetic-grade petroleum products.',
-                'formaldehyde': '⚠️ TOXIC: Formaldehyde is a known carcinogen. In skincare, it\'s sometimes released from preservatives (formaldehyde-releasers). Avoid products listing formaldehyde or formalin.',
-                'bleach': '⚠️ DANGEROUS: Bleach (sodium hypochlorite) is corrosive and toxic. Never apply to skin or consume. Can cause severe burns, respiratory issues, and poisoning.',
-                'mercury': '⚠️ EXTREMELY TOXIC: Mercury is banned in cosmetics in most countries. Even small amounts can cause neurological damage, kidney failure, and birth defects.',
-                'lead': '⚠️ HEAVY METAL TOXIC: Lead is a neurotoxin that accumulates in the body. Never use in cosmetics or food. Causes developmental issues in children and organ damage in adults.',
-                
-                // Common questions
-                'good for acne': 'For acne, look for: Salicylic acid (unclogs pores), Benzoyl peroxide (kills bacteria), Niacinamide (reduces inflammation), and Retinoids (prevents clogged pores). Avoid heavy comedogenic ingredients.',
-                'sensitive skin': 'For sensitive skin: Avoid fragrance, alcohol denat, essential oils, and strong acids. Look for soothing ingredients like ceramides, centella asiatica, and oat extract.',
-                'dry skin': 'For dry skin: Look for hydrating ingredients like hyaluronic acid, glycerin, ceramides, and squalane. Avoid drying alcohols and strong foaming cleansers.',
-                'oily skin': 'For oily skin: Use oil-free, non-comedogenic products. Look for niacinamide, salicylic acid, clay, and lightweight hydrators. Avoid heavy oils and butters.',
-                'anti aging': 'For anti-aging: Use sunscreen daily (most important!), retinoids, vitamin C, peptides, and AHAs like glycolic acid. Stay hydrated and protect from sun exposure.',
-                'what is': 'I can explain ingredients! Try asking about specific ingredients like "What is hyaluronic acid?" or "Tell me about retinol."',
-                'how to use': 'Most skincare: Cleanse → Treat (serums) → Moisturize → Sunscreen (AM). Start new products one at a time, patch test first, and introduce actives slowly.',
-                'safe for pregnancy': 'Pregnancy-safe ingredients: Hyaluronic acid, Vitamin C, Azelaic acid. AVOID: Retinoids, Salicylic acid (high concentrations), Hydroquinone, and essential oils. Always consult your doctor.',
-                'expired product': 'Expired products can lose effectiveness or grow bacteria. Discard if: Changed color/consistency, strange odor, separated. Sunscreen especially important to replace yearly.',
-                'organic': 'Organic means grown without synthetic pesticides. "Natural" isn\'t regulated - even poison ivy is natural! Focus on ingredient safety rather than marketing terms.',
-                'cruelty free': 'Cruelty-free means not tested on animals. Look for Leaping Bunny or PETA certification. Vegan means no animal ingredients (beeswax, lanolin, carmine).',
-                'sunscreen': 'Use sunscreen daily! Mineral (zinc/titanium) is gentle, chemical absorbs UV. SPF 30+, broad spectrum, water resistant if swimming. Reapply every 2 hours outdoors.',
-                'moisturizer': 'Good moisturizers contain humectants (attract water), emollients (soften), occlusives (seal). For day: lighter lotions. For night: richer creams. Match to your skin type.',
-                'cleanser': 'Cleanser should clean without stripping. Cream/milk for dry skin, gel/foam for oily. Double cleansing: oil-based first (removes makeup), then water-based.',
-                'serum': 'Serums are concentrated treatments applied after cleansing, before moisturizer. Common types: hydrating (HA), brightening (Vit C), anti-aging (retinol), calming (niacinamide).',
-                'exfoliate': 'Exfoliate 1-3x weekly depending on skin. Chemical (AHAs/BHAs) preferred over physical scrubs. Stop if skin becomes irritated or sensitive.',
-                'dark spots': 'For dark spots: Vitamin C, Niacinamide, Azelaic acid, Kojic acid, Tranexamic acid. Most important: SUNSCREEN to prevent worsening.',
-                'pores': "You can't shrink pores, but can make them appear smaller: Niacinamide, Salicylic acid, Retinoids, Clay masks. Keep skin clean and hydrated.",
-                'redness': 'For redness: Centella asiatica, Azelaic acid, Niacinamide, Licorice root extract. Avoid triggers: heat, alcohol, spicy food, stress. See derm for persistent redness.',
-                'combination skin': 'For combination skin: Use different products on different areas. Gel cleanser, light moisturizer overall, spot treat oily areas with clay or BHA.',
-                'face mask': 'Clay masks absorb oil (oily skin), sheet masks hydrate (dry skin), sleeping masks treat overnight. Use 1-2x weekly, not daily.',
-                'eye cream': 'Eye skin is thinner, needs gentle care. Look for caffeine (puffiness), peptides (fine lines), vitamin C (dark circles). Apply with ring finger gently.',
-                'lip care': 'For lips: Avoid licking (dries more), use SPF lip balm outside, overnight treatment with lanolin or petrolatum. Exfoliate gently with sugar scrub if flaky.',
-                'body care': 'Body skin is thicker than face. Can tolerate stronger exfoliants. Moisturize after showering. Use different products for body vs face.',
-                'hair care': 'For hair: Sulfates cleanse but can dry, silicones smooth but can buildup, parabens preserve. Clarify monthly if using silicones. Protein treatments for damaged hair.',
-                'makeup': 'Makeup tips: Remove thoroughly before bed, clean brushes weekly, don\'t share products (infection risk), check expiration (mascara 3-6mo, foundation 1yr).',
-                'fragrance free': 'Fragrance-free means no added scent. Unscented may have masking fragrance. For sensitive skin, fragrance-free is safer as fragrance is a common irritant.',
-                'non comedogenic': 'Non-comedogenic means less likely to clog pores. Look for this label if acne-prone. Also oil-free and lightweight textures help.',
-                'clean beauty': 'Clean beauty avoids certain ingredients (parabens, sulfates, phthalates, etc.). Not regulated - research brands\' standards. Remember "natural" isn\'t always safer.',
-                'allergy': 'If you have allergies: Patch test new products (inner arm, wait 48hrs), read labels carefully, avoid known allergens. Common allergens: fragrance, preservatives, botanicals.',
-                'skin type': 'Skin types: Dry (flaky, tight), Oily (shiny, large pores), Combination (oily T-zone, dry cheeks), Normal (balanced), Sensitive (easily irritated).',
-                'routine': 'Basic routine: AM - Cleanse, Vitamin C, Moisturize, SPF. PM - Cleanse, Treat (retinol/AHA), Moisturize. Adjust based on your skin needs.',
-                'cheap vs expensive': 'Price doesn\'t always equal quality. Drugstore has great options. Pay more for: unique technology, higher concentrations, luxurious textures. Check ingredients over brand.',
-                'storage': 'Store skincare: Cool, dry place away from sunlight and humidity. Don\'t keep in bathroom (heat/moisture). Refrigerate vitamin C and some natural products.',
-                'travel': 'Travel skincare: Decant into smaller containers, use multi-tasking products, don\'t try new products while traveling, always pack sunscreen.',
-                'men skincare': 'Men\'s skin is thicker and oilier. Same principles apply: cleanse, treat concerns, moisturize, sunscreen. Shaving can cause irritation - use proper technique.',
-                'teen skincare': 'Teens: Keep simple - gentle cleanser, light moisturizer, spot treatment for acne, daily sunscreen. Avoid over-exfoliating. See derm for persistent acne.',
-                'over 40': '40+ skincare: Retinoids (collagen), Peptides (firmness), Antioxidants (protection), Hydration (plumpness). SUNSCREEN is non-negotiable. Consider professional treatments.',
-                'over 60': '60+ skincare: Rich moisturizers, gentle cleansing, continued sunscreen, targeted treatments for specific concerns. Skin thins with age - be extra gentle.',
-                'ingredient list': 'Ingredients listed by concentration (highest first). First 5-10 ingredients are most important. "Fragrance" can hide many chemicals in one term.',
-                'order of application': 'Apply thinnest to thickest: Cleanser → Toner → Serum → Eye cream → Moisturizer → Oil → Sunscreen. Wait between layers if using actives.',
-                'patch test': 'Patch test: Apply product to inner forearm or behind ear. Wait 48 hours. Check for redness, itching, swelling. Important for sensitive skin or new products.',
-                'purge vs breakout': 'Purging (4-6 weeks): small bumps where you normally breakout, from actives increasing cell turnover. Breakout: new areas, different types, from irritation.',
-                'hormonal acne': 'Hormonal acne: jawline/chin, cyclical. Treatments: Spironolactone (RX), Birth control (RX), Topical: retinoids, azelaic acid, salicylic acid. Stress management helps.',
-                'rosacea': 'Rosacea: facial redness, visible blood vessels, bumps. Triggers: sun, heat, spicy food, alcohol, stress. Treatments: azelaic acid, metronidazole (RX), IPL laser.',
-                'eczema': 'Eczema: dry, itchy, inflamed patches. Avoid fragrances, use gentle cleansers, thick moisturizers (ceramides, colloidal oatmeal), prescription steroids for flares.',
-                'psoriasis': 'Psoriasis: thick, scaly plaques. Treatments: topical steroids, vitamin D analogs, salicylic acid, coal tar, phototherapy. See dermatologist for management.',
-                'hyperpigmentation': 'Hyperpigmentation: dark spots from sun, acne, hormones. Treatments: sunscreen (prevent), vitamin C, hydroquinone (RX), chemical peels, lasers. Takes months.',
-                'melasma': 'Melasma: hormonal brown patches on face. Strict sunscreen (mineral preferred), hydroquinone (RX), azelaic acid, tranexamic acid. Can recur with sun/hormones.',
-                'cellulite': 'Cellulite: fat pushing through connective tissue. Topical treatments limited: caffeine temporarily reduces appearance. Exercise, healthy weight, dry brushing may help.',
-                'stretch marks': 'Stretch marks: scars from rapid growth. Early (red): retinoids, hyaluronic acid. Mature (white): limited improvement, microneedling, lasers. Moisturize for prevention.',
-                'body odor': 'Body odor: bacteria breaking down sweat. Solutions: antibacterial soap, aluminum-based antiperspirants, natural fibers, prescription strength if severe. Avoid scented products if sensitive.',
-                'sweat': 'Sweat is normal! Hyperhidrosis (excessive) may need treatment. Aluminum blocks sweat glands. Botox injections for severe cases. Stay hydrated regardless.',
-                'deodorant vs antiperspirant': 'Deodorant masks odor, antiperspirant reduces sweat. Aluminum is active in antiperspirants. Natural options: baking soda, arrowroot powder, essential oils.',
-                'shaving': 'Shaving tips: Use sharp blade, shave with grain, don\'t press hard, moisturize after. For irritation: aloe vera, hydrocortisone cream, avoid fragrance. Consider electric razor.',
-                'waxing': 'Waxing removes hair from root. Wait 24hr before sun, avoid retinol before, exfoliate after 2 days to prevent ingrowns. Not for retinol users or very sensitive skin.',
-                'laser hair removal': 'Laser targets pigment in hair. Works best on dark hair, light skin. Multiple sessions needed. Avoid sun before/after. Not permanent but long-lasting reduction.',
-                'self tanner': 'Self-tanner: DHA reacts with skin proteins to create color. Exfoliate first, apply evenly, wash hands after, develops in hours. Doesn\'t protect from sun.',
-                'sunburn': 'Sunburn treatment: Cool compresses, aloe vera, ibuprofen, hydration. Don\'t pop blisters. Severe: see doctor. Prevention: sunscreen, hats, shade, avoid peak sun.',
-                'tanning': 'Tanning = skin damage. Every tan increases skin cancer risk, ages skin. Safer alternatives: self-tanner, spray tan. No safe UV tanning exists.',
-                'skin cancer': 'Skin cancer signs (ABCDE): Asymmetry, Border irregular, Color variation, Diameter >6mm, Evolving. Monthly self-checks, annual dermatologist visit if high risk.',
-                'mole check': 'Check moles regularly. Changing moles need dermatologist evaluation. Risk factors: fair skin, family history, sunburns, many moles, immunosuppression.',
-                'bug bites': 'Bug bites: Clean with soap, cold compress, hydrocortisone cream for itch, antihistamine if allergic. Seek help if: difficulty breathing, spreading redness, fever.',
-                'poison ivy': 'Poison ivy: Wash with soap immediately, don\'t scratch (spreads oil), calamine lotion, hydrocortisone, oral antihistamines. Severe: prednisone (RX). Learn to identify plants.',
-                'acne scars': 'Acne scars: Ice pick, boxcar, rolling types. Treatments: microneedling, lasers, chemical peels, fillers. Prevention: don\'t pick acne, treat early, sunscreen.',
-                'blackheads': 'Blackheads: oxidized oil in pores. Treatments: salicylic acid, retinoids, clay masks, extraction by professional. Don\'t squeeze roughly - can cause scarring.',
-                'whiteheads': 'Whiteheads: closed comedones. Same treatment as blackheads. Gentle extraction possible but be sterile. Regular exfoliation prevents formation.',
-                'cystic acne': 'Cystic acne: deep, painful nodules. Needs dermatologist: isotretinoin (Accutane), oral antibiotics, steroid injections, spironolactone. Don\'t pick - causes scarring.',
-                'back acne': 'Back acne (bacne): Wear clean clothes, shower after sweating, use salicylic acid or benzoyl peroxide wash, change sheets weekly. Can be hormonal.',
-                'fungal acne': 'Fungal acne (malassezia): itchy uniform bumps, often on chest/back. Treatments: antifungal shampoos (ketoconazole), avoiding oils/fatty acids, sometimes oral antifungals.',
-                'perioral dermatitis': 'Around mouth rash, often from topical steroids. Stop steroids, use zero therapy (nothing), maybe antibiotics (RX). Avoid heavy creams, fluoridated toothpaste.',
-                'seborrheic dermatitis': 'Oily, scaly patches on scalp/face. Treatments: antifungal (ketoconazole), zinc pyrithione, salicylic acid, mild steroids short-term. Diet may affect.',
-                'keratosis pilaris': 'Chicken skin bumps on arms/cheeks. Gentle exfoliation (lactic acid, urea), moisturize, avoid hot showers. Genetic - can improve with age but not curable.',
-                'milia': 'Milia: tiny white cysts, not acne. Often from heavy creams. Can resolve on own or be extracted by professional. Retinoids may help prevent.',
-                'cold sores': 'Cold sores (herpes): Antiviral creams/pills at first tingling, avoid touching/spreading, lysine supplements may help, stress/sun/sickness trigger. Contagious when active.',
-                'canker sores': 'Canker sores: painful mouth ulcers, not contagious. Avoid acidic/spicy foods, use protective pastes, antimicrobial mouthwash. Stress, injury, food sensitivities trigger.',
-                'hives': 'Hives: itchy welts from allergy/stress/infection. Antihistamines, cool compresses, identify triggers. Emergency if: throat swelling, difficulty breathing.',
-                'athletes foot': 'Fungal foot infection: antifungal creams/sprays, keep feet dry, change socks, don\'t share towels/shoes. Can spread to nails (onychomycosis).',
-                'nail fungus': 'Thickened, discolored nails. Topical treatments often ineffective. Oral antifungals (RX) for months, laser treatment, or removal. Prevent with dry feet, clean tools.',
-                'ingrown toenail': 'Soak in warm water, lift nail gently with floss, antibiotic ointment if infected. Podiatrist for severe/recurrent. Proper trimming: straight across, not too short.',
-                'plantar warts': 'Warts on soles, from HPV virus. Salicylic acid patches, cryotherapy, laser, immunotherapy. Contagious - don\'t pick, wear flip-flops in public showers.',
-                'body sunscreen': 'Apply 1oz (shot glass) for body, 30min before sun, reapply every 2hrs or after swimming/sweating. Don\'t forget ears, neck, feet, back of knees.',
-                'face sunscreen': '1/4 tsp for face/neck. Mineral better for sensitive/acne-prone skin. Under makeup, let absorb before applying other products. Daily use prevents aging/cancer.',
-                'sunscreen stick': 'Good for reapplication over makeup, around eyes, kids. May need multiple passes for full coverage. Check expiration - most last 3 years.',
-                'water resistant sunscreen': 'Water resistant means maintains SPF after 40-80min in water. Still need to reapply after toweling off or every 2hrs.',
-                'spf in makeup': 'Makeup SPF isn\'t enough - you\'d need 7x foundation for stated protection. Use separate sunscreen under makeup.',
-                'vitamin d': 'You need sun for vitamin D but balance with skin cancer risk. 10-15min arms/legs 2-3x weekly, then sunscreen. Supplements safer than unprotected sun.',
-                'blue light': 'Blue light from screens may contribute to aging. Mineral sunscreen (zinc/titanium) blocks some. Antioxidants (vitamin C) may help protect. Not as damaging as UV.',
-                'indoor sunscreen': 'UVA penetrates windows, causes aging. If near windows daily, wear sunscreen. Minimal exposure - maybe skip if in basement/no windows.',
-                'sunscreen pill': 'Oral sunscreens (heliocare, polypodium) are supplements, not replacements for topical sunscreen. May provide extra antioxidant protection but don\'t block UV.',
-                'reef safe': 'Reef-safe means no oxybenzone/octinoxate which harm coral. Mineral sunscreens (zinc/titanium) are reef-safe. Also avoid microplastics in exfoliants.',
-                'sunscreen allergy': 'If allergic to chemical sunscreens, try mineral (zinc/titanium). Patch test. Some react to preservatives/fragrance - choose simple formulations.',
-                'makeup remover': 'Double cleanse: oil-based first (dissolves makeup), then water-based cleanser. Micellar water good for sensitive skin. Never sleep in makeup.',
-                'eye makeup remover': 'Be gentle - use oil-based remover, soak cotton pad, hold on eye 30sec, wipe gently. Don\'t rub - causes wrinkles and lash loss.',
-                'waterproof makeup': 'Oil-based removers best for waterproof makeup. Coconut oil, cleansing balms, dedicated removers. May need to follow with regular cleanser.',
-                'makeup brushes': 'Clean weekly with gentle soap, reshape, air dry. Dirty brushes cause breakouts, poor application. Synthetic brushes easier to clean than natural.',
-                'makeup expiration': 'Mascara: 3-6mo, Liquid foundation: 6-12mo, Powder: 2yr, Lipstick: 1-2yr, Eyeliner: 6-12mo. Discard if smell/texture/color changes.',
-                'makeup storage': 'Cool, dry place away from sunlight/humidity. Don\'t store in car (heat). Refrigeration not necessary for most, can cause condensation.',
-                'makeup travel': 'Solid products less messy, decant liquids, protect from pressure changes (don\'t fill to brim), separate liquids in plastic bag for security.',
-                'makeup for acne': 'Non-comedogenic, oil-free, salicylic acid foundations, avoid heavy creams, clean tools/applicators, remove thoroughly, don\'t share.',
-                'makeup for mature skin': 'Hydrating formulas, avoid heavy powder (settles in lines), cream products, luminous finish, less is more, good skincare underneath.',
-                'makeup for oily skin': 'Matte formulas, oil-free, powder to set, blotting papers, long-wearing, avoid cream highlighters on oily areas.',
-                'makeup for dry skin': 'Hydrating/dewy formulas, cream products, avoid powder, prep with moisturizer, facial mist throughout day, exfoliate regularly.',
-                'makeup for sensitive skin': 'Fragrance-free, minimal ingredients, patch test, mineral makeup often better, clean tools, replace regularly, remove gently.',
-                'makeup allergies': 'Common allergens: fragrance, preservatives, nickel (eyeshadows), lanolin, beeswax. Patch test new products. Hypoallergenic isn\'t regulated term.',
-                'cruelty free makeup': 'Not tested on animals. Look for Leaping Bunny, PETA logo. Some parent companies may test - check brand policies carefully.',
-                'vegan makeup': 'No animal ingredients: beeswax, carmine (red pigment from beetles), lanolin, silk, gelatin. May still be tested on animals unless also cruelty-free.',
-                'clean makeup': 'Avoids certain ingredients (parabens, phthalates, etc.). Not regulated - each brand defines differently. Research ingredients if concerned.',
-                'mineral makeup': 'Powders with minerals like zinc, titanium, mica. Good for sensitive/acne-prone skin. Can be drying, may not provide full coverage.',
-                'organic makeup': 'Contains organically grown ingredients. Certification varies. "Natural" isn\'t regulated. Still check ingredients - organic doesn\'t always mean better.',
-                'makeup primer': 'Creates smooth base, extends wear, addresses concerns (pore-minimizing, hydrating, color-correcting). Use after skincare, before foundation.',
-                'makeup setting spray': 'Extends wear, melts powders together, adds dewiness or matte finish. Hold 8-10 inches away, close eyes, spray in X and T motions.',
-                'makeup setting powder': 'Sets liquid products, reduces shine, blurs pores. Press with puff for more coverage, dust with brush for light setting. Bake under eyes for creaseless.',
-                'contouring': 'Dark shades recede (hollows), light shades bring forward (high points). Blend well! Cream products under powder, subtle is more natural.',
-                'highlighting': 'Apply to high points: cheekbones, brow bone, cupid\'s bow, nose bridge, inner corners. Liquid/cream under powder for glow, powder alone for subtle.',
-                'blush placement': 'Apples of cheeks (youthful), on cheekbones (sculpted), across nose bridge (sun-kissed). Smile to find apples, blend upward toward temples.',
-                'eyebrow shaping': 'Follow natural shape, tweeze from below to lift, fill sparse areas, set with gel. Don\'t over-pluck - brows frame the face.',
-                'eyeshadow techniques': 'Transition shade in crease, lid color, darker outer V, highlight brow bone/inner corner. Blend between colors for gradient.',
-                'eyeliner styles': 'Tightline (between lashes), classic (along lashline), wing (extended up), smoked (smudged). Different shapes suit different eye shapes.',
-                'false lashes': 'Trim to eye width, wait 30sec after glue, apply to lashline not skin, press corners, blend with mascara. Remove gently with oil-based remover.',
-                'lip liner': 'Outline lips, fill in entirely as base, prevents feathering, can overline slightly. Match lipstick or go slightly darker for dimension.',
-                'lipstick longevity': 'Exfoliate lips, apply liner all over, blot, reapply, blot again, dust with powder, final layer. Avoid oily foods, use straw.',
-                'makeup brushes vs sponges': 'Brushes: more precise, better for powders. Sponges: better for liquids, dewy finish. Damp sponge sheers out foundation.',
-                'makeup for glasses': 'Focus on brows/lips since eyes behind lenses, set foundation where glasses rest, avoid glittery eyeshadows (reflects), curl lashes so they don\'t hit lenses.',
-                'makeup for masks': 'Focus on eyes, skip foundation under mask (causes breakouts), use setting spray, blotting papers, lipstick that won\'t smudge under mask.',
-                'makeup for photos': 'Matte finishes (shine reflects), slightly more blush/contour (washes out), fill brows (frames face), false lashes show up better.',
-                'makeup for videos': 'Similar to photos but consider lighting. Natural daylight shows true colors, ring light flatters, office lighting may cast shadows.',
-                'makeup for stage': 'Heavier application, more contrast, waterproof (sweat), consider distance from audience. TV makeup is between stage and everyday.',
-                'makeup trends': 'Changes yearly! Currently: skin focus, minimal makeup, graphic liner, bold blush, glossy lips. Adapt trends to suit your features.',
-                'makeup history': 'Ancient Egyptians: kohl, red ochre. 1920s: cupid\'s bow lips. 1950s: winged liner. 1980s: bold colors. 1990s: matte browns. 2000s: shimmer.',
-                'makeup brands': 'Luxury: Chanel, Dior, Tom Ford. Mid-range: MAC, NARS, Urban Decay. Drugstore: L\'Oréal, Maybelline, NYX. Indie: Glossier, Fenty, Rare Beauty.',
-                'makeup artists': 'Famous MUAs: Pat McGrath, Bobbi Brown, Kevyn Aucoin, Lisa Eldridge, Mario Dedivanovic. Learn from their tutorials!',
-                'makeup courses': 'Many online courses (YouTube, Skillshare), beauty schools, certifications (CIDESCO, ITEC). Practice is key - start with your own face.',
-                'makeup career': 'Paths: freelance, salon/spa, film/TV, fashion, bridal, retail, education, product development. Build portfolio, network, continue learning.',
-                'makeup kit essentials': 'Base products, concealer, powder, blush, mascara, neutral eyeshadow palette, eyeliner, lip products, brushes, sponges, sharpener.',
-                'makeup on budget': 'Drugstore has great options, invest in key pieces (foundation, eyeshadow), skip trends you won\'t wear, multi-use products, sales.',
-                'makeup storage ideas': 'Acrylic organizers, magnetic palettes (depot singles), drawer dividers, rotating stands, travel bags, vanity with good lighting.',
-                'makeup vanity': 'Good lighting (natural or daylight bulbs), comfortable seat, mirror (magnified side helpful), accessible storage, outlet for tools.',
-                'makeup lighting': 'Natural daylight best, ring lights even, avoid yellow bulbs (alters color). LED with adjustable color temperature ideal.',
-                'makeup mirror': 'Magnification helpful for detail work, lighted mirrors for dim spaces, portable mirrors for travel, large mirror for full face.',
-                'makeup travel bag': 'Clear bag for security, compartmentalized, waterproof lining, durable material, enough space but not bulky, easy to clean.',
-                'makeup for men': 'Increasingly common! Concealer, powder, brow gel, tinted moisturizer. Normalizes self-expression through cosmetics.',
-                'makeup for kids': 'Play makeup only (not cosmetic grade), avoid around eyes, supervise, teach removal, focus on play not appearance. Stage makeup with supervision.',
-                'makeup for teens': 'Start simple: tinted moisturizer, mascara, lip gloss. Teach skincare first, proper removal, less is more. Build skills gradually.',
-                'makeup for elderly': 'Moisturizing formulas, cream products, easy application (arthritis-friendly), larger handles on tools, good lighting, magnifying mirror.',
-                'makeup for disabilities': 'Adaptive tools (magnetic closures, one-handed), easy-open packaging, tutorials for different abilities, inclusive beauty brands emerging.',
-                'makeup for cancer patients': 'Gentle products, fragrance-free, easy removal, focus on brows/lashes (lost during chemo), SPF important (immune suppression). Look for oncology-trained MUAs.',
-                'makeup for vitiligo': 'Color matching challenging, camouflage makeup available, embrace unique patterns, sun protection on depigmented areas. Brands expanding shade ranges.',
-                'makeup for scars': 'Color-correct (green neutralizes red), silicone-based primers can smooth, full-coverage foundations, setting spray for longevity. Embrace scars too!',
-                'makeup for burns': 'Medical-grade silicone products first, then camouflage makeup if desired. Consult with burn specialist before applying to healing skin.',
-                'makeup for tattoos': 'Let heal completely first (2-4 weeks), then sunscreen always (fades ink), makeup can cover if desired for certain occasions.',
-                'makeup for hijab': 'Focus on visible areas: face, sometimes eyes. Long-wearing formulas, transfer-resistant, touch-up kit. Respect individual choices.',
-                'makeup for weddings': 'Trials important, photography considerations (matte better), longevity, touch-up kit, waterproof for tears. Practice beforehand.',
-                'makeup for job interview': 'Neutral, polished, enhances features without distraction, long-wearing, minimal fragrance. Industry appropriate (creative vs corporate).',
-                'makeup for dates': 'Whatever makes you feel confident! Often: enhanced natural look, long-wearing formulas, kiss-proof lips. Be yourself.',
-                'makeup for gym': 'Sweat-proof if any, lightweight, avoid heavy foundation (clogs pores), sunscreen, quick post-workout cleanse. Many prefer none for gym.',
-                'makeup for swimming': 'Waterproof mascara/liner, tinted moisturizer with SPF, lip/cheek stain, minimal powder (washes off). Reapply sunscreen!',
-                'makeup for beach': 'Tinted sunscreen, waterproof mascara, lip balm with SPF, cream blush. Sand + makeup = messy. Embrace natural!',
-                'makeup for skiing': 'High SPF, wind protection, moisturizing, goggles may smudge - focus on areas not covered. Cold weather dries skin.',
-                'makeup for hot weather': 'Oil-free, matte, long-wearing, sweat-proof, setting spray, blotting papers, minimal layers, sunscreen.',
-                'makeup for cold weather': 'Moisturizing, cream products avoid powder (emphasizes dry patches), protect from wind, lip balm, humidifier indoors.',
-                'makeup for humid climate': 'Water-based products, setting powder/spray, blotting papers, waterproof formulas, minimal cream products (can slide).',
-                'makeup for dry climate': 'Rich moisturizer first, hydrating formulas, avoid matte powders, facial mist throughout day, humidifier at night.',
-                'makeup for airplane': 'Hydrating mist, moisturizer, lip balm, minimal makeup during flight (recycles dry air), do full routine after landing.',
-                'makeup for time travel': 'Ancient Egypt: kohl & ochre. Renaissance: pale face. Victorian: subtle. 1920s: dark eyes/cupid lips. 1980s: bold. Future: who knows!'
+                // Common questions patterns
+                'good for acne': 'For acne: Salicylic acid (unclogs pores), Benzoyl peroxide (kills bacteria), Niacinamide (reduces inflammation), Adapalene (retinoid).',
+                'good for wrinkles': 'For wrinkles: Retinol/retinoids, Vitamin C, Peptides, AHAs, Sunscreen (most important!).',
+                'good for dark spots': 'For dark spots: Vitamin C, Niacinamide, Azelaic acid, Kojic acid, Tranexamic acid, Alpha arbutin.',
+                'good for dry skin': 'For dry skin: Hyaluronic acid, Ceramides, Glycerin, Squalane, Shea butter, Jojoba oil.',
+                'good for oily skin': 'For oily skin: Niacinamide, Salicylic acid, Clay, Zinc, Lightweight gel moisturizers.',
+                'good for sensitive skin': 'For sensitive skin: Centella asiatica, Oat extract, Ceramides, Madecassoside. Avoid fragrance, alcohol, essential oils.',
+                'safe during pregnancy': 'Pregnancy-safe: Hyaluronic acid, Vitamin C, Azelaic acid, Niacinamide. AVOID: Retinoids, Salicylic acid (high%), Hydroquinone, essential oils.',
+                'difference between': 'Tell me which two ingredients you want to compare! Example: "Difference between retinol and retinoid"',
+                'side effects of': 'Which ingredient? Common side effects: Retinol (irritation, dryness), Vitamin C (oxidation, tingling), Niacinamide (flushing at high %).',
+                'how to use': 'Apply thinnest to thickest: Cleanser → Toner → Serum → Moisturizer. Wait between actives. Sunscreen always in AM.',
+                'best concentration': 'Niacinamide: 5-10%, Vitamin C: 10-20%, Retinol: start 0.25-0.5%, Salicylic acid: 2%, Glycolic acid: 5-10% for beginners.',
+                'morning vs night': 'Morning: Vitamin C, antioxidants, sunscreen. Night: Retinoids, AHAs/BHAs, repair ingredients.',
+                'how long to see results': 'Hydration: immediate. Acne: 4-8 weeks. Hyperpigmentation: 8-12 weeks. Wrinkles: 12+ weeks. Consistency is key!',
+                'expired skincare': 'Expired products lose effectiveness, may grow bacteria. Signs: separation, color change, odd smell. Sunscreen especially important to replace yearly.',
+                'shelf life': 'Unopened: 2-3 years. Opened: 6-12 months (check PAO symbol). Vit C/retinoids degrade faster. Store in cool, dark place.',
+                'layering order': 'Water-based → oil-based, thinnest → thickest. Wait 1-2 minutes between layers. Don\'t mix retinol with Vitamin C directly.',
+                'patch test': 'Apply product to inner forearm or behind ear. Wait 48 hours. Check for redness, itching, swelling. Essential for sensitive skin.',
+                'purge vs reaction': 'Purging (4-6 weeks): small bumps where you normally breakout. Reaction: new areas, different types (hives, severe redness).',
+                'sunscreen recommendation': 'Look for: SPF 30+, broad spectrum, water resistant. Mineral (zinc/titanium) for sensitive skin, chemical for daily wear.',
+                'moisturizer with spf': 'Not enough protection! You\'d need 1/4 tsp for face - too much moisturizer. Use separate sunscreen.',
+                'double cleansing': 'First: oil-based cleanser (dissolves makeup/sunscreen). Second: water-based cleanser (cleans skin). Essential if wearing makeup/SPF.',
+                'chemical vs physical exfoliation': 'Chemical (AHAs/BHAs): dissolves dead cells, more even. Physical (scrubs): manual removal, can cause micro-tears.',
+                'toner necessary': 'Not necessary but can help: Hydrating toners add moisture, exfoliating toners contain actives, pH-balancing toners prep skin.',
+                'essence vs serum': 'Essence: lightweight, hydrating, prep step. Serum: concentrated, targeted treatment. Use essence first if using both.',
+                'eye cream necessary': 'Eye skin is thinner, needs gentle care. Eye creams are formulated to be less irritating. Can use face cream if gentle enough.',
+                'face oil': 'Apply after moisturizer to seal hydration. Dry skin: rosehip, marula. Oily skin: squalane, hemp seed. Never use undiluted essential oils.',
+                'sheet masks': 'Provide intensive hydration. Use 1-2x weekly. Apply essence/serum first, then mask, then moisturizer to seal.',
+                'clean beauty': 'No regulated definition. Generally means avoiding certain ingredients (parabens, sulfates, etc.). Not always safer - check ingredients.',
+                'cruelty free': 'Not tested on animals. Look for Leaping Bunny certification. Vegan = no animal ingredients (beeswax, lanolin, carmine).',
+                'organic skincare': 'Contains organically grown ingredients. Certification varies. "Natural" isn\'t regulated. Still check ingredient safety.',
+                'skincare for men': 'Same principles apply! Cleanse, treat concerns, moisturize, sunscreen. Men\'s skin is thicker, oilier, needs daily shaving care.',
+                'teenage skincare': 'Keep simple: gentle cleanser, light moisturizer, acne treatment as needed, daily sunscreen. Avoid over-exfoliating.',
+                'skincare over 40': 'Focus on: retinoids, antioxidants, peptides, hydration, sunscreen. Consider professional treatments for deeper wrinkles.',
+                'rosacea skincare': 'Avoid triggers: heat, alcohol, spice, stress. Use gentle products with centella, azelaic acid, niacinamide. Mineral sunscreen.',
+                'eczema skincare': 'Avoid fragrance, use gentle cleansers, thick moisturizers with ceramides, colloidal oatmeal. Prescription steroids for flares.',
+                'fungal acne': 'Not true acne - caused by yeast. Avoid oils/fatty acids. Use antifungal ingredients: ketoconazole, zinc pyrithione, sulfur.',
+                'hyperpigmentation types': 'Post-inflammatory (after acne), sun spots, melasma (hormonal). Different treatments for each. Sunscreen prevents all.',
+                'retinoid uglies': 'Initial reaction to retinoids: dryness, peeling, redness. Start slow (2-3x weekly), buffer with moisturizer, it gets better!',
+                'skin fasting': 'Taking breaks from products. Can help reset skin, identify irritants. Not recommended for those on prescription treatments.',
+                'gut skin connection': 'Gut health affects skin! Probiotics may help acne/rosacea. Avoid dairy if acne-prone. Stay hydrated, eat antioxidants.',
+                'hormonal acne': 'Along jawline/chin, cyclical. Topicals help but may need hormonal treatment (birth control, spironolactone). See dermatologist.',
+                'closed comedones': 'Tiny flesh-colored bumps. Treat with salicylic acid, retinoids, AHAs. Avoid heavy creams that clog pores.',
+                'blackheads': 'Open comedones with oxidized sebum. Salicylic acid, retinoids, clay masks help. Don\'t squeeze roughly.',
+                'whiteheads': 'Closed comedones. Same treatment as blackheads. Can be gently extracted by professional.',
+                'cystic acne': 'Deep, painful nodules. Needs dermatologist: isotretinoin, oral antibiotics, steroid injections. Don\'t pick - causes scarring.',
+                'back acne': 'Wear clean clothes, shower after sweating, use salicylic acid/benzoyl peroxide wash, change sheets weekly.',
+                'perioral dermatitis': 'Rash around mouth, often from topical steroids. Stop steroids, use zero therapy, may need antibiotics.',
+                'seborrheic dermatitis': 'Oily, scaly patches on scalp/face. Antifungal ingredients: ketoconazole, zinc pyrithione. Mild steroids short-term.',
+                'keratosis pilaris': '"Chicken skin" bumps on arms. Gentle exfoliation (lactic acid, urea), moisturize. Genetic - improves with age.',
+                'milia': 'Tiny white cysts, not acne. Often from heavy creams. Can resolve on own or be extracted professionally.',
+                'lip care': 'Avoid licking (dries more), use SPF lip balm outside, overnight treatment with lanolin. Gently exfoliate if flaky.',
+                'body care': 'Body skin thicker than face. Can tolerate stronger exfoliants. Moisturize after showering. Different products than face.',
+                'hand care': 'Hands age faster - use SPF, moisturize frequently, wear gloves for chores, treat age spots with vitamin C/retinol.',
+                'foot care': 'Exfoliate heels, moisturize with urea cream, treat fungal infections early, proper fitting shoes, pedicure safety.',
+                'deodorant ingredients': 'Aluminum blocks sweat, natural options use baking soda/arrowroot. If sensitive, avoid fragrance/aluminum.',
+                'sunscreen ingredients': 'Mineral: zinc oxide, titanium dioxide. Chemical: avobenzone, octinoxate, oxybenzone. Hybrids combine both.',
+                'makeup ingredients': 'Look for non-comedogenic, fragrance-free if sensitive. Common irritants: bismuth oxychloride, certain pigments.',
+                'hair care ingredients': 'Sulfates cleanse but can dry, silicones smooth but can buildup, parabens preserve. Clarify monthly.',
+                'nail care ingredients': 'Avoid formaldehyde, toluene, DBP. Look for "5-free" or "10-free" polishes. Nourish cuticles with oils.',
+                'fragrance ingredients': '"Fragrance" can hide 100+ chemicals. Common allergens. Fragrance-free is safer for sensitive skin.',
+                'preservative ingredients': 'Prevent microbial growth. Common: phenoxyethanol, parabens, formaldehyde-releasers. Necessary for water-based products.',
+                'emulsifier ingredients': 'Help oil and water mix. Common: cetearyl alcohol, polysorbates, lecithin. Generally safe.',
+                'thickener ingredients': 'Give texture. Common: carbomer, xanthan gum, acrylates. Generally safe.',
+                'colorant ingredients': 'CI followed by numbers. Some synthetic, some mineral-based. Generally safe, some may stain.',
+                'sunscreen for acne': 'Mineral (zinc) is best for acne-prone. Look for "non-comedogenic", oil-free. Chemical can cause breakouts in some.',
+                'sunscreen for sensitive': 'Mineral only, fragrance-free. Zinc oxide is anti-inflammatory. Avoid chemical filters.',
+                'sunscreen for dark skin': 'Mineral can leave white cast - look for tinted or micronized. Chemical works but may irritate.',
+                'water resistant sunscreen': 'Maintains SPF after 40-80min in water. Still reapply after swimming/toweling.',
+                'sunscreen spray': 'Hard to apply enough, can inhale particles. Use cream/lotion, spray only for reapplication over makeup.',
+                'sunscreen stick': 'Good for around eyes, over makeup. May need multiple passes for full coverage.',
+                'sunscreen pill': 'Supplements (heliocare) provide antioxidant support but don\'t replace topical sunscreen.',
+                'blue light protection': 'Mineral sunscreen (zinc/titanium) blocks some blue light. Antioxidants (vit C) help protect.',
+                'indoor sunscreen': 'UVA penetrates windows. If near windows daily, wear sunscreen. Minimal exposure may skip.',
+                'reef safe sunscreen': 'Avoid oxybenzone, octinoxate. Mineral sunscreens are reef-safe. Also avoid microplastics.',
+                'vitamin d from sun': 'Need sun for vitamin D but balance with skin cancer. 10-15min arms/legs 2-3x weekly, then sunscreen.',
+                'sunscreen expiration': 'Most last 3 years unopened, 1 year opened. Discard if changed color/consistency/smell.',
+                'enough sunscreen': 'Face: 1/4 tsp (finger length). Body: 1 oz (shot glass). Most people apply only 25-50% of needed amount.',
+                'sunscreen under makeup': 'Apply sunscreen, wait 2-3 minutes, then makeup. Tinted sunscreen can replace foundation.',
+                'sunscreen reapplication': 'Every 2 hours outdoors, after swimming/sweating/toweling. Use spray/powder over makeup.',
+                'makeup with spf': 'Not enough! You\'d need 7x foundation for stated SPF. Use separate sunscreen.',
+                'self tanner safety': 'DHA reacts with skin proteins to create color. Doesn\'t protect from sun. Avoid inhalation during spray.',
+                'tanning bed danger': 'Tanning beds cause skin cancer - risk higher than smoking. No safe UV tanning exists.',
+                'skin cancer signs': 'ABCDE: Asymmetry, Border irregular, Color variation, Diameter >6mm, Evolving. See dermatologist annually.',
+                'mole check': 'Monthly self-exams. Changing moles need evaluation. Risk factors: fair skin, family history, sunburns.',
+                'bug bite care': 'Clean with soap, cold compress, hydrocortisone for itch. Seek help if: difficulty breathing, spreading redness.',
+                'poison ivy treatment': 'Wash immediately with soap, don\'t scratch, calamine lotion, oral antihistamines. Severe: prednisone.',
+                'acne scar treatment': 'Professional treatments: microneedling, lasers, chemical peels, fillers. Prevention: don\'t pick acne.',
+                'stretch mark treatment': 'Early (red): retinoids, hyaluronic acid. Mature (white): limited improvement, need professional treatments.',
+                'cellulite treatment': 'Topical treatments limited. Caffeine temporarily reduces appearance. Exercise, healthy weight help.',
+                'varicose vein prevention': 'Exercise, avoid prolonged standing, compression stockings, elevate legs. See doctor for treatment.',
+                'skin tag removal': 'Can be removed by dermatologist via snipping, freezing, burning. Don\'t try home removal.',
+                'wart treatment': 'Salicylic acid, cryotherapy, laser, immunotherapy. Contagious - don\'t pick.',
+                'cold sore treatment': 'Antiviral at first tingling, avoid spreading, lysine supplements may help. Contagious when active.',
+                'canker sore treatment': 'Avoid acidic/spicy foods, protective pastes, antimicrobial mouthwash. Not contagious.',
+                'hives treatment': 'Antihistamines, identify triggers. Emergency if throat swelling, difficulty breathing.',
+                'athlete\'s foot': 'Antifungal creams, keep feet dry, change socks. Can spread to nails.',
+                'nail fungus': 'Oral antifungals for months, laser treatment. Hard to treat topically.',
+                'ingrown toenail': 'Soak, lift gently with floss. Podiatrist for severe cases. Trim straight across.',
+                'body odor treatment': 'Antibacterial soap, aluminum antiperspirants, natural fibers. Prescription strength if severe.',
+                'excessive sweating': 'Hyperhidrosis may need prescription antiperspirants, botox, surgery. Stay hydrated.',
+                'shaving irritation': 'Use sharp blade, shave with grain, don\'t press hard, moisturize after. Consider electric razor.',
+                'waxing tips': 'Wait 24hr before sun, avoid retinol before, exfoliate after 2 days. Not for very sensitive skin.',
+                'laser hair results': 'Works best dark hair/light skin. Multiple sessions needed. Not permanent but long-lasting.',
+                'tattoo aftercare': 'Keep clean/moisturized, avoid sun, no swimming 2-4 weeks. Sunscreen prevents fading.',
+                'piercing aftercare': 'Saline solution, don\'t touch, avoid swimming. Healing: lobes 6-8 weeks, cartilage 6-12 months.',
+                'skin biopsy care': 'Keep clean/dry, antibiotic ointment, watch for infection. Results in 1-2 weeks.',
+                'chemical peel recovery': 'Peeling 3-7 days, strict sunscreen, gentle skincare. Depth determines downtime.',
+                'microneedling recovery': 'Redness 24-48 hours, avoid actives 3-5 days, sunscreen crucial. Collagen production over months.',
+                'laser recovery': 'Varies by type: non-ablative (minimal), ablative (1-2 weeks). Sun protection critical.',
+                'botox aftercare': 'Don\'t rub/touch 4 hours, avoid lying down 4 hours, results in 3-7 days, lasts 3-4 months.',
+                'filler aftercare': 'Swelling/bruising 1-2 weeks, avoid strenuous exercise 24-48 hours, massage if lumps.',
+                'thread lift recovery': 'Swelling/bruising 1-2 weeks, avoid extreme facial movements initially, results immediate.',
+                'plastic surgery recovery': 'Follow surgeon instructions exactly, attend follow-ups, be patient with swelling.',
+                'dermatologist visit prep': 'List all products/medications, note concerns/questions, bring product photos if helpful.',
+                'esthetician vs dermatologist': 'Esthetician: facials, basic skincare advice. Dermatologist: medical conditions, prescriptions.',
+                'skincare budget tips': 'Drugstore has great options, invest in key actives (retinol, vitamin C), multi-use products.',
+                'travel skincare': 'Decant into smaller containers, bring basics, don\'t try new products while traveling, always sunscreen.',
+                'skincare for flights': 'Hydrate extra, moisturize, lip balm, skip makeup during flight, do routine after landing.',
+                'skincare storage': 'Cool, dark place, not bathroom (humidity), fridge for vitamin C/retinoids, check expiration.',
+                'product waste reduction': 'Use up products fully, recycle packaging, buy larger sizes, choose sustainable brands.',
+                'skincare for athletes': 'Shower after sweating, double cleanse if wearing sunscreen, hydrate extra, protect from elements.',
+                'skincare for swimmers': 'Shower immediately after, moisturize heavily, protect hair with cap/conditioner, chlorine removal products.',
+                'skincare for winter': 'Rich moisturizers, humidifier, avoid hot showers, protect from wind, lip balm with SPF.',
+                'skincare for summer': 'Lightweight textures, antioxidant protection, frequent sunscreen reapplication, after-sun care.',
+                'skincare for humid climate': 'Oil-free products, gel textures, blotting papers, fungal acne prevention.',
+                'skincare for dry climate': 'Heavy moisturizers, occlusives, humidifier, gentle cleansing, avoid over-exfoliating.',
+                'skincare for polluted areas': 'Double cleanse nightly, antioxidant serums, regular exfoliation, physical barrier (sunscreen).',
+                'skincare routine order': 'AM: Cleanse → Vitamin C → Moisturize → Sunscreen. PM: Double cleanse → Treatment → Moisturize.',
+                'skincare routine for beginners': 'Start with: gentle cleanser, moisturizer, sunscreen. Add treatments after 4-6 weeks.',
+                'skincare routine for acne': 'AM: Cleanser → Treatment → Moisturizer → Sunscreen. PM: Double cleanse → Treatment → Moisturizer.',
+                'skincare routine for anti-aging': 'AM: Cleanser → Vitamin C → Moisturizer → Sunscreen. PM: Cleanser → Retinol → Moisturizer.',
+                'skincare routine for sensitive': 'AM: Water rinse → Moisturizer → Mineral sunscreen. PM: Gentle cleanser → Moisturizer.',
+                'skincare routine for hyperpigmentation': 'AM: Cleanser → Vitamin C → Moisturizer → Sunscreen. PM: Cleanser → Treatment → Moisturizer.',
+                'skincare routine for rosacea': 'AM: Gentle cleanse → Soothing serum → Moisturizer → Mineral sunscreen. PM: Gentle cleanse → Treatment → Moisturizer.',
+                'skincare routine for eczema': 'AM: Water rinse → Prescription (if any) → Moisturizer. PM: Gentle cleanse → Prescription → Heavy moisturizer.',
+                'skincare routine for men': 'Same principles! Shave after cleansing, use aftershave balm, always sunscreen.',
+                'skincare routine for teens': 'Keep simple: cleanser, moisturizer, spot treatment, sunscreen. Add slowly, don\'t overdo.',
+                'skincare routine for 20s': 'Prevention: antioxidants, sunscreen, hydration. Add retinol late 20s for prevention.',
+                'skincare routine for 30s': 'Anti-aging: retinoids, peptides, antioxidants, regular exfoliation, eye cream.',
+                'skincare routine for 40s': 'Intensive: retinoids, growth factors, professional treatments, neck/hand care.',
+                'skincare routine for 50s+': 'Repair: rich moisturizers, peptides, professional treatments, body skincare, sun protection.',
+                'skincare myths': 'Myth: Natural is always better. Truth: Poison ivy is natural! Focus on ingredient safety, not source.',
+                'skincare truths': 'Truth: Sunscreen is most important product. Consistency matters more than expensive products.',
+                'skincare trends': 'Current: skin cycling, barrier repair, microbiome skincare, blue light protection, personalized routines.',
+                'skincare future': 'Future: DNA-based customization, microbiome balancing, stem cell technology, smart devices.',
+                'skincare psychology': 'Self-care aspect is real! Routine provides stress relief, confidence boost, self-care time.',
+                'skincare addiction': 'Healthy interest vs obsession. If causing stress/financial issues, simplify routine.',
+                'skincare community': 'Online communities can be helpful (knowledge sharing) or harmful (comparison). Find balanced spaces.',
+                'skincare education': 'Learn from dermatologists (Dr. Dray, Dr. Shereene Idriss), estheticians (Hyram), science-based creators.',
+                'skincare books': 'Recommendations: "The Skincare Bible" by Dr. Anjali Mahto, "Beyond Soap" by Dr. Sandy Skotnicki.',
+                'skincare courses': 'Online courses from dermatologists, cosmetic chemists, esthetician schools. Science-based learning.',
+                'skincare career': 'Paths: dermatologist, esthetician, cosmetic chemist, product development, beauty journalism.',
+                'skincare industry': 'Growing industry! Focus on transparency, sustainability, inclusivity, science-backed products.',
+                'skincare regulation': 'US: FDA regulates as cosmetics (less strict). EU: stricter regulation, banned 1300+ ingredients.',
+                'skincare testing': 'Patch testing, clinical trials, consumer testing. Cruelty-free options available.',
+                'skincare sustainability': 'Refillable packaging, biodegradable ingredients, carbon-neutral shipping, waterless products.',
+                'skincare inclusivity': 'Shade ranges, products for all skin types/tones, affordable options, representation in marketing.',
+                'skincare accessibility': 'Affordable options, availability worldwide, products for disabilities, clear labeling.',
+                'skincare technology': 'Apps for analysis, smart devices, AI formulation, personalized recommendations.',
+                'skincare and mental health': 'Can improve confidence, provide routine/structure, self-care practice. Seek help if causing distress.',
+                'skincare and diet': 'Healthy fats, antioxidants, hydration support skin. Dairy/sugar may worsen acne in some.',
+                'skincare and sleep': 'Skin repairs overnight! 7-9 hours quality sleep, clean pillowcases, nighttime routine.',
+                'skincare and stress': 'Stress worsens many skin conditions. Mindfulness, exercise, adequate sleep help skin.',
+                'skincare and exercise': 'Sweat can irritate - shower after, protect skin from sun during outdoor exercise.',
+                'skincare and hormones': 'Hormones affect oil production, acne, pigmentation. Cycle-aware skincare may help.',
+                'skincare and menopause': 'Decreased estrogen causes dryness, thinning. Need rich moisturizers, gentle care.',
+                'skincare and pregnancy': 'Many ingredient restrictions. Focus on hydration, sun protection, gentle products.',
+                'skincare and breastfeeding': 'Similar restrictions as pregnancy. Check specific ingredients with doctor.',
+                'skincare and medications': 'Some medications cause photosensitivity, dryness, acne. Adjust routine accordingly.',
+                'skincare and illnesses': 'Chronic illnesses can affect skin. Work with dermatologist and specialist.',
+                'skincare and cancer treatment': 'Extreme sensitivity during chemo/radiation. Need ultra-gentle, fragrance-free products.',
+                'skincare for all': 'Everyone deserves healthy skin! Age, gender, ethnicity, ability - skincare can be adapted for all.'
             };
             
-            // Check for specific ingredient queries
+            // Check for exact matches first
             for (const [keyword, response] of Object.entries(ingredientKnowledge)) {
-                if (lowerMsg.includes(keyword)) {
+                if (lowerMsg.includes(keyword.toLowerCase())) {
                     return response;
                 }
             }
             
             // Check for question patterns
-            if (lowerMsg.includes('what is') || lowerMsg.includes('tell me about')) {
-                const ingredient = lowerMsg.replace('what is', '').replace('tell me about', '').trim();
-                if (ingredient) {
-                    return `I'd be happy to tell you about ${ingredient}! However, I need more specific information. Could you clarify which ingredient you mean? Or try asking about common ingredients like hyaluronic acid, retinol, or niacinamide.`;
+            const questionPatterns = [
+                { pattern: /what (is|are) (.+)/i, response: (match) => {
+                    const ingredient = match[2];
+                    return `I'd be happy to tell you about ${ingredient}! From my knowledge, ${ingredient} is ${ingredientKnowledge[ingredient.toLowerCase()] ? 'an ingredient I know about. ' + ingredientKnowledge[ingredient.toLowerCase()] : 'not in my specific database. Could you ask about a more common ingredient like hyaluronic acid, retinol, or niacinamide?'}`;
+                }},
+                { pattern: /tell me about (.+)/i, response: (match) => {
+                    const ingredient = match[1];
+                    return `About ${ingredient}: ${ingredientKnowledge[ingredient.toLowerCase()] || "I don't have specific information on that ingredient. Try asking about common skincare ingredients or specific concerns."}`;
+                }},
+                { pattern: /is (.+) (good|bad|safe|dangerous)/i, response: (match) => {
+                    const ingredient = match[1];
+                    const qualifier = match[2];
+                    if (ingredientKnowledge[ingredient.toLowerCase()]) {
+                        const info = ingredientKnowledge[ingredient.toLowerCase()];
+                        if (info.includes('⚠️')) {
+                            return `${ingredient} is ${qualifier === 'good' ? 'not recommended' : qualifier} because: ${info}`;
+                        } else {
+                            return `${ingredient} is generally ${qualifier === 'bad' ? 'not ' : ''}${qualifier === 'bad' ? 'recommended' : qualifier}. ${info}`;
+                        }
+                    }
+                    return `I can't specifically assess ${ingredient}. Try asking about ingredients like fragrance, parabens, or alcohol in skincare.`;
+                }},
+                { pattern: /how (to|do i) (.+)/i, response: () => {
+                    return "I can help with 'how to' questions! Try: 'How to use retinol?' or 'How to treat acne?' or 'How to layer skincare?'";
+                }},
+                { pattern: /best (.+) for (.+)/i, response: (match) => {
+                    const product = match[1];
+                    const concern = match[2];
+                    return `For ${concern}, good ${product} options would contain: ${getRecommendation(concern, product)}`;
+                }},
+                { pattern: /(hello|hi|hey)/i, response: () => {
+                    return 'Hello! I\'m your Ingredient Buddy. Ask me anything about skincare or food ingredients! Try: "Is niacinamide good for acne?" or "What does hyaluronic acid do?"';
+                }},
+                { pattern: /thank/i, response: () => {
+                    return 'You\'re welcome! Feel free to ask more questions about ingredients anytime.';
+                }},
+                { pattern: /bye|goodbye/i, response: () => {
+                    return 'Goodbye! Remember to check ingredients before using new products. Stay safe!';
+                }}
+            ];
+            
+            for (const {pattern, response} of questionPatterns) {
+                const match = userMessage.match(pattern);
+                if (match) {
+                    return response(match);
                 }
             }
             
-            if (lowerMsg.includes('good for') || lowerMsg.includes('help with')) {
-                return 'I can recommend ingredients for specific concerns! Try asking: "What ingredients are good for acne?" or "What helps with dry skin?"';
-            }
-            
-            if (lowerMsg.includes('bad for') || lowerMsg.includes('avoid')) {
-                return 'Some ingredients to be cautious about: fragrance (irritant), alcohol denat (drying), certain preservatives if sensitive. What specific ingredient are you concerned about?';
-            }
-            
-            if (lowerMsg.includes('thank') || lowerMsg.includes('thanks')) {
-                return 'You\'re welcome! Feel free to ask more questions about ingredients anytime.';
-            }
-            
-            if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('hey')) {
-                return 'Hello! I\'m your Ingredient Buddy. Ask me anything about skincare or food ingredients!';
-            }
-            
-            if (lowerMsg.includes('how are you')) {
-                return 'I\'m just a bot, but I\'m here and ready to help you with all your ingredient questions!';
-            }
-            
-            if (lowerMsg.includes('bye') || lowerMsg.includes('goodbye')) {
-                return 'Goodbye! Remember to check ingredients before using new products. Stay safe!';
-            }
-            
-            // Default response for unrecognized queries
+            // Default response
             const defaultResponses = [
                 "I'm here to help with ingredient questions! Try asking about specific ingredients or skincare concerns.",
                 "I can explain ingredients and their effects on skin/health. What would you like to know?",
                 "Need help understanding an ingredient list? Share what you're curious about!",
-                "I specialize in ingredient knowledge. Ask me about anything from hyaluronic acid to preservatives!"
+                "I specialize in ingredient knowledge. Ask me about anything from hyaluronic acid to preservatives!",
+                "Try asking about a specific ingredient or concern. Example: 'Is fragrance bad for skin?' or 'What's good for dry skin?'"
             ];
             
             return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
         }
         
+        function getRecommendation(concern, productType) {
+            const recommendations = {
+                'acne': 'salicylic acid, benzoyl peroxide, niacinamide, retinoids',
+                'dry skin': 'hyaluronic acid, ceramides, glycerin, squalane',
+                'oily skin': 'niacinamide, salicylic acid, clay, zinc',
+                'wrinkles': 'retinol, vitamin C, peptides, sunscreen',
+                'dark spots': 'vitamin C, niacinamide, azelaic acid, kojic acid',
+                'sensitive skin': 'centella asiatica, oat extract, ceramides, madecassoside',
+                'redness': 'azelaic acid, centella, niacinamide, licorice root'
+            };
+            
+            return recommendations[concern.toLowerCase()] || 'ingredients suitable for your concern. Could you be more specific about your skin type or issue?';
+        }
+        
         function startVoiceChat() {
-            alert('Voice chat would start in a real app. For now, type your questions!');
+            alert('Voice input would activate in a real app. For now, type your questions!');
+        }
+        
+        // ========== STREAK MANAGEMENT ==========
+        function updateStreakUI() {
+            document.getElementById('waterStreak').textContent = userData.streaks.water.current;
+            document.getElementById('foodStreak').textContent = userData.streaks.food.current;
+            document.getElementById('skinStreak').textContent = userData.streaks.skin.current;
+            
+            document.getElementById('waterProgress').style.width = `${Math.min(userData.streaks.water.current * 10, 100)}%`;
+            document.getElementById('foodProgress').style.width = `${Math.min(userData.streaks.food.current * 10, 100)}%`;
+            document.getElementById('skinProgress').style.width = `${Math.min(userData.streaks.skin.current * 10, 100)}%`;
+        }
+        
+        function updateStreakCount(type, success) {
+            const today = new Date().toDateString();
+            const lastUpdated = userData.streaks[type].lastUpdated;
+            
+            if (lastUpdated === today) {
+                // Already updated today
+                return;
+            }
+            
+            if (lastUpdated) {
+                const lastDate = new Date(lastUpdated);
+                const todayDate = new Date(today);
+                const diffTime = Math.abs(todayDate - lastDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                    // Consecutive day
+                    if (success) {
+                        userData.streaks[type].current++;
+                        userData.streaks[type].max = Math.max(userData.streaks[type].max, userData.streaks[type].current);
+                    } else {
+                        userData.streaks[type].current = 0;
+                    }
+                } else if (diffDays > 1) {
+                    // Streak broken
+                    userData.streaks[type].current = success ? 1 : 0;
+                }
+            } else {
+                // First time
+                userData.streaks[type].current = success ? 1 : 0;
+                userData.streaks[type].max = success ? 1 : 0;
+            }
+            
+            userData.streaks[type].lastUpdated = today;
+            updateStreakUI();
+            updateBadgesUI();
+            saveUserData();
+            
+            // Visual feedback
+            const streakElement = document.querySelector(`#${type}Streak`).parentElement.parentElement;
+            streakElement.style.animation = 'bounce 0.5s';
+            setTimeout(() => {
+                streakElement.style.animation = '';
+            }, 500);
+        }
+        
+        function checkStreakContinuity() {
+            const today = new Date().toDateString();
+            
+            // Check water streak - reset if not logged today
+            if (userData.streaks.water.lastUpdated !== today) {
+                // For demo, we'll randomly decide if they maintained it
+                if (Math.random() > 0.3) {
+                    userData.streaks.water.current = 0;
+                }
+            }
+            
+            // Check other streaks similarly
+            updateStreakUI();
+        }
+        
+        function logWater() {
+            updateStreakCount('water', true);
+            alert('💧 Great job staying hydrated! Your water streak has been updated.');
+        }
+        
+        // ========== BADGES SYSTEM ==========
+        function updateBadgesUI() {
+            const badgesContainer = document.getElementById('badgesContainer');
+            const badges = [
+                { 
+                    id: 'beginner', 
+                    name: 'Ingredient Aware Beginner', 
+                    icon: 'fas fa-medal',
+                    earned: userData.scanStats.total >= 1,
+                    description: 'Completed first scan'
+                },
+                { 
+                    id: 'safeStreak', 
+                    name: '7-Day Safe Choice Streak', 
+                    icon: 'fas fa-fire',
+                    earned: userData.streaks.skin.current >= 7,
+                    description: '7 consecutive safe choices'
+                },
+                { 
+                    id: 'foodPro', 
+                    name: 'Food Label Pro', 
+                    icon: 'fas fa-search',
+                    earned: userData.scanStats.total >= 10 && userData.scanStats.total >= userData.scanStats.foodScans,
+                    description: 'Scanned 10 food items'
+                },
+                { 
+                    id: 'ingredientExpert', 
+                    name: 'Ingredient Expert', 
+                    icon: 'fas fa-graduation-cap',
+                    earned: userData.scanStats.total >= 20,
+                    description: '20+ total scans'
+                },
+                { 
+                    id: 'cleanBeauty', 
+                    name: 'Clean Beauty Advocate', 
+                    icon: 'fas fa-seedling',
+                    earned: userData.scanStats.safe >= 15,
+                    description: '15+ safe product choices'
+                },
+                { 
+                    id: 'wellnessWarrior', 
+                    name: 'Wellness Warrior', 
+                    icon: 'fas fa-heart',
+                    earned: userData.streaks.water.current >= 14 && userData.streaks.skin.current >= 14,
+                    description: '14-day streaks in multiple categories'
+                }
+            ];
+            
+            badgesContainer.innerHTML = badges.map(badge => `
+                <div class="badge ${badge.earned ? 'earned' : ''}" title="${badge.description}">
+                    <i class="${badge.icon}"></i> ${badge.name}
+                </div>
+            `).join('');
+            
+            // Update badge data
+            badges.forEach(badge => {
+                userData.badges[badge.id] = badge.earned;
+            });
+            
+            saveUserData();
+        }
+        
+        // ========== SCAN HISTORY & STATS ==========
+        function addToHistory(product, safety, source) {
+            const historyItem = {
+                id: Date.now(),
+                product: product,
+                safety: safety,
+                date: new Date().toISOString(),
+                source: source
+            };
+            
+            userData.history.unshift(historyItem);
+            
+            // Update stats
+            userData.scanStats.total++;
+            if (safety === 'safe') userData.scanStats.safe++;
+            if (safety === 'warning') userData.scanStats.warning++;
+            if (safety === 'danger') userData.scanStats.danger++;
+            
+            userData.scanStats.lastScanDate = new Date().toISOString();
+            
+            // Update UI
+            updateScanStatsUI();
+            updateHistoryDisplay();
+            updateBadgesUI();
+            updatePersonalizedInsight();
+            saveUserData();
+        }
+        
+        function updateScanStatsUI() {
+            document.getElementById('totalScans').textContent = userData.scanStats.total;
+            document.getElementById('safeScans').textContent = userData.scanStats.safe;
+            document.getElementById('warningScans').textContent = userData.scanStats.warning;
+        }
+        
+        function updateHistoryDisplay() {
+            const historyContainer = document.getElementById('historyContainer');
+            
+            if (userData.history.length === 0) {
+                historyContainer.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--text-light);">
+                        <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <div>No scan history yet</div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Start by uploading a product or analyzing ingredients!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const historyItems = userData.history.slice(0, 5).map(item => {
+                const date = new Date(item.date);
+                const timeAgo = getTimeAgo(date);
+                
+                return `
+                    <div class="history-item">
+                        <div class="history-icon">
+                            <i class="fas fa-${item.source === 'upload' ? 'camera' : 'keyboard'}"></i>
+                        </div>
+                        <div class="history-info">
+                            <div class="history-name">${item.product}</div>
+                            <div class="history-date">${timeAgo}</div>
+                        </div>
+                        <div class="history-status status-${item.safety}">
+                            ${item.safety === 'safe' ? 'Safe' : item.safety === 'warning' ? 'Caution' : 'Avoid'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            historyContainer.innerHTML = historyItems;
+        }
+        
+        function updatePersonalizedInsight() {
+            const insightElement = document.getElementById('personalizedInsight');
+            
+            if (userData.scanStats.total === 0) {
+                insightElement.textContent = 'Start scanning products to get personalized insights!';
+                return;
+            }
+            
+            const safeRatio = userData.scanStats.safe / userData.scanStats.total;
+            const warningRatio = userData.scanStats.warning / userData.scanStats.total;
+            
+            let insight = '';
+            
+            if (safeRatio >= 0.8) {
+                insight = 'Excellent! You consistently choose safe products. Keep up the great work!';
+            } else if (safeRatio >= 0.6) {
+                insight = 'Good job! Most of your choices are safe. Look for fragrance-free alternatives to improve further.';
+            } else if (warningRatio >= 0.4) {
+                insight = 'You frequently encounter products with potential irritants. Consider patch testing new products.';
+            } else {
+                insight = 'You have a mix of safe and cautionary products. Read labels carefully and prioritize gentle formulas.';
+            }
+            
+            insightElement.textContent = insight;
+        }
+        
+        function updateFragranceAlert(safety) {
+            if (safety === 'warning' || safety === 'danger') {
+                const alertElement = document.getElementById('fragranceAlert');
+                alertElement.textContent = `You've used products with potential irritants. Sensitive skin may react.`;
+            }
+        }
+        
+        // ========== HELPER FUNCTIONS ==========
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+            if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+            
+            return date.toLocaleDateString();
+        }
+        
+        function saveUserData() {
+            localStorage.setItem('jneyah_user_data', JSON.stringify(userData));
         }
         
         // ========== NAVIGATION MODALS ==========
@@ -2055,28 +2645,52 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
             const modal = document.getElementById('historyModal');
             const content = document.getElementById('historyModalContent');
             
-            content.innerHTML = `
-                <h4 style="color: var(--text-dark); margin-bottom: 15px;">Recent Scans</h4>
-                <div style="max-height: 400px; overflow-y: auto;">
-                    ${generateHistoryItems()}
-                </div>
-                <div style="margin-top: 20px; padding: 15px; background: rgba(172, 225, 175, 0.1); border-radius: var(--radius-sm);">
-                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Scan Statistics</h5>
-                    <div style="display: flex; justify-content: space-between;">
-                        <div>
-                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">42</div>
-                            <div style="font-size: 0.8rem; color: var(--text-light);">Total Scans</div>
+            const historyItems = userData.history.map(item => {
+                const date = new Date(item.date);
+                return `
+                    <div class="history-item" style="margin-bottom: 10px;">
+                        <div class="history-icon">
+                            <i class="fas fa-${item.source === 'upload' ? 'camera' : 'keyboard'}"></i>
                         </div>
-                        <div>
-                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">36</div>
-                            <div style="font-size: 0.8rem; color: var(--text-light);">Safe Products</div>
+                        <div class="history-info">
+                            <div class="history-name">${item.product}</div>
+                            <div class="history-date">${date.toLocaleDateString()} ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
                         </div>
-                        <div>
-                            <div style="font-size: 1.5rem; font-weight: bold; color: var(--warning);">6</div>
-                            <div style="font-size: 0.8rem; color: var(--text-light);">Warnings</div>
+                        <div class="history-status status-${item.safety}">
+                            ${item.safety === 'safe' ? 'Safe' : item.safety === 'warning' ? 'Caution' : 'Avoid'}
                         </div>
                     </div>
+                `;
+            }).join('');
+            
+            content.innerHTML = `
+                <h4 style="color: var(--text-dark); margin-bottom: 15px;">Full Scan History (${userData.history.length} items)</h4>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    ${historyItems || '<div style="text-align: center; padding: 20px; color: var(--text-light);">No scan history yet</div>'}
                 </div>
+                ${userData.history.length > 0 ? `
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(172, 225, 175, 0.1); border-radius: var(--radius-sm);">
+                        <h5 style="color: var(--text-dark); margin-bottom: 10px;">Scan Statistics</h5>
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">${userData.scanStats.total}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">Total Scans</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--success);">${userData.scanStats.safe}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">Safe Products</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--warning);">${userData.scanStats.warning}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">Warnings</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--error);">${userData.scanStats.danger}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">Avoid</div>
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
             `;
             
             modal.style.display = 'flex';
@@ -2088,48 +2702,51 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
             
             content.innerHTML = `
                 <h4 style="color: var(--text-dark); margin-bottom: 15px;">Your Wellness Insights</h4>
+                
                 <div style="margin-bottom: 20px;">
-                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Top Ingredients You Encounter</h5>
-                    <ul style="color: var(--text-light); padding-left: 20px;">
-                        <li>Fragrance/Parfum (found in 18 products)</li>
-                        <li>Alcohol Denat. (found in 12 products)</li>
-                        <li>Glycerin (found in 35 products)</li>
-                        <li>Hyaluronic Acid (found in 8 products)</li>
-                        <li>Niacinamide (found in 5 products)</li>
-                    </ul>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Monthly Trends</h5>
-                    <div style="background: white; padding: 15px; border-radius: var(--radius-sm);">
-                        <div style="display: flex; align-items: flex-end; height: 150px; gap: 10px;">
-                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-                                <div style="background: var(--success); height: 80%; width: 20px; border-radius: 5px;"></div>
-                                <div style="font-size: 0.8rem; margin-top: 5px;">Jan</div>
-                            </div>
-                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-                                <div style="background: var(--success); height: 90%; width: 20px; border-radius: 5px;"></div>
-                                <div style="font-size: 0.8rem; margin-top: 5px;">Feb</div>
-                            </div>
-                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-                                <div style="background: var(--warning); height: 60%; width: 20px; border-radius: 5px;"></div>
-                                <div style="font-size: 0.8rem; margin-top: 5px;">Mar</div>
-                            </div>
-                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-                                <div style="background: var(--success); height: 95%; width: 20px; border-radius: 5px;"></div>
-                                <div style="font-size: 0.8rem; margin-top: 5px;">Apr</div>
-                            </div>
+                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Current Streaks</h5>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1; background: white; padding: 15px; border-radius: var(--radius-sm); text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: var(--info);">${userData.streaks.water.current}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">Water Days</div>
                         </div>
-                        <div style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 10px;">Safe vs Unsafe Product Ratio</div>
+                        <div style="flex: 1; background: white; padding: 15px; border-radius: var(--radius-sm); text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: var(--success);">${userData.streaks.skin.current}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">Safe Choice Days</div>
+                        </div>
+                        <div style="flex: 1; background: white; padding: 15px; border-radius: var(--radius-sm); text-align: center;">
+                            <div style="font-size: 1.8rem; font-weight: bold; color: var(--cta-dark);">${userData.streaks.food.current}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">Healthy Food Days</div>
+                        </div>
                     </div>
                 </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h5 style="color: var(--text-dark); margin-bottom: 10px;">Monthly Progress</h5>
+                    <div style="background: white; padding: 15px; border-radius: var(--radius-sm);">
+                        <div style="display: flex; align-items: flex-end; height: 150px; gap: 10px;">
+                            ${Array.from({length: 7}, (_, i) => {
+                                const height = 20 + Math.random() * 80;
+                                return `
+                                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                                        <div style="background: var(--success); height: ${height}%; width: 20px; border-radius: 5px;"></div>
+                                        <div style="font-size: 0.8rem; margin-top: 5px;">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        <div style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 10px;">Daily Safe Scans This Week</div>
+                    </div>
+                </div>
+                
                 <div>
                     <h5 style="color: var(--text-dark); margin-bottom: 10px;">Personalized Recommendations</h5>
                     <div style="background: rgba(172, 225, 175, 0.1); padding: 15px; border-radius: var(--radius-sm);">
-                        <p style="color: var(--text-light); margin-bottom: 10px;">Based on your scan history, we recommend:</p>
+                        <p style="color: var(--text-light); margin-bottom: 10px;">Based on your activity:</p>
                         <ul style="color: var(--text-light); padding-left: 20px;">
-                            <li>Try fragrance-free alternatives for your next purchase</li>
-                            <li>Consider products with hyaluronic acid for better hydration</li>
-                            <li>Your safe choice streak is 12 days - keep it up!</li>
+                            <li>${userData.scanStats.warning > 0 ? 'Try fragrance-free alternatives for your next purchase' : 'Great job avoiding potential irritants!'}</li>
+                            <li>${userData.streaks.water.current < 3 ? 'Remember to log water daily to build your hydration habit' : 'Excellent hydration tracking!'}</li>
+                            <li>${userData.scanStats.total < 5 ? 'Scan more products to unlock detailed insights' : 'Keep scanning to maintain your ingredient awareness'}</li>
                         </ul>
                     </div>
                 </div>
@@ -2181,6 +2798,7 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
             
             alert('Your question has been posted to the community! Our experts and other users will respond soon.');
             questionInput.value = '';
+            closeModal('communityModal');
         }
         
         function showSettings() {
@@ -2261,16 +2879,14 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
                 currentUser.name = newName.trim();
                 currentUser.initials = newName.trim().split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
                 
-                // Save to localStorage
                 localStorage.setItem('jneyah_user', JSON.stringify(currentUser));
                 
-                // Update UI
                 document.getElementById('welcomeMessage').textContent = `Welcome back, ${currentUser.name}!`;
                 document.getElementById('userInitial').textContent = currentUser.initials;
                 
                 alert('Profile updated successfully!');
                 closeModal('settingsModal');
-                showSettings(); // Refresh settings modal
+                showSettings();
             }
         }
         
@@ -2280,9 +2896,8 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
         
         function logout() {
             if (confirm('Are you sure you want to sign out?')) {
-                // In a real app, you would clear session and redirect to login
                 alert('Signed out successfully. Redirecting to login...');
-                // window.location.href = 'signin.html'; // Uncomment in real implementation
+                // window.location.href = 'signin.html';
             }
         }
         
@@ -2291,96 +2906,9 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
         }
         
         function showHome() {
-            // Close all modals
             const modals = document.querySelectorAll('.modal');
             modals.forEach(modal => modal.style.display = 'none');
-            
-            // Ensure main content is visible (it always is, but just in case)
             document.getElementById('mainContent').style.display = 'block';
-        }
-        
-        // ========== HISTORY MANAGEMENT ==========
-        let scanHistory = JSON.parse(localStorage.getItem('jneyah_history')) || [
-            { product: 'Vitamin C Serum', type: 'safe', date: new Date(Date.now() - 86400000).toISOString(), source: 'upload' },
-            { product: 'Protein Bar', type: 'warning', date: new Date(Date.now() - 172800000).toISOString(), source: 'manual' },
-            { product: 'Face Wash', type: 'safe', date: new Date(Date.now() - 259200000).toISOString(), source: 'upload' },
-            { product: 'Sunscreen', type: 'safe', date: new Date(Date.now() - 345600000).toISOString(), source: 'upload' },
-            { product: 'Shampoo', type: 'danger', date: new Date(Date.now() - 432000000).toISOString(), source: 'manual' }
-        ];
-        
-        function addToHistory(product, safety, source) {
-            const historyItem = {
-                product: product,
-                type: safety,
-                date: new Date().toISOString(),
-                source: source
-            };
-            
-            scanHistory.unshift(historyItem); // Add to beginning
-            if (scanHistory.length > 50) scanHistory = scanHistory.slice(0, 50); // Keep last 50
-            
-            localStorage.setItem('jneyah_history', JSON.stringify(scanHistory));
-            updateHistoryDisplay();
-        }
-        
-        function generateHistoryItems() {
-            return scanHistory.map(item => {
-                const date = new Date(item.date);
-                const timeAgo = getTimeAgo(date);
-                
-                return `
-                    <div class="history-item">
-                        <div class="history-icon">
-                            <i class="fas fa-${item.source === 'upload' ? 'camera' : 'keyboard'}"></i>
-                        </div>
-                        <div class="history-info">
-                            <div class="history-name">${item.product}</div>
-                            <div class="history-date">${timeAgo}</div>
-                        </div>
-                        <div class="history-status status-${item.type}">
-                            ${item.type === 'safe' ? 'Safe' : item.type === 'warning' ? 'Caution' : 'Avoid'}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function updateHistoryDisplay() {
-            const historyContainer = document.getElementById('historyContainer');
-            if (historyContainer) {
-                historyContainer.innerHTML = generateHistoryItems();
-            }
-        }
-        
-        function getTimeAgo(date) {
-            const now = new Date();
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-            
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins} min ago`;
-            if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-            if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-            
-            return date.toLocaleDateString();
-        }
-        
-        // ========== STREAK MANAGEMENT ==========
-        function updateStreak(type) {
-            console.log(`Updated ${type} streak`);
-            
-            // Visual feedback
-            const streakCards = document.querySelectorAll('.streak-card');
-            streakCards.forEach(card => {
-                if (card.querySelector('.streak-name').textContent.toLowerCase().includes(type)) {
-                    card.style.animation = 'pulse 0.5s';
-                    setTimeout(() => {
-                        card.style.animation = '';
-                    }, 500);
-                }
-            });
         }
         
         // ========== COMMUNITY QUESTION ==========
@@ -2396,25 +2924,20 @@ Example: Water, Glycerin, Niacinamide, Hyaluronic Acid, Fragrance"></textarea>
             alert('Your question has been posted to the community! Our experts and other users will respond soon.');
             askInput.value = '';
             
-            // Update community engagement streak
-            updateStreak('learning');
+            updateStreakCount('learning', true);
         }
         
-        // ========== INITIALIZATION ==========
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('Jneyah Home Screen loaded');
-            updateHistoryDisplay();
+        // ========== INGREDIENT OF THE DAY ==========
+        function rateIngredient(type) {
+            const messages = {
+                helpful: 'Thanks for your feedback! We\'ll show more helpful content like this.',
+                confusing: 'Thanks! We\'ll try to explain ingredients more clearly.',
+                new: 'Glad you learned something new! Keep exploring.'
+            };
             
-            // Close modals when clicking outside
-            window.addEventListener('click', function(e) {
-                const modals = document.querySelectorAll('.modal');
-                modals.forEach(modal => {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                    }
-                });
-            });
-        });
+            alert(messages[type]);
+            updateStreakCount('learning', true);
+        }
     </script>
 </body>
 </html>
