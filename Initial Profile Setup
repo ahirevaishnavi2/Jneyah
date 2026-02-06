@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jneyah - Profile Setup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        :root {
+            /* Perfect Green Theme - Hackathon Friendly */
+            --primary-bg: #F1FAF4; /* off-white green background */
+            --card-bg: #E6F4EA; /* cards / input fields */
+            --cta: #ACE1AF; /* buttons / CTA */
+            --cta-dark: #8BCF8F; /* button hover */
+            --cta-light: #C2E8C5; /* button light state */
+            --text-dark: #2F3E34; /* dark text */
+            --text-light: #4A5B50; /* light text */
+            --text-lighter: #6B7A6F; /* lighter text */
+            --border: #B7E4C7; /* border / divider */
+            --border-light: #D4EDDA; /* light border */
+            --success: #34A853; /* success green */
+            --error: #EA4335; /* error red */
+            --warning: #FBBC05; /* warning yellow */
+            --info: #4285F4; /* info blue */
+            --shadow: rgba(172, 225, 175, 0.2);
+            --shadow-dark: rgba(172, 225, 175, 0.3);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        
+        .dark-mode {
+            --primary-bg: #0F2B1C;
+            --card-bg: #1A3B27;
+            --cta: #4CAF50;
+            --cta-dark: #3D8B40;
+            --cta-light: #6ABF6D;
+            --text-dark: #E8F5E9;
+            --text-light: #C8E6C9;
+            --text-lighter: #A5D6A7;
+            --border: #2E7D32;
+            --border-light: #388E3C;
+            --success: #4CAF50;
+            --error: #F44336;
+            --warning: #FFC107;
+            --info: #2196F3;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+        }
+        
+        body {
+            background-color: var(--primary-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(172, 225, 175, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(172, 225, 175, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--primary-bg) 0%, #E8F5E9 100%);
+        }
+        
+        .dark-mode body {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(76, 175, 80, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--primary-bg) 0%, #1B5E20 100%);
+        }
+        
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1100px;
+            min-height: 700px;
+            box-shadow: 
+                0 25px 60px var(--shadow-dark),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            overflow: hidden;
+            position: relative;
+            background: white;
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 100;
+        }
+        
+        .toggle-btn {
+            width: 60px;
+            height: 30px;
+            background: var(--card-bg);
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: var(--cta);
+            border-radius: 50%;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .dark-mode .toggle-slider {
+            transform: translateX(30px);
+        }
+        
+        .toggle-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: var(--cta);
+        }
+        
+        .sun {
+            left: 8px;
+        }
+        
+        .moon {
+            right: 8px;
+        }
+        
+        /* Brand Section */
+        .brand-section {
+            flex: 1;
+            background: linear-gradient(145deg, 
+                var(--cta) 0%, 
+                var(--cta-dark) 30%, 
+                #8BCF8F 70%, 
+                #ACE1AF 100%);
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .brand-section::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 250px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            filter: blur(20px);
+        }
+        
+        .brand-section::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            filter: blur(15px);
+        }
+        
+        .brand-logo {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 25px;
+        }
+        
+        .brand-name {
+            font-size: 3.8rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: 2px;
+            text-shadow: 
+                2px 2px 8px rgba(0, 0, 0, 0.1),
+                0 0 20px rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .brand-name::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: white;
+            border-radius: 2px;
+        }
+        
+        .brand-tagline {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+            max-width: 300px;
+            line-height: 1.5;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Profile Setup Section */
+        .profile-section {
+            flex: 1.2;
+            background: white;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border-light);
+        }
+        
+        .profile-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .profile-header h2 {
+            color: var(--text-dark);
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .profile-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: var(--cta);
+            border-radius: 2px;
+        }
+        
+        .profile-header p {
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 400;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--card-bg);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--cta);
+            border-radius: 3px;
+            width: 20%;
+            transition: width 0.4s ease;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+            flex: 1;
+        }
+        
+        .step.active {
+            color: var(--cta);
+            font-weight: 600;
+        }
+        
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            border: 2px solid var(--card-bg);
+        }
+        
+        .step.active .step-number {
+            background: var(--cta);
+            color: white;
+            border-color: var(--cta);
+        }
+        
+        /* Form Steps */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Why It Matters Banner */
+        .info-banner {
+            background: rgba(172, 225, 175, 0.15);
+            border-left: 4px solid var(--cta);
+            padding: 15px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .info-banner i {
+            color: var(--cta);
+            font-size: 1.2rem;
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+        
+        .info-banner p {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* Icon-based Selection */
+        .icon-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .icon-option {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon-option:hover {
+            transform: translateY(-3px);
+            border-color: var(--cta);
+            box-shadow: 0 8px 15px var(--shadow);
+        }
+        
+        .icon-option.selected {
+            background: rgba(172, 225, 175, 0.2);
+            border-color: var(--cta);
+            box-shadow: 0 0 0 3px rgba(172, 225, 175, 0.3);
+        }
+        
+        .icon-option i {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+        
+        .icon-option span {
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        /* Chip Selection (Skin Issues, Allergies) */
+        .chip-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .chip {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 10px 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .chip:hover {
+            border-color: var(--cta);
+            transform: translateY(-2px);
+        }
+        
+        .chip.selected {
+            background: var(--cta);
+            color: white;
+            border-color: var(--cta);
+            font-weight: 500;
+        }
+        
+        .chip i {
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+        
+        /* Accessibility Add-Ons */
+        .accessibility-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .accessibility-title {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .accessibility-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .accessibility-option {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .accessibility-option:hover {
+            border-color: var(--cta);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+        
+        .accessibility-option.selected {
+            background: rgba(172, 225, 175, 0.2);
+            border-color: var(--cta);
+        }
+        
+        .accessibility-option i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: var(--cta);
+        }
+        
+        .accessibility-option-content h4 {
+            color: var(--text-dark);
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        
+        .accessibility-option-content p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            margin-bottom: 30px;
+        }
+        
+        .language-selector label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .language-selector select {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--card-bg);
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+        
+        .language-selector select:hover {
+            border-color: var(--cta);
+        }
+        
+        .language-selector select:focus {
+            outline: none;
+            border-color: var(--cta);
+            box-shadow: 0 0 0 3px var(--shadow);
+        }
+        
+        /* Form Controls */
+        .form-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+        
+        .btn {
+            background: var(--cta);
+            color: var(--text-dark);
+            border: none;
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            min-width: 140px;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            background: var(--cta-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow-dark);
+            color: white;
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            background: var(--border);
+            color: var(--text-lighter);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-light);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--card-bg);
+            border-color: var(--cta);
+            color: var(--text-dark);
+        }
+        
+        .btn-skip {
+            background: transparent;
+            color: var(--text-light);
+            border: none;
+            padding: 16px 24px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .btn-skip:hover {
+            color: var(--cta);
+        }
+        
+        /* Voice Setup Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 43, 28, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px var(--shadow-dark);
+            border: 1px solid var(--border);
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-header h3 {
+            color: var(--cta);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .modal-header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        
+        .voice-indicator {
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .voice-icon {
+            font-size: 3.5rem;
+            color: var(--cta);
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .voice-status {
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .voice-instruction {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                max-width: 550px;
+                min-height: auto;
+            }
+            
+            .brand-name {
+                font-size: 3rem;
+            }
+            
+            .brand-section, .profile-section {
+                padding: 40px 30px;
+            }
+            
+            .icon-selection {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 12px;
+            }
+            
+            .brand-name {
+                font-size: 2.5rem;
+            }
+            
+            .brand-section, .profile-section {
+                padding: 30px 20px;
+            }
+            
+            .icon-selection {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .accessibility-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* Animation for the brand name */
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6); }
+        }
+        
+        .dark-mode .brand-name {
+            animation: glow 4s infinite ease-in-out;
+        }
+        
+        .brand-name {
+            transition: all 0.3s ease;
+        }
+        
+        .brand-name:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--text-dark);
+            color: white;
+            text-align: center;
+            border-radius: var(--radius-sm);
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--text-dark) transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Theme Toggle -->
+        <div class="theme-toggle">
+            <div class="toggle-btn" id="themeToggle">
+                <div class="toggle-slider"></div>
+                <span class="toggle-icon sun"><i class="fas fa-sun"></i></span>
+                <span class="toggle-icon moon"><i class="fas fa-moon"></i></span>
+            </div>
+        </div>
+        
+        <!-- Brand Section -->
+        <div class="brand-section">
+            <div class="brand-logo">
+                <h1 class="brand-name">JNEYAH</h1>
+                <p class="brand-tagline">Where truth is identified before belief</p>
+            </div>
+        </div>
+        
+        <!-- Profile Setup Section -->
+        <div class="profile-section">
+            <div class="profile-header">
+                <h2 id="stepTitle">Initial Profile Setup</h2>
+                <p id="stepSubtitle">Complete your health profile in 1-2 minutes for personalized safety recommendations</p>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step active" id="step1">
+                        <div class="step-number">1</div>
+                        <span>Skin Info</span>
+                    </div>
+                    <div class="step" id="step2">
+                        <div class="step-number">2</div>
+                        <span>Allergies</span>
+                    </div>
+                    <div class="step" id="step3">
+                        <div class="step-number">3</div>
+                        <span>Preferences</span>
+                    </div>
+                    <div class="step" id="step4">
+                        <div class="step-number">4</div>
+                        <span>Accessibility</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Why It Matters Banner -->
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <p><strong>Why this matters?</strong> Same product ≠ same safety for everyone. Your profile helps us provide personalized safety recommendations.</p>
+            </div>
+            
+            <!-- Form Steps -->
+            <div class="form-steps">
+                <!-- Step 1: Skin Information -->
+                <div class="form-step active" id="formStep1">
+                    <div class="input-group">
+                        <label>Skin Type <span class="tooltip">?
+                            <span class="tooltiptext">Select your primary skin type for product recommendations</span>
+                        </span></label>
+                        <div class="icon-selection">
+                            <div class="icon-option" onclick="selectOption(this, 'skinType')">
+                                <i class="fas fa-tint"></i>
+                                <span>Dry</span>
+                            </div>
+                            <div class="icon-option" onclick="selectOption(this, 'skinType')">
+                                <i class="fas fa-oil-can"></i>
+                                <span>Oily</span>
+                            </div>
+                            <div class="icon-option" onclick="selectOption(this, 'skinType')">
+                                <i class="fas fa-balance-scale"></i>
+                                <span>Combination</span>
+                            </div>
+                            <div class="icon-option" onclick="selectOption(this, 'skinType')">
+                                <i class="fas fa-allergies"></i>
+                                <span>Sensitive</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Skin Issues (Select all that apply)</label>
+                        <div class="chip-selection">
+                            <div class="chip" onclick="toggleChip(this, 'skinIssues')">
+                                <i class="fas fa-dot-circle"></i> Acne
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinIssues')">
+                                <i class="fas fa-itch"></i> Itching
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinIssues')">
+                                <i class="fas fa-circle"></i> Pigmentation
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinIssues')">
+                                <i class="fas fa-fire"></i> Redness
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinIssues')">
+                                <i class="fas fa-wind"></i> Dryness
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinIssues')">
+                                <i class="fas fa-water"></i> Oiliness
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-controls">
+                        <button class="btn-secondary" onclick="goToStep(2)">
+                            <i class="fas fa-arrow-right"></i> Next: Allergies
+                        </button>
+                        <button class="btn-skip" onclick="skipStep()">
+                            Skip for now
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Allergies & Age -->
+                <div class="form-step" id="formStep2">
+                    <div class="input-group">
+                        <label>Food Allergies (Optional)</label>
+                        <div class="chip-selection">
+                            <div class="chip" onclick="toggleChip(this, 'foodAllergies')">
+                                <i class="fas fa-peanut"></i> Nuts
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'foodAllergies')">
+                                <i class="fas fa-cheese"></i> Dairy
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'foodAllergies')">
+                                <i class="fas fa-bread-slice"></i> Gluten
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'foodAllergies')">
+                                <i class="fas fa-egg"></i> Eggs
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'foodAllergies')">
+                                <i class="fas fa-fish"></i> Seafood
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'foodAllergies')">
+                                <i class="fas fa-seedling"></i> Soy
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Skin Allergies (Optional)</label>
+                        <div class="chip-selection">
+                            <div class="chip" onclick="toggleChip(this, 'skinAllergies')">
+                                <i class="fas fa-spray-can"></i> Fragrance
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinAllergies')">
+                                <i class="fas fa-wine-bottle"></i> Alcohol
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinAllergies')">
+                                <i class="fas fa-prescription-bottle"></i> Preservatives
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinAllergies')">
+                                <i class="fas fa-flask"></i> Chemicals
+                            </div>
+                            <div class="chip" onclick="toggleChip(this, 'skinAllergies')">
+                                <i class="fas fa-leaf"></i> Natural Oils
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="ageGroup">Age Group (Optional)</label>
+                        <select id="ageGroup">
+                            <option value="">Select age group</option>
+                            <option value="under-18">Under 18</option>
+                            <option value="18-25">18 - 25</option>
+                            <option value="26-35">26 - 35</option>
+                            <option value="36-50">36 - 50</option>
+                            <option value="51-65">51 - 65</option>
+                            <option value="65-plus">65+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-controls">
+                        <button class="btn-secondary" onclick="goToStep(1)">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn" onclick="goToStep(3)">
+                            Next: Preferences <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Diet Preferences -->
+                <div class="form-step" id="formStep3">
+                    <div class="input-group">
+                        <label>Diet Preference</label>
+                        <div class="icon-selection">
+                            <div class="icon-option" onclick="selectOption(this, 'dietPreference')">
+                                <i class="fas fa-leaf"></i>
+                                <span>Vegetarian</span>
+                            </div>
+                            <div class="icon-option" onclick="selectOption(this, 'dietPreference')">
+                                <i class="fas fa-egg"></i>
+                                <span>Eggetarian</span>
+                            </div>
+                            <div class="icon-option" onclick="selectOption(this, 'dietPreference')">
+                                <i class="fas fa-drumstick-bite"></i>
+                                <span>Non-Vegetarian</span>
+                            </div>
+                            <div class="icon-option" onclick="selectOption(this, 'dietPreference')">
+                                <i class="fas fa-infinity"></i>
+                                <span>Flexitarian</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accessibility-section">
+                        <div class="accessibility-title">
+                            <i class="fas fa-universal-access"></i> Accessibility Add-Ons
+                        </div>
+                        <div class="accessibility-options">
+                            <div class="accessibility-option" onclick="toggleAccessibility(this, 'voice')">
+                                <i class="fas fa-microphone-alt"></i>
+                                <div class="accessibility-option-content">
+                                    <h4>Voice-guided setup</h4>
+                                    <p>Complete setup using voice commands</p>
+                                </div>
+                            </div>
+                            <div class="accessibility-option" onclick="toggleAccessibility(this, 'language')">
+                                <i class="fas fa-language"></i>
+                                <div class="accessibility-option-content">
+                                    <h4>Local language support</h4>
+                                    <p>Use app in your preferred language</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-controls">
+                        <button class="btn-secondary" onclick="goToStep(2)">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn" onclick="goToStep(4)">
+                            Next: Review <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Review & Complete -->
+                <div class="form-step" id="formStep4">
+                    <div class="input-group">
+                        <label>Selected Language</label>
+                        <div class="language-selector">
+                            <select id="language">
+                                <option value="en">English</option>
+                                <option value="hi">हिंदी (Hindi)</option>
+                                <option value="ta">தமிழ் (Tamil)</option>
+                                <option value="te">తెలుగు (Telugu)</option>
+                                <option value="ml">മലയാളം (Malayalam)</option>
+                                <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                                <option value="bn">বাংলা (Bengali)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="info-banner" style="margin-top: 20px;">
+                        <i class="fas fa-edit"></i>
+                        <p><strong>Skip & edit anytime:</strong> You can update your profile anytime from settings. Your data is encrypted and secure.</p>
+                    </div>
+                    
+                    <div class="form-controls">
+                        <button class="btn-secondary" onclick="goToStep(3)">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn" onclick="completeSetup()">
+                            <i class="fas fa-check"></i> Complete Setup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Voice Setup Modal -->
+    <div class="modal" id="voiceModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeVoiceModal()">&times;</button>
+            <div class="modal-header">
+                <h3>Voice-guided Setup</h3>
+                <p>Speak your answers for a hands-free experience</p>
+            </div>
+            
+            <div class="voice-indicator">
+                <div class="voice-icon">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <div class="voice-status" id="voiceStatus">Ready to listen</div>
+                <p class="voice-instruction" id="voiceInstruction">Say "Dry", "Oily", "Combination", or "Sensitive" for skin type</p>
+            </div>
+            
+            <div class="form-controls">
+                <button class="btn-secondary" onclick="stopVoiceSetup()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn" id="voiceActionBtn" onclick="startVoiceListening()">
+                    <i class="fas fa-microphone"></i> Start Speaking
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+        
+        // Setup State
+        let currentStep = 1;
+        const totalSteps = 4;
+        
+        // User Profile Data
+        const userProfile = {
+            skinType: null,
+            skinIssues: [],
+            foodAllergies: [],
+            skinAllergies: [],
+            ageGroup: null,
+            dietPreference: null,
+            accessibility: {
+                voice: false,
+                language: false
+            },
+            language: 'en'
+        };
+        
+        // Step Navigation
+        function goToStep(step) {
+            if (step < 1 || step > totalSteps) return;
+            
+            // Hide current step
+            document.getElementById(`formStep${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            
+            // Show new step
+            currentStep = step;
+            document.getElementById(`formStep${currentStep}`).classList.add('active');
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${((currentStep - 1) / (totalSteps - 1)) * 100}%`;
+            
+            // Update titles
+            updateStepTitles();
+        }
+        
+        function updateStepTitles() {
+            const titles = [
+                'Skin & Health Info',
+                'Allergies & Age',
+                'Diet & Accessibility',
+                'Review & Complete'
+            ];
+            
+            const subtitles = [
+                'Tell us about your skin type and any skin issues',
+                'Select any allergies and optionally your age group',
+                'Choose diet preference and accessibility options',
+                'Review your selections and complete setup'
+            ];
+            
+            document.getElementById('stepTitle').textContent = titles[currentStep - 1];
+            document.getElementById('stepSubtitle').textContent = subtitles[currentStep - 1];
+        }
+        
+        // Selection Functions
+        function selectOption(element, category) {
+            // Remove selection from siblings
+            const siblings = element.parentElement.children;
+            for (let sibling of siblings) {
+                sibling.classList.remove('selected');
+            }
+            
+            // Select current element
+            element.classList.add('selected');
+            
+            // Update profile data
+            const value = element.querySelector('span').textContent;
+            userProfile[category] = value;
+            
+            console.log(`Selected ${category}:`, value);
+        }
+        
+        function toggleChip(element, category) {
+            element.classList.toggle('selected');
+            
+            const value = element.textContent.trim().replace(/^[^a-zA-Z]+/, '');
+            
+            if (element.classList.contains('selected')) {
+                userProfile[category].push(value);
+            } else {
+                const index = userProfile[category].indexOf(value);
+                if (index > -1) {
+                    userProfile[category].splice(index, 1);
+                }
+            }
+            
+            console.log(`${category}:`, userProfile[category]);
+        }
+        
+        function toggleAccessibility(element, type) {
+            element.classList.toggle('selected');
+            userProfile.accessibility[type] = element.classList.contains('selected');
+            
+            // Special handling for voice setup
+            if (type === 'voice' && userProfile.accessibility.voice) {
+                openVoiceModal();
+            }
+            
+            console.log(`Accessibility ${type}:`, userProfile.accessibility[type]);
+        }
+        
+        // Skip Step
+        function skipStep() {
+            if (currentStep < totalSteps) {
+                goToStep(currentStep + 1);
+            } else {
+                completeSetup();
+            }
+        }
+        
+        // Voice Setup Modal
+        function openVoiceModal() {
+            document.getElementById('voiceModal').style.display = 'flex';
+            document.getElementById('voiceStatus').textContent = 'Ready to listen';
+            document.getElementById('voiceInstruction').textContent = 'Say "Dry", "Oily", "Combination", or "Sensitive" for skin type';
+            document.getElementById('voiceActionBtn').innerHTML = '<i class="fas fa-microphone"></i> Start Speaking';
+        }
+        
+        function closeVoiceModal() {
+            document.getElementById('voiceModal').style.display = 'none';
+            userProfile.accessibility.voice = false;
+            
+            // Deselect voice option
+            const voiceOption = document.querySelector('.accessibility-option[onclick*="voice"]');
+            if (voiceOption) {
+                voiceOption.classList.remove('selected');
+            }
+        }
+        
+        function stopVoiceSetup() {
+            closeVoiceModal();
+        }
+        
+        function startVoiceListening() {
+            const voiceStatus = document.getElementById('voiceStatus');
+            const voiceActionBtn = document.getElementById('voiceActionBtn');
+            
+            // Simulate voice listening
+            voiceStatus.textContent = 'Listening...';
+            voiceActionBtn.innerHTML = '<div class="spinner"></div> Listening...';
+            voiceActionBtn.disabled = true;
+            
+            // Simulate processing after 2 seconds
+            setTimeout(() => {
+                voiceStatus.textContent = 'Processing...';
+                
+                // Simulate successful recognition after another second
+                setTimeout(() => {
+                    voiceStatus.textContent = 'Recognized: "Combination"';
+                    voiceActionBtn.innerHTML = '<i class="fas fa-check"></i> Success';
+                    
+                    // Update skin type selection
+                    const skinOptions = document.querySelectorAll('.icon-option');
+                    skinOptions.forEach(option => {
+                        if (option.querySelector('span').textContent === 'Combination') {
+                            selectOption(option, 'skinType');
+                        }
+                    });
+                    
+                    // Close modal after 2 seconds
+                    setTimeout(() => {
+                        closeVoiceModal();
+                    }, 2000);
+                }, 1000);
+            }, 2000);
+        }
+        
+        // Age Group Change
+        document.getElementById('ageGroup').addEventListener('change', function() {
+            userProfile.ageGroup = this.value;
+            console.log('Age group:', userProfile.ageGroup);
+        });
+        
+        // Language Change
+        document.getElementById('language').addEventListener('change', function() {
+            userProfile.language = this.value;
+            console.log('Language:', userProfile.language);
+        });
+        
+        // Complete Setup
+        function completeSetup() {
+            // Validate required fields
+            if (!userProfile.skinType) {
+                alert('Please select your skin type to continue');
+                goToStep(1);
+                return;
+            }
+            
+            // Show loading state
+            const completeBtn = document.querySelector('#formStep4 .btn');
+            const originalText = completeBtn.innerHTML;
+            completeBtn.innerHTML = '<div class="spinner"></div> Saving Profile...';
+            completeBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                console.log('Profile setup complete:', userProfile);
+                
+                // Show success message
+                alert('Profile setup complete! Personalized recommendations are now enabled.');
+                
+                // Redirect to dashboard (in real app)
+                // window.location.href = '/dashboard.html';
+                
+                // Reset button
+                completeBtn.innerHTML = originalText;
+                completeBtn.disabled = false;
+            }, 1500);
+        }
+        
+        // Initialize
+        updateStepTitles();
+        
+        // Set up chip selection arrays
+        document.querySelectorAll('.chip-selection').forEach(selection => {
+            const chips = selection.querySelectorAll('.chip');
+            chips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    // Determine category from parent label
+                    const label = this.closest('.input-group').querySelector('label').textContent;
+                    let category = '';
+                    
+                    if (label.includes('Skin Issues')) category = 'skinIssues';
+                    else if (label.includes('Food Allergies')) category = 'foodAllergies';
+                    else if (label.includes('Skin Allergies')) category = 'skinAllergies';
+                    
+                    if (category) {
+                        toggleChip(this, category);
+                    }
+                });
+            });
+        });
+        
+        // Initialize accessibility options
+        document.querySelectorAll('.accessibility-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const type = this.getAttribute('onclick').includes('voice') ? 'voice' : 'language';
+                toggleAccessibility(this, type);
+            });
+        });
+        
+        // Initialize icon options
+        document.querySelectorAll('.icon-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const category = this.getAttribute('onclick').includes('skinType') ? 'skinType' : 'dietPreference';
+                selectOption(this, category);
+            });
+        });
+    </script>
+</body>
+</html>
