@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ingredient Safety Intelligence Platform</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 800px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .logo {
+        color: #4f6df5;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 2.2rem;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .mode-selector {
+        display: flex;
+        gap: 20px;
+        margin-top: 40px;
+      }
+
+      .mode-card {
+        flex: 1;
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .mode-card:hover {
+        border-color: #4f6df5;
+        transform: translateY(-5px);
+      }
+
+      .mode-icon {
+        font-size: 3rem;
+        color: #4f6df5;
+        margin-bottom: 20px;
+      }
+
+      .mode-title {
+        color: #333;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+
+      .mode-desc {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #4f6df5;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        background: #3a56d6;
+        transform: scale(1.05);
+      }
+
+      .btn-expert {
+        background: transparent;
+        border: 2px solid #4f6df5;
+        color: #4f6df5;
+      }
+
+      .btn-expert:hover {
+        background: #4f6df5;
+        color: white;
+      }
+
+      /* Auth Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        max-width: 400px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        color: #333;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 1rem;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #4f6df5;
+      }
+
+      .form-switch {
+        text-align: center;
+        margin-top: 20px;
+        color: #666;
+      }
+
+      .form-switch a {
+        color: #4f6df5;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .error {
+        color: #dc3545;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .mode-selector {
+          flex-direction: column;
+        }
+
+        .container {
+          padding: 20px;
+        }
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">
+          <i class="fas fa-shield-alt"></i> SafeIngredient AI
+        </div>
+        <h1>Ingredient Safety Intelligence Platform</h1>
+        <p class="subtitle">
+          Analyze skincare & food ingredients with AI-powered safety insights.
+          Detect interactions, build healthy habits, and make informed choices.
+        </p>
+      </div>
+
+      <div class="mode-selector">
+        <!-- Citizen Mode -->
+        <div class="mode-card" onclick="showAuthModal('signup')">
+          <div class="mode-icon">
+            <i class="fas fa-user-friends"></i>
+          </div>
+          <h3 class="mode-title">Citizen Mode</h3>
+          <p class="mode-desc">
+            Simple, personalized safety checks for your daily products.
+          </p>
+          <button class="btn">
+            <i class="fas fa-user-plus"></i> Enter Citizen Mode
+          </button>
+        </div>
+
+        <!-- Expert Mode -->
+        <div
+          class="mode-card"
+          onclick="window.location.href = '/expert/ExpertHome.html'"
+        >
+          <div class="mode-icon">
+            <i class="fas fa-microscope"></i>
+          </div>
+          <h3 class="mode-title">Expert Mode</h3>
+          <p class="mode-desc">
+            Advanced analytics and research tools for professionals.
+          </p>
+          <button class="btn btn-expert">
+            <i class="fas fa-arrow-right"></i> Enter Expert Mode
+          </button>
+          <p style="margin-top: 10px; font-size: 0.9rem; color: #666">
+            No account required
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="modalTitle">Create Account</h2>
+          <button class="close-btn" onclick="closeAuthModal()">&times;</button>
+        </div>
+
+        <!-- Signup Form -->
+        <form
+          id="signupForm"
+          onsubmit="handleSignup(event)"
+          style="display: none"
+        >
+          <div class="form-group">
+            <input type="text" id="fullName" placeholder="Full Name" required />
+            <div class="error" id="nameError"></div>
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              id="email"
+              placeholder="Email Address"
+              required
+            />
+            <div class="error" id="emailError"></div>
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="password"
+              placeholder="Password (min 6 characters)"
+              required
+            />
+            <div class="error" id="passwordError"></div>
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              required
+            />
+            <div class="error" id="confirmError"></div>
+          </div>
+          <button type="submit" class="btn" style="width: 100%">
+            <i class="fas fa-user-plus"></i> Create Account
+          </button>
+          <div class="form-switch">
+            Already have an account?
+            <a href="#" onclick="showLoginForm()">Login here</a>
+          </div>
+        </form>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <input
+              type="email"
+              id="loginEmail"
+              placeholder="Email Address"
+              required
+            />
+            <div class="error" id="loginEmailError"></div>
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Password"
+              required
+            />
+            <div class="error" id="loginPasswordError"></div>
+          </div>
+          <button type="submit" class="btn" style="width: 100%">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+          <div class="form-switch">
+            New user?
+            <a href="#" onclick="showSignupForm()">Create account</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:8000/api";
+
+      // Show auth modal
+      function showAuthModal(formType) {
+        const modal = document.getElementById("authModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const signupForm = document.getElementById("signupForm");
+        const loginForm = document.getElementById("loginForm");
+
+        modal.style.display = "flex";
+
+        if (formType === "signup") {
+          modalTitle.textContent = "Create Account";
+          signupForm.style.display = "block";
+          loginForm.style.display = "none";
+        } else {
+          modalTitle.textContent = "Login";
+          signupForm.style.display = "none";
+          loginForm.style.display = "block";
+        }
+      }
+
+      // Close auth modal
+      function closeAuthModal() {
+        document.getElementById("authModal").style.display = "none";
+        clearErrors();
+      }
+
+      // Switch between forms
+      function showLoginForm() {
+        document.getElementById("modalTitle").textContent = "Login";
+        document.getElementById("signupForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+        clearErrors();
+      }
+
+      function showSignupForm() {
+        document.getElementById("modalTitle").textContent = "Create Account";
+        document.getElementById("signupForm").style.display = "block";
+        document.getElementById("loginForm").style.display = "none";
+        clearErrors();
+      }
+
+      // Clear error messages
+      function clearErrors() {
+        document.querySelectorAll(".error").forEach((el) => {
+          el.style.display = "none";
+          el.textContent = "";
+        });
+      }
+
+      // Show error message
+      function showError(elementId, message) {
+        const errorEl = document.getElementById(elementId);
+        errorEl.textContent = message;
+        errorEl.style.display = "block";
+      }
+
+      // Handle signup
+      async function handleSignup(event) {
+        event.preventDefault();
+        clearErrors();
+
+        const fullName = document.getElementById("fullName").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+
+        // Validation
+        let isValid = true;
+
+        if (!fullName.trim()) {
+          showError("nameError", "Full name is required");
+          isValid = false;
+        }
+
+        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+          showError("emailError", "Please enter a valid email");
+          isValid = false;
+        }
+
+        if (password.length < 6) {
+          showError("passwordError", "Password must be at least 6 characters");
+          isValid = false;
+        }
+
+        if (password !== confirmPassword) {
+          showError("confirmError", "Passwords do not match");
+          isValid = false;
+        }
+
+        if (!isValid) return;
+
+        try {
+          const response = await fetch(`${API_BASE}/auth/form/register`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              full_name: fullName,
+              email: email,
+              password: password,
+              confirm_password: confirmPassword,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            // Store tokens
+            localStorage.setItem("access_token", result.access_token);
+            localStorage.setItem("refresh_token", result.refresh_token);
+
+            // Redirect to profile completion
+            window.location.href = result.redirect;
+          } else {
+            showError("emailError", result.message || "Registration failed");
+          }
+        } catch (error) {
+          console.error("Signup error:", error);
+          showError("emailError", "An error occurred during signup");
+        }
+      }
+
+      // Handle login
+      async function handleLogin(event) {
+        event.preventDefault();
+        clearErrors();
+
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        if (!email || !password) {
+          showError("loginEmailError", "Please fill in all fields");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE}/auth/form/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              email: email,
+              password: password,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            // Store tokens
+            localStorage.setItem("access_token", result.access_token);
+            localStorage.setItem("refresh_token", result.refresh_token);
+
+            // Redirect based on profile completion
+            window.location.href = result.redirect;
+          } else {
+            showError("loginEmailError", result.message || "Login failed");
+          }
+        } catch (error) {
+          console.error("Login error:", error);
+          showError("loginEmailError", "An error occurred during login");
+        }
+      }
+
+      // Close modal on outside click
+      document
+        .getElementById("authModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeAuthModal();
+          }
+        });
+    </script>
+  </body>
+</html>

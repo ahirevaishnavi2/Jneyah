@@ -1,0 +1,1986 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Safety Profile - SafeIngredient AI</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #4f6df5;
+        --primary-light: #eef2ff;
+        --secondary: #6c5ce7;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --danger: #e17055;
+        --light: #f8f9fa;
+        --dark: #2d3436;
+        --gray: #636e72;
+        --light-gray: #dfe6e9;
+        --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        --hover-shadow: 0 12px 35px rgba(79, 109, 245, 0.12);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f9fbfd 0%, #edf1f7 100%);
+        min-height: 100vh;
+        color: var(--dark);
+        padding: 20px;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 25px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: var(--card-shadow);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 15px;
+      }
+
+      .logo-icon {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.3rem;
+      }
+
+      .logo-text {
+        font-size: 1.6rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .header h1 {
+        font-size: 1.9rem;
+        margin-bottom: 10px;
+        color: var(--dark);
+      }
+
+      .header p {
+        color: var(--gray);
+        font-size: 1.05rem;
+        max-width: 700px;
+        margin: 0 auto 15px;
+      }
+
+      .notice-box {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        text-align: left;
+      }
+
+      .notice-box i {
+        color: var(--primary);
+        margin-right: 10px;
+      }
+
+      /* Progress Bar */
+      .progress-container {
+        margin: 25px 0;
+      }
+
+      .progress-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        position: relative;
+      }
+
+      .progress-bar::before {
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--light-gray);
+        z-index: 1;
+      }
+
+      .progress-line {
+        position: absolute;
+        top: 20px;
+        left: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+        z-index: 2;
+        transition: width 0.3s ease;
+        border-radius: 2px;
+      }
+
+      .progress-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 3;
+      }
+
+      .step-number {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid var(--light-gray);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--gray);
+        margin-bottom: 8px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+      }
+
+      .step-number.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .step-label {
+        font-size: 0.85rem;
+        color: var(--gray);
+        font-weight: 500;
+        text-align: center;
+      }
+
+      /* Form Container */
+      .form-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+        margin-bottom: 30px;
+      }
+
+      .form-sections {
+        padding: 30px;
+      }
+
+      /* Form Navigation */
+      .form-nav {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 30px;
+        background: var(--light);
+        border-top: 1px solid var(--light-gray);
+      }
+
+      .nav-btn {
+        padding: 12px 28px;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-prev {
+        background: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+      }
+
+      .btn-prev:hover {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-next {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        border: none;
+      }
+
+      .btn-next:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--hover-shadow);
+      }
+
+      .btn-skip {
+        background: transparent;
+        color: var(--gray);
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        text-decoration: underline;
+      }
+
+      .btn-skip:hover {
+        color: var(--dark);
+      }
+
+      /* Form Sections */
+      .form-section {
+        display: none;
+        animation: fadeIn 0.4s ease;
+      }
+
+      .form-section.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .section-header {
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid var(--light);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.4rem;
+        color: var(--dark);
+        margin-bottom: 8px;
+      }
+
+      .section-icon {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+      }
+
+      .section-description {
+        color: var(--gray);
+        font-size: 1rem;
+      }
+
+      /* Question Groups */
+      .question-group {
+        margin-bottom: 25px;
+        padding: 20px;
+        background: var(--light);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .question-group:hover {
+        background: var(--primary-light);
+        transform: translateY(-2px);
+      }
+
+      .question-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+
+      .question-label {
+        font-weight: 600;
+        color: var(--dark);
+        font-size: 1.05rem;
+        flex: 1;
+      }
+
+      .required::after {
+        content: " *";
+        color: var(--danger);
+        font-weight: bold;
+      }
+
+      /* Help Tooltip */
+      .help-tooltip {
+        position: relative;
+        margin-left: 10px;
+      }
+
+      .help-icon {
+        color: var(--primary);
+        cursor: help;
+        font-size: 1rem;
+        background: white;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--primary);
+      }
+
+      .tooltip-content {
+        display: none;
+        position: absolute;
+        top: 30px;
+        right: 0;
+        width: 280px;
+        background: white;
+        border: 1px solid var(--light-gray);
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        font-size: 0.9rem;
+        color: var(--dark);
+      }
+
+      .tooltip-content::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        right: 10px;
+        width: 16px;
+        height: 16px;
+        background: white;
+        transform: rotate(45deg);
+        border-left: 1px solid var(--light-gray);
+        border-top: 1px solid var(--light-gray);
+      }
+
+      .help-tooltip:hover .tooltip-content {
+        display: block;
+      }
+
+      .tooltip-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--primary);
+      }
+
+      .example {
+        background: var(--light);
+        padding: 10px;
+        border-radius: 8px;
+        margin-top: 8px;
+        font-size: 0.85rem;
+        color: var(--gray);
+      }
+
+      /* Simple Options */
+      .simple-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+      }
+
+      .simple-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px;
+        background: white;
+        border: 2px solid var(--light-gray);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .simple-option:hover {
+        border-color: var(--primary);
+        background: var(--primary-light);
+      }
+
+      .simple-option input[type="radio"],
+      .simple-option input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--primary);
+      }
+
+      .option-text {
+        font-size: 0.95rem;
+        color: var(--dark);
+      }
+
+      /* Simple Inputs */
+      .simple-input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--light-gray);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      .simple-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(79, 109, 245, 0.1);
+      }
+
+      select.simple-input {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23636e72' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 14px;
+        padding-right: 40px;
+      }
+
+      /* Simple Textarea */
+      .simple-textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid var(--light-gray);
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+        min-height: 100px;
+        resize: vertical;
+        font-family: inherit;
+      }
+
+      /* Info Boxes */
+      .info-box {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        font-size: 0.95rem;
+      }
+
+      .info-box i {
+        color: #2196f3;
+        margin-right: 10px;
+      }
+
+      .tip-box {
+        background: #f3e5f5;
+        border-left: 4px solid #9c27b0;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        font-size: 0.95rem;
+      }
+
+      .tip-box i {
+        color: #9c27b0;
+        margin-right: 10px;
+      }
+
+      /* Simple Tags */
+      .simple-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        background: white;
+        border: 2px solid var(--light-gray);
+        border-radius: 20px;
+        font-size: 0.9rem;
+        color: var(--dark);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .tag:hover {
+        background: var(--primary-light);
+        border-color: var(--primary);
+      }
+
+      .tag.selected {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      /* Review Section */
+      .review-box {
+        background: var(--light);
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+      }
+
+      .review-item {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed var(--light-gray);
+      }
+
+      .review-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .review-label {
+        font-weight: 600;
+        color: var(--gray);
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+      }
+
+      .review-value {
+        font-size: 1.05rem;
+        color: var(--dark);
+      }
+
+      /* Success Screen */
+      .success-screen {
+        text-align: center;
+        padding: 40px 20px;
+        display: none;
+      }
+
+      .success-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--success), #00cec9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        margin: 0 auto 20px;
+        animation: bounce 1s ease;
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-20px);
+        }
+        60% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .success-screen h2 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        color: var(--dark);
+      }
+
+      .success-screen p {
+        color: var(--gray);
+        line-height: 1.6;
+        margin-bottom: 30px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Error Messages */
+      .error-message {
+        color: var(--danger);
+        font-size: 0.9rem;
+        margin-top: 8px;
+        display: none;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        body {
+          padding: 15px;
+        }
+
+        .header {
+          padding: 20px;
+        }
+
+        .header h1 {
+          font-size: 1.6rem;
+        }
+
+        .form-sections {
+          padding: 20px;
+        }
+
+        .form-nav {
+          padding: 15px 20px;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .nav-btn {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .simple-options {
+          grid-template-columns: 1fr;
+        }
+
+        .tooltip-content {
+          width: 250px;
+          right: -100px;
+        }
+
+        .tooltip-content::before {
+          right: 110px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header h1 {
+          font-size: 1.4rem;
+        }
+
+        .section-title {
+          font-size: 1.2rem;
+        }
+
+        .section-icon {
+          width: 40px;
+          height: 40px;
+          font-size: 1rem;
+        }
+
+        .question-group {
+          padding: 15px;
+        }
+
+        .progress-bar {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+      }
+
+      /* Loading Spinner */
+      .loading {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+        vertical-align: middle;
+        margin-right: 8px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">
+          <div class="logo-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="logo-text">SafeIngredient AI</div>
+        </div>
+        <h1>Tell Us About Yourself</h1>
+        <p>
+          Help us understand you better so we can provide personalized
+          ingredient safety advice.
+        </p>
+
+        <div class="notice-box">
+          <i class="fas fa-info-circle"></i>
+          <strong>Your privacy is protected:</strong> We only use this
+          information to make ingredient safety recommendations. We never share
+          your personal data.
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div
+            class="progress-line"
+            id="progressLine"
+            style="width: 16.66%"
+          ></div>
+          <div class="progress-step">
+            <div class="step-number active">1</div>
+            <div class="step-label">About You</div>
+          </div>
+          <div class="progress-step">
+            <div class="step-number">2</div>
+            <div class="step-label">Your Skin</div>
+          </div>
+          <div class="progress-step">
+            <div class="step-number">3</div>
+            <div class="step-label">Allergies</div>
+          </div>
+          <div class="progress-step">
+            <div class="step-number">4</div>
+            <div class="step-label">Health</div>
+          </div>
+          <div class="progress-step">
+            <div class="step-number">5</div>
+            <div class="step-label">Habits</div>
+          </div>
+          <div class="progress-step">
+            <div class="step-number">6</div>
+            <div class="step-label">Finish</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Container -->
+      <div class="form-container">
+        <div class="form-sections">
+          <!-- Section 1: About You -->
+          <div class="form-section active" id="section1">
+            <div class="section-header">
+              <h2 class="section-title">
+                <div class="section-icon">
+                  <i class="fas fa-user"></i>
+                </div>
+                About You
+              </h2>
+              <p class="section-description">
+                Basic information to personalize your experience
+              </p>
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label required">How old are you?</label>
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">Why we ask:</div>
+                    <p>
+                      Some ingredients are safer or riskier at different ages.
+                      For example, certain ingredients aren't recommended for
+                      children or during pregnancy.
+                    </p>
+                    <div class="example">
+                      <strong>Example:</strong> Retinol is often avoided during
+                      pregnancy.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input
+                type="number"
+                id="age"
+                class="simple-input"
+                min="1"
+                max="120"
+                placeholder="Enter your age"
+                required
+              />
+              <div class="error-message" id="ageError"></div>
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label required"
+                  >What's your gender?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">Why we ask:</div>
+                    <p>
+                      Some ingredients may affect men and women differently due
+                      to hormonal differences. This helps us provide more
+                      accurate safety advice.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-options">
+                <label class="simple-option">
+                  <input type="radio" name="gender" value="female" required />
+                  <span class="option-text">Female</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="gender" value="male" />
+                  <span class="option-text">Male</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="gender" value="other" />
+                  <span class="option-text">Other</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="gender" value="prefer-not-to-say" />
+                  <span class="option-text">Prefer not to say</span>
+                </label>
+              </div>
+              <div class="error-message" id="genderError"></div>
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >Are you pregnant or breastfeeding?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">Important for safety:</div>
+                    <p>
+                      Many ingredients that are normally safe should be avoided
+                      during pregnancy or breastfeeding. We'll flag these
+                      ingredients for you.
+                    </p>
+                    <div class="example">
+                      <strong>Examples to avoid:</strong> Retinol, salicylic
+                      acid (in high doses), certain essential oils.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-options">
+                <label class="simple-option">
+                  <input type="radio" name="pregnancy" value="no" />
+                  <span class="option-text">No</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="pregnancy" value="pregnant" />
+                  <span class="option-text">Yes, pregnant</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="pregnancy" value="breastfeeding" />
+                  <span class="option-text">Yes, breastfeeding</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="pregnancy" value="planning" />
+                  <span class="option-text">Planning pregnancy</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="tip-box">
+              <i class="fas fa-lightbulb"></i>
+              <strong>Tip:</strong> The more accurate your information, the
+              better we can protect you from potentially harmful ingredients.
+            </div>
+          </div>
+
+          <!-- Section 2: Your Skin -->
+          <div class="form-section" id="section2">
+            <div class="section-header">
+              <h2 class="section-title">
+                <div class="section-icon">
+                  <i class="fas fa-spa"></i>
+                </div>
+                Your Skin
+              </h2>
+              <p class="section-description">
+                Help us understand your skin type and concerns
+              </p>
+            </div>
+
+            <div class="info-box">
+              <i class="fas fa-info-circle"></i>
+              This helps us recommend skincare ingredients that work well with
+              your skin type and avoid those that might cause problems.
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label required"
+                  >What's your skin type?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">
+                      Not sure? Here's how to tell:
+                    </div>
+                    <p>
+                      <strong>Oily:</strong> Skin looks shiny, pores may be
+                      visible<br />
+                      <strong>Dry:</strong> Skin feels tight, may flake<br />
+                      <strong>Combination:</strong> Oily in T-zone (forehead,
+                      nose, chin), dry elsewhere<br />
+                      <strong>Sensitive:</strong> Easily gets red or
+                      irritated<br />
+                      <strong>Normal:</strong> Balanced, not too oily or dry
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-options">
+                <label class="simple-option">
+                  <input type="radio" name="skin_type" value="oily" required />
+                  <span class="option-text">Oily (Shiny skin)</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="skin_type" value="dry" />
+                  <span class="option-text">Dry (Feels tight)</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="skin_type" value="combination" />
+                  <span class="option-text">Combination (Oily T-zone)</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="skin_type" value="sensitive" />
+                  <span class="option-text">Sensitive (Easily irritated)</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="skin_type" value="normal" />
+                  <span class="option-text">Normal (Balanced)</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="skin_type" value="not-sure" />
+                  <span class="option-text">Not sure</span>
+                </label>
+              </div>
+              <div class="error-message" id="skinTypeError"></div>
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >What skin concerns do you have?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">
+                      We'll help you find ingredients that address these
+                      concerns:
+                    </div>
+                    <p>
+                      Select all that apply. We'll recommend ingredients that
+                      help with your specific concerns and avoid those that
+                      might make them worse.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-tags">
+                <div class="tag" data-value="acne">Acne/Pimples</div>
+                <div class="tag" data-value="aging">Aging/Wrinkles</div>
+                <div class="tag" data-value="dark-spots">Dark Spots</div>
+                <div class="tag" data-value="redness">Redness</div>
+                <div class="tag" data-value="dryness">Dryness</div>
+                <div class="tag" data-value="oiliness">Too Oily</div>
+                <div class="tag" data-value="pores">Large Pores</div>
+                <div class="tag" data-value="none">None</div>
+              </div>
+              <input type="hidden" id="skin_concerns" />
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >How does your skin react to sun?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">Sun sensitivity matters:</div>
+                    <p>
+                      Some ingredients make your skin more sensitive to
+                      sunlight. We'll warn you about these ingredients based on
+                      how your skin typically reacts to sun.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-options">
+                <label class="simple-option">
+                  <input
+                    type="radio"
+                    name="sun_sensitivity"
+                    value="burns-easily"
+                  />
+                  <span class="option-text">Burns easily, rarely tans</span>
+                </label>
+                <label class="simple-option">
+                  <input
+                    type="radio"
+                    name="sun_sensitivity"
+                    value="sometimes-burns"
+                  />
+                  <span class="option-text">Sometimes burns, tans slowly</span>
+                </label>
+                <label class="simple-option">
+                  <input
+                    type="radio"
+                    name="sun_sensitivity"
+                    value="tans-easily"
+                  />
+                  <span class="option-text">Tans easily, rarely burns</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="sun_sensitivity" value="not-sure" />
+                  <span class="option-text">Not sure</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Allergies -->
+          <div class="form-section" id="section3">
+            <div class="section-header">
+              <h2 class="section-title">
+                <div class="section-icon">
+                  <i class="fas fa-allergies"></i>
+                </div>
+                Allergies & Reactions
+              </h2>
+              <p class="section-description">
+                Tell us about any allergic reactions or sensitivities
+              </p>
+            </div>
+
+            <div class="info-box">
+              <i class="fas fa-info-circle"></i>
+              Even if you're not sure about specific allergies, tell us about
+              products that have caused reactions in the past.
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >Have you had allergic reactions to skincare or makeup?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">
+                      Common allergens in products:
+                    </div>
+                    <p>
+                      <strong>Fragrance:</strong> Perfume or scents in
+                      products<br />
+                      <strong>Preservatives:</strong> Ingredients that keep
+                      products fresh<br />
+                      <strong>Essential oils:</strong> Natural oils like
+                      lavender, tea tree<br />
+                      <strong>Metals:</strong> Nickel in jewelry or makeup
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-tags">
+                <div class="tag" data-value="fragrance">Fragrance/Perfume</div>
+                <div class="tag" data-value="preservatives">Preservatives</div>
+                <div class="tag" data-value="essential-oils">
+                  Essential Oils
+                </div>
+                <div class="tag" data-value="latex">Latex</div>
+                <div class="tag" data-value="nickel">Nickel</div>
+                <div class="tag" data-value="none">No allergies</div>
+              </div>
+              <input type="hidden" id="product_allergies" />
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >Do you have food allergies?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">
+                      Why food allergies matter for skincare:
+                    </div>
+                    <p>
+                      Some skincare ingredients come from foods you might be
+                      allergic to. For example, nut oils in lotions or dairy
+                      proteins in creams.
+                    </p>
+                    <div class="example">
+                      <strong>Examples:</strong> Almond oil, shea butter (from
+                      nuts), lactose in creams.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-tags">
+                <div class="tag" data-value="nuts">Nuts</div>
+                <div class="tag" data-value="dairy">Dairy</div>
+                <div class="tag" data-value="gluten">Gluten</div>
+                <div class="tag" data-value="soy">Soy</div>
+                <div class="tag" data-value="seafood">Seafood</div>
+                <div class="tag" data-value="none">No food allergies</div>
+              </div>
+              <input type="hidden" id="food_allergies" />
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >How severe are your allergies?</label
+                >
+              </div>
+              <div class="simple-options">
+                <label class="simple-option">
+                  <input type="radio" name="allergy_severity" value="mild" />
+                  <span class="option-text">Mild (Minor itching/rash)</span>
+                </label>
+                <label class="simple-option">
+                  <input
+                    type="radio"
+                    name="allergy_severity"
+                    value="moderate"
+                  />
+                  <span class="option-text"
+                    >Moderate (Noticeable rash/swelling)</span
+                  >
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="allergy_severity" value="severe" />
+                  <span class="option-text">Severe (Difficulty breathing)</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >Any specific products or ingredients that cause
+                  reactions?</label
+                >
+              </div>
+              <textarea
+                id="specific_allergies"
+                class="simple-textarea"
+                placeholder="E.g., 'Neosporin makes me itch', 'I react to products with lavender', 'Penicillin allergy'"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Section 4: Health -->
+          <div class="form-section" id="section4">
+            <div class="section-header">
+              <h2 class="section-title">
+                <div class="section-icon">
+                  <i class="fas fa-heartbeat"></i>
+                </div>
+                Health & Medications
+              </h2>
+              <p class="section-description">
+                Some ingredients interact with health conditions or medicines
+              </p>
+            </div>
+
+            <div class="info-box">
+              <i class="fas fa-info-circle"></i>
+              This information is completely confidential. We use it only to
+              warn you about potentially harmful interactions.
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >Do you have any health conditions?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">Why this matters:</div>
+                    <p>
+                      Some ingredients can affect or be affected by health
+                      conditions. For example, certain ingredients shouldn't be
+                      used if you have thyroid problems or autoimmune diseases.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-tags">
+                <div class="tag" data-value="diabetes">Diabetes</div>
+                <div class="tag" data-value="high-bp">High Blood Pressure</div>
+                <div class="tag" data-value="thyroid">Thyroid Issues</div>
+                <div class="tag" data-value="asthma">Asthma</div>
+                <div class="tag" data-value="eczema">Eczema/Psoriasis</div>
+                <div class="tag" data-value="autoimmune">
+                  Autoimmune Disease
+                </div>
+                <div class="tag" data-value="kidney">Kidney Issues</div>
+                <div class="tag" data-value="liver">Liver Issues</div>
+                <div class="tag" data-value="cancer">
+                  Cancer (Current/History)
+                </div>
+                <div class="tag" data-value="none">No health conditions</div>
+              </div>
+              <input type="hidden" id="health_conditions" />
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >Are you currently taking any medications?</label
+                >
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">Important for safety:</div>
+                    <p>
+                      Some skincare ingredients can interact with medications.
+                      For example, vitamin A products (retinol) shouldn't be
+                      used with certain acne medications.
+                    </p>
+                    <div class="example">
+                      <strong>Common interactions:</strong> Retinol + Accutane,
+                      Certain oils + blood thinners
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <textarea
+                id="medications"
+                class="simple-textarea"
+                placeholder="List any medicines, supplements, or vitamins you take regularly. E.g., 'Blood pressure medicine, Vitamin D, Birth control pill'"
+              ></textarea>
+            </div>
+
+            <div class="tip-box">
+              <i class="fas fa-lightbulb"></i>
+              <strong>Remember:</strong> Always consult your doctor before
+              making changes to medications or treatments. Our advice is for
+              informational purposes only.
+            </div>
+          </div>
+
+          <!-- Section 5: Habits -->
+          <div class="form-section" id="section5">
+            <div class="section-header">
+              <h2 class="section-title">
+                <div class="section-icon">
+                  <i class="fas fa-running"></i>
+                </div>
+                Daily Habits
+              </h2>
+              <p class="section-description">
+                Your daily routine affects how ingredients work
+              </p>
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label">What's your diet like?</label>
+                <div class="help-tooltip">
+                  <span class="help-icon">?</span>
+                  <div class="tooltip-content">
+                    <div class="tooltip-title">Diet affects skin health:</div>
+                    <p>
+                      Your diet can make your skin more or less sensitive to
+                      certain ingredients. We'll consider this when making
+                      recommendations.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="simple-tags">
+                <div class="tag" data-value="vegetarian">Vegetarian</div>
+                <div class="tag" data-value="vegan">Vegan</div>
+                <div class="tag" data-value="gluten-free">Gluten-Free</div>
+                <div class="tag" data-value="dairy-free">Dairy-Free</div>
+                <div class="tag" data-value="organic">Prefers Organic</div>
+                <div class="tag" data-value="regular">Regular Diet</div>
+              </div>
+              <input type="hidden" id="diet" />
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label">How often do you exercise?</label>
+              </div>
+              <div class="simple-options">
+                <label class="simple-option">
+                  <input type="radio" name="exercise" value="rarely" />
+                  <span class="option-text">Rarely or never</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="exercise" value="1-2" />
+                  <span class="option-text">1-2 times a week</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="exercise" value="3-4" />
+                  <span class="option-text">3-4 times a week</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="exercise" value="daily" />
+                  <span class="option-text">Almost daily</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label">Do you smoke?</label>
+              </div>
+              <div class="simple-options">
+                <label class="simple-option">
+                  <input type="radio" name="smoking" value="no" />
+                  <span class="option-text">No, never</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="smoking" value="former" />
+                  <span class="option-text">Used to, but quit</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="smoking" value="occasional" />
+                  <span class="option-text">Occasionally</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="smoking" value="regular" />
+                  <span class="option-text">Yes, regularly</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="question-group">
+              <div class="question-header">
+                <label class="question-label"
+                  >What's your stress level like?</label
+                >
+              </div>
+              <div class="simple-options">
+                <label class="simple-option">
+                  <input type="radio" name="stress" value="low" />
+                  <span class="option-text">Usually relaxed</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="stress" value="moderate" />
+                  <span class="option-text">Sometimes stressed</span>
+                </label>
+                <label class="simple-option">
+                  <input type="radio" name="stress" value="high" />
+                  <span class="option-text">Often stressed</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 6: Finish -->
+          <div class="form-section" id="section6">
+            <div class="section-header">
+              <h2 class="section-title">
+                <div class="section-icon">
+                  <i class="fas fa-clipboard-check"></i>
+                </div>
+                Almost Done!
+              </h2>
+              <p class="section-description">
+                Review your information and submit
+              </p>
+            </div>
+
+            <div class="review-box" id="reviewBox">
+              <div class="review-item">
+                <div class="review-label">Your Age</div>
+                <div class="review-value" id="reviewAge">Not provided</div>
+              </div>
+              <div class="review-item">
+                <div class="review-label">Skin Type</div>
+                <div class="review-value" id="reviewSkin">Not provided</div>
+              </div>
+              <div class="review-item">
+                <div class="review-label">Allergies</div>
+                <div class="review-value" id="reviewAllergies">None noted</div>
+              </div>
+              <div class="review-item">
+                <div class="review-label">Health Notes</div>
+                <div class="review-value" id="reviewHealth">None provided</div>
+              </div>
+            </div>
+
+            <div class="question-group">
+              <label
+                class="simple-option"
+                style="
+                  display: flex;
+                  align-items: flex-start;
+                  padding: 15px;
+                  background: var(--light);
+                  border-radius: 10px;
+                "
+              >
+                <input
+                  type="checkbox"
+                  id="consent"
+                  required
+                  style="margin-top: 3px"
+                />
+                <span style="margin-left: 10px; font-size: 0.95rem">
+                  <strong
+                    >I agree to use SafeIngredient AI for personalized safety
+                    advice</strong
+                  ><br />
+                  <small style="color: var(--gray)"
+                    >I understand my information is secure and used only to help
+                    me avoid harmful ingredients.</small
+                  >
+                </span>
+              </label>
+              <div class="error-message" id="consentError"></div>
+            </div>
+
+            <div class="success-screen" id="successScreen">
+              <div class="success-icon">
+                <i class="fas fa-check"></i>
+              </div>
+              <h2>Profile Complete! 🎉</h2>
+              <p>
+                Thank you for sharing your information. We'll now use this to
+                provide personalized ingredient safety advice just for you.
+              </p>
+              <p>
+                <strong>Next:</strong> Start by uploading a product photo or
+                entering ingredients to get your first safety analysis!
+              </p>
+              <button
+                class="nav-btn btn-next"
+                onclick="goToDashboard()"
+                style="margin: 20px auto; display: block; width: auto"
+              >
+                Go to Your Dashboard <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Navigation -->
+        <div class="form-nav">
+          <div>
+            <button
+              class="nav-btn btn-prev"
+              id="prevBtn"
+              onclick="prevSection()"
+              style="display: none"
+            >
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+
+          <div style="text-align: center">
+            <button
+              class="btn-skip"
+              id="skipBtn"
+              onclick="skipProfile()"
+              style="display: none"
+            >
+              Skip for now
+            </button>
+          </div>
+
+          <div>
+            <button
+              class="nav-btn btn-next"
+              id="nextBtn"
+              onclick="nextSection()"
+            >
+              Continue <i class="fas fa-arrow-right"></i>
+            </button>
+            <button
+              class="nav-btn btn-next"
+              id="submitBtn"
+              onclick="submitProfile()"
+              style="display: none"
+            >
+              <span
+                class="loading"
+                id="submitSpinner"
+                style="display: none"
+              ></span>
+              Finish & Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Help Footer -->
+      <div
+        style="
+          text-align: center;
+          margin-top: 20px;
+          color: var(--gray);
+          font-size: 0.9rem;
+        "
+      >
+        <p>
+          <i class="fas fa-question-circle"></i> Need help? All your information
+          is kept private and secure.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "http://localhost:8000/api";
+      let currentSection = 1;
+      const totalSections = 6;
+      const formData = {};
+
+      // Initialize on page load
+      window.addEventListener("DOMContentLoaded", function () {
+        // Check if user is logged in
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          window.location.href = "/";
+          return;
+        }
+
+        // Set up tag selection
+        setupTagSelection();
+
+        // Update navigation buttons
+        updateNavigationButtons();
+
+        // Update progress bar
+        updateProgressBar();
+      });
+
+      // Set up tag selection functionality
+      function setupTagSelection() {
+        document.querySelectorAll(".simple-tags").forEach((tagContainer) => {
+          const tags = tagContainer.querySelectorAll(".tag");
+          const hiddenInput = tagContainer.nextElementSibling;
+
+          tags.forEach((tag) => {
+            tag.addEventListener("click", function () {
+              const value = this.getAttribute("data-value");
+
+              // If "none" is clicked, unselect all others
+              if (value === "none") {
+                tags.forEach((t) => {
+                  t.classList.remove("selected");
+                  if (t.getAttribute("data-value") === "none") {
+                    t.classList.add("selected");
+                  }
+                });
+                if (hiddenInput) hiddenInput.value = "none";
+                return;
+              }
+
+              // Unselect "none" if another tag is clicked
+              const noneTag = tagContainer.querySelector(
+                '.tag[data-value="none"]',
+              );
+              if (noneTag) {
+                noneTag.classList.remove("selected");
+              }
+
+              // Toggle current tag
+              this.classList.toggle("selected");
+
+              // Update hidden input value
+              const selectedTags = Array.from(
+                tagContainer.querySelectorAll(".tag.selected"),
+              )
+                .map((t) => t.getAttribute("data-value"))
+                .filter((v) => v !== "none");
+
+              if (hiddenInput) {
+                hiddenInput.value = selectedTags.join(",");
+              }
+            });
+          });
+        });
+      }
+
+      // Navigation functions
+      function nextSection() {
+        if (!validateCurrentSection()) {
+          return;
+        }
+
+        saveCurrentSectionData();
+
+        if (currentSection < totalSections) {
+          // Hide current section
+          document
+            .getElementById(`section${currentSection}`)
+            .classList.remove("active");
+          document.getElementById(`section${currentSection}`).style.display =
+            "none";
+
+          // Show next section
+          currentSection++;
+          document
+            .getElementById(`section${currentSection}`)
+            .classList.add("active");
+          document.getElementById(`section${currentSection}`).style.display =
+            "block";
+
+          // Update progress bar
+          updateProgressBar();
+
+          // Update navigation buttons
+          updateNavigationButtons();
+
+          // If on review section, generate summary
+          if (currentSection === 6) {
+            generateReviewSummary();
+          }
+        }
+      }
+
+      function prevSection() {
+        if (currentSection > 1) {
+          // Hide current section
+          document
+            .getElementById(`section${currentSection}`)
+            .classList.remove("active");
+          document.getElementById(`section${currentSection}`).style.display =
+            "none";
+
+          // Show previous section
+          currentSection--;
+          document
+            .getElementById(`section${currentSection}`)
+            .classList.add("active");
+          document.getElementById(`section${currentSection}`).style.display =
+            "block";
+
+          // Update progress bar
+          updateProgressBar();
+
+          // Update navigation buttons
+          updateNavigationButtons();
+        }
+      }
+
+      function updateProgressBar() {
+        const progressPercentage =
+          ((currentSection - 1) / (totalSections - 1)) * 100;
+        document.getElementById("progressLine").style.width =
+          `${progressPercentage}%`;
+
+        // Update step numbers
+        const stepNumbers = document.querySelectorAll(".step-number");
+        stepNumbers.forEach((step, index) => {
+          if (index + 1 <= currentSection) {
+            step.classList.add("active");
+          } else {
+            step.classList.remove("active");
+          }
+        });
+      }
+
+      function updateNavigationButtons() {
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const submitBtn = document.getElementById("submitBtn");
+        const skipBtn = document.getElementById("skipBtn");
+
+        // Show/hide previous button
+        prevBtn.style.display = currentSection > 1 ? "flex" : "none";
+
+        // Show/hide next and submit buttons
+        if (currentSection < totalSections) {
+          nextBtn.style.display = "flex";
+          submitBtn.style.display = "none";
+        } else {
+          nextBtn.style.display = "none";
+          submitBtn.style.display = "flex";
+        }
+
+        // Show skip button on first section only
+        skipBtn.style.display = currentSection === 1 ? "block" : "none";
+      }
+
+      // Save current section data
+      function saveCurrentSectionData() {
+        if (currentSection === 1) {
+          formData.age = document.getElementById("age").value;
+          formData.gender = document.querySelector(
+            'input[name="gender"]:checked',
+          )?.value;
+          formData.pregnancy = document.querySelector(
+            'input[name="pregnancy"]:checked',
+          )?.value;
+        } else if (currentSection === 2) {
+          formData.skin_type = document.querySelector(
+            'input[name="skin_type"]:checked',
+          )?.value;
+          formData.skin_concerns =
+            document.getElementById("skin_concerns").value;
+          formData.sun_sensitivity = document.querySelector(
+            'input[name="sun_sensitivity"]:checked',
+          )?.value;
+        } else if (currentSection === 3) {
+          formData.product_allergies =
+            document.getElementById("product_allergies").value;
+          formData.food_allergies =
+            document.getElementById("food_allergies").value;
+          formData.allergy_severity = document.querySelector(
+            'input[name="allergy_severity"]:checked',
+          )?.value;
+          formData.specific_allergies =
+            document.getElementById("specific_allergies").value;
+        } else if (currentSection === 4) {
+          formData.health_conditions =
+            document.getElementById("health_conditions").value;
+          formData.medications = document.getElementById("medications").value;
+        } else if (currentSection === 5) {
+          formData.diet = document.getElementById("diet").value;
+          formData.exercise = document.querySelector(
+            'input[name="exercise"]:checked',
+          )?.value;
+          formData.smoking = document.querySelector(
+            'input[name="smoking"]:checked',
+          )?.value;
+          formData.stress = document.querySelector(
+            'input[name="stress"]:checked',
+          )?.value;
+        }
+      }
+
+      // Validation
+      function validateCurrentSection() {
+        let isValid = true;
+
+        // Clear previous errors
+        document.querySelectorAll(".error-message").forEach((el) => {
+          el.style.display = "none";
+          el.textContent = "";
+        });
+
+        // Section-specific validation
+        if (currentSection === 1) {
+          const age = document.getElementById("age").value;
+          const gender = document.querySelector('input[name="gender"]:checked');
+
+          if (!age || age < 1 || age > 120) {
+            document.getElementById("ageError").textContent =
+              "Please enter your age (1-120)";
+            document.getElementById("ageError").style.display = "block";
+            isValid = false;
+          }
+
+          if (!gender) {
+            document.getElementById("genderError").textContent =
+              "Please select a gender";
+            document.getElementById("genderError").style.display = "block";
+            isValid = false;
+          }
+        }
+
+        if (currentSection === 2) {
+          const skinType = document.querySelector(
+            'input[name="skin_type"]:checked',
+          );
+
+          if (!skinType) {
+            document.getElementById("skinTypeError").textContent =
+              "Please select your skin type";
+            document.getElementById("skinTypeError").style.display = "block";
+            isValid = false;
+          }
+        }
+
+        return isValid;
+      }
+
+      // Generate review summary
+      function generateReviewSummary() {
+        saveCurrentSectionData();
+
+        // Update review display
+        document.getElementById("reviewAge").textContent = formData.age
+          ? `${formData.age} years`
+          : "Not provided";
+        document.getElementById("reviewSkin").textContent = formData.skin_type
+          ? formData.skin_type.replace("-", " ").toUpperCase()
+          : "Not provided";
+
+        // Allergies summary
+        let allergiesText = "None noted";
+        if (
+          formData.product_allergies &&
+          formData.product_allergies !== "none"
+        ) {
+          allergiesText = formData.product_allergies.split(",").join(", ");
+        }
+        document.getElementById("reviewAllergies").textContent = allergiesText;
+
+        // Health summary
+        let healthText = "None provided";
+        if (
+          formData.health_conditions &&
+          formData.health_conditions !== "none"
+        ) {
+          healthText = formData.health_conditions.split(",").join(", ");
+        }
+        if (formData.medications && formData.medications.trim()) {
+          healthText += " (Medications noted)";
+        }
+        document.getElementById("reviewHealth").textContent = healthText;
+      }
+
+      // Submit profile
+      async function submitProfile() {
+        // Check consent
+        if (!document.getElementById("consent").checked) {
+          document.getElementById("consentError").textContent =
+            "Please agree to continue";
+          document.getElementById("consentError").style.display = "block";
+          return;
+        }
+
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          window.location.href = "/";
+          return;
+        }
+
+        // Show loading spinner
+        const submitSpinner = document.getElementById("submitSpinner");
+        const submitBtn = document.getElementById("submitBtn");
+        submitSpinner.style.display = "inline-block";
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Saving...";
+
+        try {
+          // Prepare form data
+          const formDataToSend = new FormData();
+
+          // Convert arrays from comma-separated strings
+          const arraysToConvert = [
+            "skin_concerns",
+            "product_allergies",
+            "food_allergies",
+            "health_conditions",
+            "diet",
+          ];
+
+          Object.keys(formData).forEach((key) => {
+            if (arraysToConvert.includes(key) && formData[key]) {
+              const values = formData[key]
+                .split(",")
+                .filter((v) => v && v !== "none");
+              values.forEach((value) => {
+                formDataToSend.append(`${key}[]`, value.trim());
+              });
+            } else if (formData[key]) {
+              formDataToSend.append(key, formData[key]);
+            }
+          });
+
+          // Add empty arrays for fields that weren't filled
+          arraysToConvert.forEach((key) => {
+            if (!formData[key] || formData[key] === "none") {
+              formDataToSend.append(`${key}[]`, "");
+            }
+          });
+
+          // Send to server
+          const response = await fetch(`${API_BASE}/auth/complete-profile`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formDataToSend,
+          });
+
+          if (response.ok) {
+            // Show success screen
+            document.getElementById("reviewBox").style.display = "none";
+            document.getElementById("submitBtn").style.display = "none";
+            document.getElementById("prevBtn").style.display = "none";
+            document.getElementById("skipBtn").style.display = "none";
+            document.getElementById("successScreen").style.display = "block";
+
+            // Store in localStorage
+            localStorage.setItem("user_profile_complete", "true");
+          } else {
+            const error = await response.json();
+            alert(`Oops! Couldn't save: ${error.detail || "Please try again"}`);
+
+            // Reset button
+            submitSpinner.style.display = "none";
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "Finish & Save";
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert(
+            "Something went wrong. Please check your connection and try again.",
+          );
+
+          // Reset button
+          submitSpinner.style.display = "none";
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "Finish & Save";
+        }
+      }
+
+      // Skip profile
+      function skipProfile() {
+        if (
+          confirm(
+            "Skip for now? You can complete your profile later for better safety recommendations.",
+          )
+        ) {
+          window.location.href = "/citizen/CitizenHome.html";
+        }
+      }
+
+      // Go to dashboard
+      function goToDashboard() {
+        window.location.href = "/citizen/CitizenHome.html";
+      }
+    </script>
+  </body>
+</html>

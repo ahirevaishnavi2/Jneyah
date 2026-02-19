@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expert Mode - Analytics Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: #f5f7fa;
+        min-height: 100vh;
+      }
+
+      .header {
+        background: white;
+        padding: 20px 40px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        color: #4f6df5;
+        font-size: 1.8rem;
+        font-weight: bold;
+      }
+
+      .nav {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav a {
+        color: #666;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+      }
+
+      .nav a:hover {
+        background: #f8f9fa;
+        color: #4f6df5;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      .welcome-section {
+        background: linear-gradient(135deg, #4f6df5 0%, #3a56d6 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 40px;
+      }
+
+      .welcome-section h1 {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+      }
+
+      .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .card h3 {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+      }
+
+      .card ul {
+        list-style: none;
+      }
+
+      .card li {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        color: #666;
+      }
+
+      .card li:last-child {
+        border-bottom: none;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #4f6df5;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        margin-top: 20px;
+      }
+
+      .btn:hover {
+        background: #3a56d6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">SafeIngredient AI - Expert Mode</div>
+      <div class="nav">
+        <a href="/">← Back to Home</a>
+        <a href="/expert/AnalyticsDashboard.html">Analytics</a>
+        <a href="/expert/IngredientExplorer.html">Ingredient Explorer</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="welcome-section">
+        <h1>Expert Analytics Dashboard</h1>
+        <p>Advanced tools for ingredient safety research and analysis</p>
+      </div>
+
+      <div class="dashboard-cards">
+        <div class="card">
+          <h3>📊 Quick Analytics</h3>
+          <ul>
+            <li>Total Ingredients Analyzed: 1,245</li>
+            <li>Interaction Patterns: 892</li>
+            <li>Safety Violations Detected: 67</li>
+            <li>User Reports Generated: 342</li>
+          </ul>
+          <a href="/expert/AnalyticsDashboard.html" class="btn"
+            >View Full Analytics</a
+          >
+        </div>
+
+        <div class="card">
+          <h3>🔍 Ingredient Explorer</h3>
+          <ul>
+            <li>Search ingredient database</li>
+            <li>View interaction graphs</li>
+            <li>Check safety scores</li>
+            <li>Research chemical properties</li>
+          </ul>
+          <a href="/expert/IngredientExplorer.html" class="btn"
+            >Explore Ingredients</a
+          >
+        </div>
+
+        <div class="card">
+          <h3>🤖 ML Insights</h3>
+          <ul>
+            <li>Predictive risk scoring</li>
+            <li>Pattern recognition</li>
+            <li>Anomaly detection</li>
+            <li>Explainable AI reports</li>
+          </ul>
+          <a href="/expert/MLInsights.html" class="btn">View ML Insights</a>
+        </div>
+
+        <div class="card">
+          <h3>📈 Reports</h3>
+          <ul>
+            <li>Generate safety reports</li>
+            <li>Export data to CSV/JSON</li>
+            <li>Create visualizations</li>
+            <li>Share findings</li>
+          </ul>
+          <a href="/expert/Reports.html" class="btn">Generate Reports</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
