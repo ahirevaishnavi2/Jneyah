@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ingredient of the Day - Fun & Facts</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .navbar {
+        background: white;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: #667eea;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      /* Main Card */
+      .ingredient-card {
+        background: white;
+        border-radius: 30px;
+        padding: 40px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .ingredient-card::before {
+        content: "🥴";
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        font-size: 150px;
+        opacity: 0.1;
+        transform: rotate(15deg);
+      }
+
+      .date-badge {
+        background: #f0f0f0;
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      .ingredient-name {
+        font-size: 48px;
+        font-weight: 800;
+        color: #333;
+        margin-bottom: 10px;
+        position: relative;
+        display: inline-block;
+      }
+
+      .ingredient-name::after {
+        content: "✨";
+        font-size: 30px;
+        position: absolute;
+        top: -10px;
+        right: -40px;
+      }
+
+      .fun-tagline {
+        font-size: 20px;
+        color: #667eea;
+        font-style: italic;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 3px dashed #f0f0f0;
+      }
+
+      /* Risk Meter */
+      .risk-meter {
+        background: #f8f9ff;
+        padding: 20px;
+        border-radius: 20px;
+        margin: 30px 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .risk-emoji {
+        font-size: 50px;
+      }
+
+      .risk-info {
+        flex: 1;
+      }
+
+      .risk-label {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .risk-level {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .risk-level.high {
+        color: #dc3545;
+      }
+      .risk-level.medium {
+        color: #ffc107;
+      }
+      .risk-level.low {
+        color: #28a745;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        transition: width 0.5s ease;
+      }
+
+      /* Fun Facts Grid */
+      .facts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .fact-card {
+        background: #f8f9ff;
+        padding: 20px;
+        border-radius: 15px;
+        border-left: 4px solid #667eea;
+      }
+
+      .fact-emoji {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .fact-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      .fact-text {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      /* Joke Section */
+      .joke-section {
+        background: linear-gradient(135deg, #fff5f5 0%, #fef3e7 100%);
+        padding: 25px;
+        border-radius: 20px;
+        margin: 30px 0;
+        border: 2px dashed #ff6b6b;
+      }
+
+      .joke-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .joke-emoji {
+        font-size: 30px;
+      }
+
+      .joke-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ff6b6b;
+      }
+
+      .joke-text {
+        font-size: 18px;
+        color: #333;
+        font-style: italic;
+      }
+
+      .joke-punchline {
+        font-size: 20px;
+        font-weight: 600;
+        color: #ff6b6b;
+        margin-top: 10px;
+        text-align: right;
+      }
+
+      /* Benefits & Side Effects */
+      .lists-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .benefits-list,
+      .side-effects-list {
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      .benefits-list {
+        background: #e8f5e9;
+      }
+
+      .side-effects-list {
+        background: #ffebee;
+      }
+
+      .list-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .list-item {
+        padding: 10px;
+        background: white;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+      }
+
+      /* Celebrity Look-alike */
+      .celebrity-section {
+        background: #f0f0f0;
+        padding: 20px;
+        border-radius: 15px;
+        margin: 30px 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .celebrity-emoji {
+        font-size: 50px;
+      }
+
+      .celebrity-text {
+        flex: 1;
+      }
+
+      .celebrity-name {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .celebrity-reason {
+        color: #666;
+        font-style: italic;
+      }
+
+      /* Did You Know */
+      .didyouknow {
+        background: #e3f2fd;
+        padding: 20px;
+        border-radius: 15px;
+        margin: 30px 0;
+        border-left: 4px solid #2196f3;
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .action-btn {
+        flex: 1;
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .like-btn {
+        background: #ff6b6b;
+        color: white;
+      }
+
+      .share-btn {
+        background: #4ecdc4;
+        color: white;
+      }
+
+      .learn-btn {
+        background: #667eea;
+        color: white;
+      }
+
+      /* Navigation Arrows */
+      .nav-arrows {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      .nav-arrow {
+        background: white;
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+      }
+
+      .nav-arrow:hover {
+        background: #667eea;
+        color: white;
+        transform: scale(1.1);
+      }
+
+      /* Streak Notification */
+      .streak-notification {
+        background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 50px;
+        text-align: center;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Loading */
+      .loading {
+        text-align: center;
+        padding: 50px;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .navbar-content {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .facts-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .lists-container {
+          grid-template-columns: 1fr;
+        }
+
+        .ingredient-name {
+          font-size: 36px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-content">
+        <div class="logo">🔍 Ingredient Safety Analyzer</div>
+        <div class="nav-links">
+          <a href="CitizenHome.html">Home</a>
+          <a href="UploadAndKnow.html">Upload</a>
+          <a href="EnterIngredients.html">Enter</a>
+          <a href="IngredientOfTheDay.html" class="active">Daily Ingredient</a>
+          <a href="Community.html">Community</a>
+          <a href="Chatbot.html">AI Assistant</a>
+          <a href="Streaks.html">🏆 Streaks</a>
+          <a href="Profile.html">Profile</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Streak Notification -->
+      <div class="streak-notification" id="streakNotification">
+        🔥 You're on a 5-day learning streak! Keep it up!
+      </div>
+
+      <!-- Main Card -->
+      <div class="ingredient-card" id="ingredientCard">
+        <div class="date-badge" id="dateBadge">
+          📅 Tuesday, February 19, 2026
+        </div>
+
+        <h1 class="ingredient-name" id="ingredientName">Retinol</h1>
+        <div class="fun-tagline" id="funTagline">
+          "The Benjamin Button of skincare - ages backwards, but drama follows!"
+        </div>
+
+        <!-- Risk Meter -->
+        <div class="risk-meter">
+          <div class="risk-emoji" id="riskEmoji">😅</div>
+          <div class="risk-info">
+            <div class="risk-label">
+              Risk Level (on a scale of "meh" to "run!")
+            </div>
+            <div class="risk-level medium" id="riskLevel">
+              MEDIUM - Handle with care! 🧤
+            </div>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                id="riskProgress"
+                style="width: 55%; background-color: #ffc107"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fun Facts Grid -->
+        <div class="facts-grid">
+          <div class="fact-card">
+            <div class="fact-emoji">🎭</div>
+            <div class="fact-title">Dual Personality</div>
+            <div class="fact-text" id="fact1">
+              By day: Vitamin A. By night: Cell turnover superhero. Shh, don't
+              tell its day job!
+            </div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-emoji">⏰</div>
+            <div class="fact-title">Drama Queen Alert</div>
+            <div class="fact-text" id="fact2">
+              It WILL make you peel like a sunburned potato before giving you
+              glass skin. Trust the process!
+            </div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-emoji">🌞</div>
+            <div class="fact-title">Vampire Hours</div>
+            <div class="fact-text" id="fact3">
+              Hates sunlight more than a vampire. Use at night or become a
+              crispy fries!
+            </div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-emoji">🤰</div>
+            <div class="fact-title">Baby on Board?</div>
+            <div class="fact-text" id="fact4">
+              Pregnant? Retinol says "bye, felicia!" Not safe for baby baking.
+            </div>
+          </div>
+        </div>
+
+        <!-- Joke Section -->
+        <div class="joke-section">
+          <div class="joke-header">
+            <span class="joke-emoji">😂</span>
+            <span class="joke-title">Knock Knock! Who's there? Retinol.</span>
+          </div>
+          <div class="joke-text" id="jokeSetup">
+            "Why did Retinol break up with Sunscreen?"
+          </div>
+          <div class="joke-punchline" id="jokePunchline">
+            "Because it needed some space! (Get it? SPF? Space? No? Okay, we
+            tried...) 🌞🚀"
+          </div>
+        </div>
+
+        <!-- Benefits & Side Effects -->
+        <div class="lists-container">
+          <div class="benefits-list">
+            <div class="list-title">
+              <span>✅ The Good Stuff (Why we love it)</span>
+            </div>
+            <div id="benefits">
+              <div class="list-item">
+                ✨ Erases wrinkles like a digital photo editor
+              </div>
+              <div class="list-item">
+                🚀 Speeds up cell turnover faster than your ex's rebound
+              </div>
+              <div class="list-item">
+                🌟 Makes collagen like it's going out of style
+              </div>
+              <div class="list-item">
+                🎯 Unclogs pores better than a plunger
+              </div>
+            </div>
+          </div>
+
+          <div class="side-effects-list">
+            <div class="list-title">
+              <span>⚠️ The Drama (The "Ugly" Phase)</span>
+            </div>
+            <div id="sideEffects">
+              <div class="list-item">
+                😱 Makes you peel like a snake (temporary, we promise!)
+              </div>
+              <div class="list-item">
+                🔥 Redness so real, people ask if you're okay
+              </div>
+              <div class="list-item">
+                ☀️ Sun sensitivity - you'll feel the sun in your soul
+              </div>
+              <div class="list-item">
+                💀 The "retinol uglies" - it gets worse before it gets better
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Celebrity Look-alike -->
+        <div class="celebrity-section">
+          <div class="celebrity-emoji">🌟</div>
+          <div class="celebrity-text">
+            <div class="celebrity-name" id="celebrityName">
+              Celebrity Look-alike: Ross Geller
+            </div>
+            <div class="celebrity-reason" id="celebrityReason">
+              "WE WERE ON A BREAK!" - Retinol to your skin cells. Dramatic,
+              effective, takes three seasons to see results.
+            </div>
+          </div>
+        </div>
+
+        <!-- Did You Know -->
+        <div class="didyouknow" id="didYouKnow">
+          <strong>🤓 Nerdy Corner:</strong> Retinol was discovered in 1931 by a
+          scientist who probably had amazing skin. It's part of the retinoid
+          family, which is basically the Kardashians of skincare - famous,
+          effective, and everyone has an opinion.
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="action-btn like-btn" onclick="likeIngredient()">
+            <span>❤️</span> Like (<span id="likeCount">127</span>)
+          </button>
+          <button class="action-btn share-btn" onclick="shareIngredient()">
+            <span>📤</span> Share the Fun
+          </button>
+          <button class="action-btn learn-btn" onclick="learnMore()">
+            <span>🔬</span> Deep Dive
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <div class="nav-arrows">
+        <button class="nav-arrow" onclick="previousIngredient()">←</button>
+        <button class="nav-arrow" onclick="nextIngredient()">→</button>
+      </div>
+
+      <!-- Tiny Footer -->
+      <p
+        style="text-align: center; color: white; margin-top: 20px; opacity: 0.8"
+      >
+        🤓 New ingredient every day! Learn, laugh, and level up your skincare
+        game.
+      </p>
+    </div>
+
+    <script>
+      // Configuration
+      const API_BASE_URL = "http://localhost:8000";
+      const USER_ID =
+        localStorage.getItem("user_id") ||
+        "user_" + Math.random().toString(36).substr(2, 9);
+
+      // Ingredient database with humor
+      const ingredients = [
+        {
+          name: "Retinol",
+          tagline:
+            "The Benjamin Button of skincare - ages backwards, but drama follows!",
+          riskLevel: "MEDIUM - Handle with care! 🧤",
+          riskScore: 55,
+          riskColor: "#ffc107",
+          riskEmoji: "😅",
+          fact1:
+            "By day: Vitamin A. By night: Cell turnover superhero. Shh, don't tell its day job!",
+          fact2:
+            "It WILL make you peel like a sunburned potato before giving you glass skin. Trust the process!",
+          fact3:
+            "Hates sunlight more than a vampire. Use at night or become a crispy fries!",
+          fact4:
+            "Pregnant? Retinol says 'bye, felicia!' Not safe for baby baking.",
+          jokeSetup: "Why did Retinol break up with Sunscreen?",
+          jokePunchline:
+            "Because it needed some space! (Get it? SPF? Space? No? Okay, we tried...) 🌞🚀",
+          benefits: [
+            "✨ Erases wrinkles like a digital photo editor",
+            "🚀 Speeds up cell turnover faster than your ex's rebound",
+            "🌟 Makes collagen like it's going out of style",
+            "🎯 Unclogs pores better than a plunger",
+          ],
+          sideEffects: [
+            "😱 Makes you peel like a snake (temporary, we promise!)",
+            "🔥 Redness so real, people ask if you're okay",
+            "☀️ Sun sensitivity - you'll feel the sun in your soul",
+            "💀 The 'retinol uglies' - it gets worse before it gets better",
+          ],
+          celebrityName: "Celebrity Look-alike: Ross Geller",
+          celebrityReason:
+            "'WE WERE ON A BREAK!' - Retinol to your skin cells. Dramatic, effective, takes three seasons to see results.",
+          didYouKnow:
+            "Retinol was discovered in 1931 by a scientist who probably had amazing skin. It's part of the retinoid family, which is basically the Kardashians of skincare - famous, effective, and everyone has an opinion.",
+          likes: 127,
+        },
+        {
+          name: "Hyaluronic Acid",
+          tagline:
+            "The overachiever that can hold 1000x its weight in water. Basic? Never.",
+          riskLevel: "LOW - Chill as a cucumber 🥒",
+          riskScore: 5,
+          riskColor: "#28a745",
+          riskEmoji: "💧",
+          fact1:
+            "Can hold 1000x its weight in water - basically the camel of skincare!",
+          fact2:
+            "Found naturally in your body, but decreases with age. Thanks, gravity!",
+          fact3:
+            "Works best when applied to damp skin. Dry skin + HA = sad panda.",
+          fact4:
+            "Comes in different molecular sizes - it's not a one-size-fits-all situation!",
+          jokeSetup: "What did Hyaluronic Acid say to the dry skin?",
+          jokePunchline: "'Quit being so thirsty, I got you!' 💧😎",
+          benefits: [
+            "💦 Holds more water than your emotional support water bottle",
+            "🎈 Plumps skin like a balloon animal",
+            "✨ Reduces fine lines (temporarily, but we'll take it!)",
+            "🌍 Works for ALL skin types - the people's champion",
+          ],
+          sideEffects: [
+            "💸 Can be expensive for the good stuff",
+            "🏜️ In dry climates, might draw moisture FROM your skin (plot twist!)",
+            "🤷‍♀️ Pills with some products - skincare drama",
+            "😌 Too gentle? Sometimes you want the drama!",
+          ],
+          celebrityName: "Celebrity Look-alike: Elle Woods",
+          celebrityReason:
+            "Bend and snap! Works hard, stays hydrated, and always looks fabulous. What, like it's hard?",
+          didYouKnow:
+            "Hyaluronic Acid is like that friend who always has a water bottle - literally holds 1000 times its weight in water. If your skin was a plant, this would be the rain.",
+          likes: 342,
+        },
+        {
+          name: "Niacinamide",
+          tagline:
+            "The friend who solves all your problems and looks good doing it.",
+          riskLevel: "LOW - Sweet angel baby 😇",
+          riskScore: 10,
+          riskColor: "#28a745",
+          riskEmoji: "😇",
+          fact1:
+            "Also known as Vitamin B3 - sounds boring, but it's the office MVP!",
+          fact2:
+            "Plays well with others - unlike that one coworker who hogs the microwave.",
+          fact3: "Reduces redness so well, your face will forget how to blush.",
+          fact4:
+            "Controls oil better than those blotting papers from high school.",
+          jokeSetup: "Why did Niacinamide get invited to every party?",
+          jokePunchline:
+            "Because it gets along with EVERYONE! No drama, just results. 🎉",
+          benefits: [
+            "🎭 Reduces redness like a Photoshop blur tool",
+            "⚡ Controls oil better than your high school math teacher",
+            "🧱 Strengthens skin barrier - builds walls (but the good kind!)",
+            "✨ Minimizes pores (okay, makes them LOOK smaller - magic!)",
+          ],
+          sideEffects: [
+            "😬 Might tingle if you use too much - like that one spicy meme",
+            "🧪 Can cause flushing in high doses (your face will literally blush)",
+            "🤔 Works slowly - patience, young grasshopper",
+            "💊 Smells slightly like vitamins (because it literally is one)",
+          ],
+          celebrityName: "Celebrity Look-alike: Keanu Reeves",
+          celebrityReason:
+            "Wholesome, good for everyone, secretly powerful, and makes everything better just by being there.",
+          didYouKnow:
+            "Niacinamide is the Switzerland of skincare - neutral, peaceful, and friends with everyone. It can be used with Vitamin C, Retinol, Acids... it's not afraid of commitment!",
+          likes: 256,
+        },
+        {
+          name: "Vitamin C",
+          tagline:
+            "The morning sunshine your face deserves (without the UV rays).",
+          riskLevel: "LOW-MEDIUM - High maintenance but worth it 💅",
+          riskScore: 25,
+          riskColor: "#fd7e14",
+          riskEmoji: "🍊",
+          fact1:
+            "Oxidizes faster than your milk left out overnight. Keep it in the dark!",
+          fact2:
+            "L-ascorbic acid is the real name - sounds like a Harry Potter spell.",
+          fact3: "Works best in the morning because it's an overachiever.",
+          fact4: "Brightens skin so much, you'll need sunglasses indoors.",
+          jokeSetup: "Why did Vitamin C break up with sunlight?",
+          jokePunchline:
+            "Because it needed a stable relationship! (Get it? Stable? Oxidation? No? We'll see ourselves out...) 🌞💔",
+          benefits: [
+            "✨ Brightens skin like you got 8 hours of sleep (impossible, we know)",
+            "🛡️ Protects from pollution - skin's personal bodyguard",
+            "🌟 Boosts collagen - the scaffolding of your face",
+            "🎯 Fades dark spots like Photoshop for real life",
+          ],
+          sideEffects: [
+            "😬 Can sting like that one friend's honest opinion",
+            "🧪 Oxidizes and turns orange - not the glow you wanted",
+            "💸 Good ones are expensive (because of course they are)",
+            "🤷‍♀️ Picky about pH - the diva of skincare",
+          ],
+          celebrityName: "Celebrity Look-alike: Cher",
+          celebrityReason:
+            "Timeless, bright, been around forever but still relevant, and definitely has some secrets.",
+          didYouKnow:
+            "Vitamin C is like that friend who's always positive in the morning (annoying, but good for you). Use it in your AM routine for maximum benefits!",
+          likes: 189,
+        },
+      ];
+
+      let currentIndex = 0;
+
+      // DOM Elements
+      const dateBadge = document.getElementById("dateBadge");
+      const ingredientName = document.getElementById("ingredientName");
+      const funTagline = document.getElementById("funTagline");
+      const riskEmoji = document.getElementById("riskEmoji");
+      const riskLevel = document.getElementById("riskLevel");
+      const riskProgress = document.getElementById("riskProgress");
+      const fact1 = document.getElementById("fact1");
+      const fact2 = document.getElementById("fact2");
+      const fact3 = document.getElementById("fact3");
+      const fact4 = document.getElementById("fact4");
+      const jokeSetup = document.getElementById("jokeSetup");
+      const jokePunchline = document.getElementById("jokePunchline");
+      const benefits = document.getElementById("benefits");
+      const sideEffects = document.getElementById("sideEffects");
+      const celebrityName = document.getElementById("celebrityName");
+      const celebrityReason = document.getElementById("celebrityReason");
+      const didYouKnow = document.getElementById("didYouKnow");
+      const likeCount = document.getElementById("likeCount");
+
+      // Initialize
+      function init() {
+        updateDate();
+        loadIngredient(0);
+        loadStreak();
+      }
+
+      function updateDate() {
+        const now = new Date();
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        dateBadge.textContent = `📅 ${now.toLocaleDateString("en-US", options)}`;
+      }
+
+      function loadIngredient(index) {
+        const ing = ingredients[index];
+
+        ingredientName.textContent = ing.name;
+        funTagline.textContent = ing.tagline;
+        riskEmoji.textContent = ing.riskEmoji;
+        riskLevel.textContent = ing.riskLevel;
+        riskLevel.className = `risk-level ${ing.riskLevel.split(" ")[0].toLowerCase()}`;
+        riskProgress.style.width = `${ing.riskScore}%`;
+        riskProgress.style.backgroundColor = ing.riskColor;
+
+        fact1.textContent = ing.fact1;
+        fact2.textContent = ing.fact2;
+        fact3.textContent = ing.fact3;
+        fact4.textContent = ing.fact4;
+
+        jokeSetup.textContent = ing.jokeSetup;
+        jokePunchline.textContent = ing.jokePunchline;
+
+        // Benefits
+        benefits.innerHTML = ing.benefits
+          .map((b) => `<div class="list-item">${b}</div>`)
+          .join("");
+
+        // Side Effects
+        sideEffects.innerHTML = ing.sideEffects
+          .map((s) => `<div class="list-item">${s}</div>`)
+          .join("");
+
+        celebrityName.textContent = ing.celebrityName;
+        celebrityReason.textContent = ing.celebrityReason;
+
+        didYouKnow.innerHTML = `<strong>🤓 Nerdy Corner:</strong> ${ing.didYouKnow}`;
+
+        likeCount.textContent = ing.likes;
+      }
+
+      function previousIngredient() {
+        currentIndex =
+          (currentIndex - 1 + ingredients.length) % ingredients.length;
+        loadIngredient(currentIndex);
+        logActivity("previous");
+      }
+
+      function nextIngredient() {
+        currentIndex = (currentIndex + 1) % ingredients.length;
+        loadIngredient(currentIndex);
+        logActivity("next");
+      }
+
+      function likeIngredient() {
+        const ing = ingredients[currentIndex];
+        ing.likes++;
+        likeCount.textContent = ing.likes;
+        showToast(`❤️ You liked ${ing.name}!`);
+        logActivity("like");
+      }
+
+      function shareIngredient() {
+        const ing = ingredients[currentIndex];
+        if (navigator.share) {
+          navigator.share({
+            title: `Ingredient of the Day: ${ing.name}`,
+            text: `${ing.tagline} - Check it out!`,
+            url: window.location.href,
+          });
+        } else {
+          navigator.clipboard.writeText(
+            `${ing.name}: ${ing.tagline} ${window.location.href}`,
+          );
+          showToast("📋 Copied to clipboard!");
+        }
+        logActivity("share");
+      }
+
+      function learnMore() {
+        window.location.href = `EnterIngredients.html?ingredient=${ingredients[currentIndex].name}`;
+      }
+
+      async function loadStreak() {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/streak/dashboard/${USER_ID}`,
+          );
+          const data = await response.json();
+          const streak =
+            data.streaks?.find((s) => s.streak_type === "learning")
+              ?.current_count || 0;
+          document.getElementById("streakNotification").innerHTML =
+            `🔥 You're on a ${streak}-day learning streak! Keep it up!`;
+        } catch (error) {
+          console.error("Error loading streak:", error);
+        }
+      }
+
+      async function logActivity(action) {
+        try {
+          await fetch(
+            `${API_BASE_URL}/streak/activity/log?user_id=${USER_ID}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                activity_type: "ingredient_learn",
+                description: `Checked out ${ingredients[currentIndex].name} (${action})`,
+                metadata: {
+                  ingredient: ingredients[currentIndex].name,
+                  action,
+                },
+              }),
+            },
+          );
+        } catch (error) {
+          console.error("Error logging activity:", error);
+        }
+      }
+
+      function showToast(message) {
+        const toast = document.createElement("div");
+        toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #333;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 50px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                animation: slideIn 0.3s ease;
+                z-index: 1000;
+            `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      }
+
+      // Add animation style
+      const style = document.createElement("style");
+      style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+      document.head.appendChild(style);
+
+      // Initialize on load
+      init();
+    </script>
+  </body>
+</html>

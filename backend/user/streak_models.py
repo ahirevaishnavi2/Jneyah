@@ -8,12 +8,14 @@ class ActivityType(str, Enum):
     HEALTHY_FOOD = "healthy_food"
     SAFE_PRODUCT = "safe_product"
     PRODUCT_SCAN = "product_scan"
-    INGREDIENT_LEARN = "ingredient_learn"
+    INGREDIENT_LEARN = "ingredient_learn"  # This should already be there
     ECO_CHOICE = "eco_choice"
     BADGE_EARNED = "badge_earned"
     RECYCLE = "recycle"
     REVIEW_WRITTEN = "review_written"
     COMMUNITY_SHARE = "community_share"
+    INGREDIENT_LIKE = "ingredient_like"  # Add this if you want to track likes
+    INGREDIENT_SHARE = "ingredient_share"
 
 class StreakType(str, Enum):
     WATER = "water"

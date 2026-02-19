@@ -11,6 +11,7 @@ from citizen_mode.citizen_controller import router as citizen_router
 from citizen_mode import citizen_controller
 from citizen_mode import chatbot_controller 
 from datetime import datetime
+from citizen_mode.ingredient_day_controller import router as ingredient_day_router
 from database.db_connection import Database
 from scan import scan_controller
 from auth.auth_controller import router as auth_router
@@ -65,7 +66,7 @@ app.include_router(scan_router)
 app.include_router(citizen_router)
 app.include_router(scan_controller.router)
 app.include_router(chatbot_controller.router)  # Now this works
-
+app.include_router(ingredient_day_router)
 # ===== ADD CHATBOT ROUTER =====
 app.include_router(chatbot_router)  # Add chatbot routes
 # ===============================
@@ -135,7 +136,7 @@ if __name__ == "__main__":
 
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 
-    
+
 
 # from fastapi import FastAPI
 # from fastapi.middleware.cors import CORSMiddleware
