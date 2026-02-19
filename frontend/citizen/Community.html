@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community - Ingredient Safety</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .navbar {
+        background: white;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: #667eea;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 20px;
+      }
+
+      /* Sidebar Styles */
+      .sidebar {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        height: fit-content;
+      }
+
+      .user-card {
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+        border-radius: 15px;
+        margin-bottom: 20px;
+      }
+
+      .user-avatar {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: white;
+      }
+
+      .user-name {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .user-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #ffd700;
+        border-radius: 20px;
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+
+      .user-stats {
+        display: flex;
+        justify-content: space-around;
+        margin: 15px 0;
+      }
+
+      .stat {
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 20px;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .create-post-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+
+      .trending-topic {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background: #f8f9ff;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+
+      .trending-rank {
+        width: 30px;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .trending-name {
+        flex: 1;
+      }
+
+      .trending-count {
+        color: #666;
+        font-size: 12px;
+      }
+
+      /* Main Feed Styles */
+      .feed {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+      }
+
+      .feed-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+      }
+
+      .tab {
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 20px;
+        transition: all 0.3s;
+      }
+
+      .tab.active {
+        background: #667eea;
+        color: white;
+      }
+
+      .post {
+        background: #f8f9ff;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .post-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .post-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+      }
+
+      .post-user {
+        flex: 1;
+      }
+
+      .post-user-name {
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .post-time {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .post-badge {
+        padding: 4px 8px;
+        background: #e0e0e0;
+        border-radius: 12px;
+        font-size: 11px;
+      }
+
+      .post-type {
+        display: inline-block;
+        padding: 4px 8px;
+        background: #e7f3ff;
+        color: #17a2b8;
+        border-radius: 12px;
+        font-size: 11px;
+        margin-bottom: 10px;
+      }
+
+      .post-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .post-content {
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 15px;
+      }
+
+      .post-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+
+      .tag {
+        padding: 4px 8px;
+        background: #e0e0e0;
+        border-radius: 12px;
+        font-size: 11px;
+      }
+
+      .post-actions {
+        display: flex;
+        gap: 20px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .action-btn:hover {
+        color: #667eea;
+      }
+
+      .action-btn.active {
+        color: #667eea;
+      }
+
+      .reaction-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .reaction-btn {
+        padding: 5px 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .reaction-btn:hover {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+      }
+
+      .reaction-btn.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+      }
+
+      .comments-section {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .comment {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .comment-avatar {
+        width: 30px;
+        height: 30px;
+        background: #e0e0e0;
+        border-radius: 50%;
+      }
+
+      .comment-content {
+        flex: 1;
+        background: white;
+        padding: 10px;
+        border-radius: 10px;
+      }
+
+      .comment-user {
+        font-weight: 600;
+        font-size: 12px;
+        margin-bottom: 5px;
+      }
+
+      .comment-text {
+        font-size: 13px;
+        margin-bottom: 5px;
+      }
+
+      .comment-time {
+        font-size: 10px;
+        color: #666;
+      }
+
+      .add-comment {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .add-comment input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        outline: none;
+      }
+
+      .add-comment button {
+        padding: 10px 20px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      /* Right Sidebar */
+      .right-sidebar {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        height: fit-content;
+      }
+
+      .leaderboard-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: #f8f9ff;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+
+      .leaderboard-rank {
+        width: 30px;
+        height: 30px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .leaderboard-info {
+        flex: 1;
+      }
+
+      .leaderboard-name {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .leaderboard-score {
+        font-size: 12px;
+        color: #666;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-family: inherit;
+      }
+
+      .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      @media (max-width: 1024px) {
+        .container {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar,
+        .right-sidebar {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="navbar-content">
+        <div class="logo">🔍 Ingredient Safety Analyzer</div>
+        <div class="nav-links">
+          <a href="CitizenHome.html">Home</a>
+          <a href="UploadAndKnow.html">Upload</a>
+          <a href="EnterIngredients.html">Enter</a>
+          <a href="IngredientOfTheDay.html">Daily Ingredient</a>
+          <a href="Community.html" class="active">Community</a>
+          <a href="Chatbot.html">AI Assistant</a>
+          <a href="Streaks.html">🏆 Streaks</a>
+          <a href="Profile.html">Profile</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Left Sidebar -->
+      <div class="sidebar">
+        <div class="user-card" id="userCard">
+          <div class="user-avatar" id="userAvatar">👤</div>
+          <div class="user-name" id="userName">Loading...</div>
+          <div class="user-badge" id="userBadge">🌱 Skincare Newbie</div>
+          <div class="user-stats">
+            <div class="stat">
+              <div class="stat-value" id="postCount">0</div>
+              <div class="stat-label">Posts</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="followerCount">0</div>
+              <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="followingCount">0</div>
+              <div class="stat-label">Following</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="create-post-btn" onclick="openCreatePostModal()">
+          ✍️ Create Post
+        </button>
+
+        <h3 style="margin-bottom: 15px">🔥 Trending Now</h3>
+        <div id="trendingList">
+          <div class="trending-topic">
+            <span class="trending-rank">#1</span>
+            <span class="trending-name">Retinol</span>
+            <span class="trending-count">45 posts</span>
+          </div>
+          <div class="trending-topic">
+            <span class="trending-rank">#2</span>
+            <span class="trending-name">Vitamin C</span>
+            <span class="trending-count">32 posts</span>
+          </div>
+          <div class="trending-topic">
+            <span class="trending-rank">#3</span>
+            <span class="trending-name">Acne</span>
+            <span class="trending-count">28 posts</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Feed -->
+      <div class="feed">
+        <div class="feed-tabs">
+          <div class="tab active" onclick="switchTab('recent')">Recent</div>
+          <div class="tab" onclick="switchTab('trending')">Trending</div>
+          <div class="tab" onclick="switchTab('following')">Following</div>
+        </div>
+
+        <div id="feedPosts"></div>
+        <div
+          id="loading"
+          class="loading"
+          style="display: none; text-align: center; padding: 20px"
+        >
+          <div class="spinner"></div>
+          <p>Loading posts...</p>
+        </div>
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="right-sidebar">
+        <h3 style="margin-bottom: 15px">🏆 Top Contributors</h3>
+        <div id="leaderboard">
+          <div class="leaderboard-item">
+            <div class="leaderboard-rank">1</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">Sarah K.</div>
+              <div class="leaderboard-score">2,450 pts</div>
+            </div>
+            <span>👑</span>
+          </div>
+          <div class="leaderboard-item">
+            <div class="leaderboard-rank">2</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">Mike R.</div>
+              <div class="leaderboard-score">2,120 pts</div>
+            </div>
+          </div>
+          <div class="leaderboard-item">
+            <div class="leaderboard-rank">3</div>
+            <div class="leaderboard-info">
+              <div class="leaderboard-name">Emma W.</div>
+              <div class="leaderboard-score">1,980 pts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="modal" id="createPostModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Create Post</h2>
+          <button class="modal-close" onclick="closeCreatePostModal()">
+            &times;
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label>Post Type</label>
+          <select id="postType">
+            <option value="product_review">📝 Product Review</option>
+            <option value="ingredient_question">❓ Ingredient Question</option>
+            <option value="routine_share">🧴 Routine Share</option>
+            <option value="before_after">📸 Before/After</option>
+            <option value="tip_trick">💡 Tip & Trick</option>
+            <option value="alert_warning">⚠️ Alert/Warning</option>
+            <option value="success_story">🌟 Success Story</option>
+            <option value="dilemma">🤔 Skincare Dilemma</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="postTitle" placeholder="Catchy title..." />
+        </div>
+
+        <div class="form-group">
+          <label>Content</label>
+          <textarea
+            id="postContent"
+            placeholder="Share your thoughts..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Tags (comma separated)</label>
+          <input
+            type="text"
+            id="postTags"
+            placeholder="retinol, acne, routine"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="postAnonymous" /> Post anonymously
+          </label>
+        </div>
+
+        <button class="submit-btn" onclick="submitPost()">
+          Share with Community
+        </button>
+      </div>
+    </div>
+
+    <style>
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+
+    <script>
+      const API_BASE_URL = "http://localhost:8000";
+      const USER_ID =
+        localStorage.getItem("user_id") ||
+        "user_" + Math.random().toString(36).substr(2, 9);
+      let currentUser = null;
+      let currentPage = 1;
+      let currentTab = "recent";
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        loadUserProfile();
+        loadFeed();
+        loadTrending();
+        loadLeaderboard();
+      });
+
+      async function loadUserProfile() {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/community/users/${USER_ID}?viewer_id=${USER_ID}`,
+          );
+          const data = await response.json();
+
+          if (data.success) {
+            currentUser = data.data;
+            updateUserUI(currentUser);
+          }
+        } catch (error) {
+          console.error("Error loading user:", error);
+        }
+      }
+
+      function updateUserUI(user) {
+        document.getElementById("userName").textContent =
+          user.display_name || "Skincare Enthusiast";
+        document.getElementById("userBadge").textContent =
+          user.badge || "🌱 Skincare Newbie";
+        document.getElementById("postCount").textContent = user.post_count || 0;
+        document.getElementById("followerCount").textContent =
+          user.followers_count || 0;
+        document.getElementById("followingCount").textContent =
+          user.following_count || 0;
+
+        if (user.avatar) {
+          document.getElementById("userAvatar").innerHTML =
+            `<img src="${user.avatar}" style="width:100%; height:100%; border-radius:50%;">`;
+        }
+      }
+
+      async function loadFeed() {
+        showLoading();
+
+        try {
+          const url =
+            currentTab === "following"
+              ? `${API_BASE_URL}/community/feed/personal/${USER_ID}`
+              : `${API_BASE_URL}/community/feed?user_id=${USER_ID}&page=${currentPage}`;
+
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.success) {
+            const posts =
+              currentTab === "following" ? data.data : data.data.posts;
+            displayPosts(posts);
+          }
+        } catch (error) {
+          console.error("Error loading feed:", error);
+        } finally {
+          hideLoading();
+        }
+      }
+
+      function displayPosts(posts) {
+        const feedDiv = document.getElementById("feedPosts");
+
+        if (!posts || posts.length === 0) {
+          feedDiv.innerHTML =
+            '<p style="text-align: center; color: #666;">No posts yet. Be the first to post! ✨</p>';
+          return;
+        }
+
+        feedDiv.innerHTML = posts.map((post) => createPostHTML(post)).join("");
+      }
+
+      function createPostHTML(post) {
+        const timeAgo = post.time_ago || "just now";
+        const reactions = post.reactions || {};
+        const totalReactions = Object.values(reactions).reduce(
+          (a, b) => a + b,
+          0,
+        );
+
+        return `
+                <div class="post" data-post-id="${post.post_id}">
+                    <div class="post-header">
+                        <div class="post-avatar">${post.user.avatar ? `<img src="${post.user.avatar}" style="width:100%; height:100%; border-radius:50%;">` : "👤"}</div>
+                        <div class="post-user">
+                            <div class="post-user-name">${post.user.name}</div>
+                            <div class="post-time">${timeAgo}</div>
+                        </div>
+                        <span class="post-badge">${post.user.badge || "Member"}</span>
+                    </div>
+                    
+                    <span class="post-type">${formatPostType(post.post_type)}</span>
+                    <h3 class="post-title">${post.title}</h3>
+                    <div class="post-content">${post.content}</div>
+                    
+                    ${
+                      post.tags.length > 0
+                        ? `
+                        <div class="post-tags">
+                            ${post.tags.map((tag) => `<span class="tag">#${tag}</span>`).join("")}
+                        </div>
+                    `
+                        : ""
+                    }
+                    
+                    <div class="reaction-buttons">
+                        <span class="reaction-btn ${post.user_reaction === "like" ? "active" : ""}" onclick="reactToPost('${post.post_id}', 'like')">
+                            👍 ${reactions.like || 0}
+                        </span>
+                        <span class="reaction-btn ${post.user_reaction === "love" ? "active" : ""}" onclick="reactToPost('${post.post_id}', 'love')">
+                            ❤️ ${reactions.love || 0}
+                        </span>
+                        <span class="reaction-btn ${post.user_reaction === "helpful" ? "active" : ""}" onclick="reactToPost('${post.post_id}', 'helpful')">
+                            💡 ${reactions.helpful || 0}
+                        </span>
+                        <span class="reaction-btn ${post.user_reaction === "lol" ? "active" : ""}" onclick="reactToPost('${post.post_id}', 'lol')">
+                            😂 ${reactions.lol || 0}
+                        </span>
+                    </div>
+                    
+                    <div class="post-actions">
+                        <span class="action-btn" onclick="toggleComments('${post.post_id}')">
+                            💬 ${post.comment_count || 0} Comments
+                        </span>
+                        <span class="action-btn ${post.saved_by_user ? "active" : ""}" onclick="savePost('${post.post_id}')">
+                            🔖 Save
+                        </span>
+                        <span class="action-btn" onclick="sharePost('${post.post_id}')">
+                            📤 Share
+                        </span>
+                    </div>
+                    
+                    <div class="comments-section" id="comments-${post.post_id}" style="display: none;">
+                        <div id="comments-list-${post.post_id}"></div>
+                        
+                        <div class="add-comment">
+                            <input type="text" id="comment-input-${post.post_id}" placeholder="Write a comment...">
+                            <button onclick="addComment('${post.post_id}')">Post</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      function formatPostType(type) {
+        const types = {
+          product_review: "📝 Product Review",
+          ingredient_question: "❓ Ingredient Question",
+          routine_share: "🧴 Routine Share",
+          before_after: "📸 Before/After",
+          tip_trick: "💡 Tip & Trick",
+          alert_warning: "⚠️ Alert/Warning",
+          success_story: "🌟 Success Story",
+          dilemma: "🤔 Skincare Dilemma",
+        };
+        return types[type] || type;
+      }
+
+      async function reactToPost(postId, reaction) {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/community/posts/${postId}/react?user_id=${USER_ID}&reaction=${reaction}`,
+            {
+              method: "POST",
+            },
+          );
+
+          if (response.ok) {
+            // Refresh feed to show updated reactions
+            loadFeed();
+            showToast(`Reacted with ${reaction}!`);
+          }
+        } catch (error) {
+          console.error("Error reacting:", error);
+        }
+      }
+
+      async function savePost(postId) {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/community/posts/${postId}/save?user_id=${USER_ID}`,
+            {
+              method: "POST",
+            },
+          );
+
+          const data = await response.json();
+          if (data.success) {
+            showToast(data.data.message);
+            loadFeed(); // Refresh to show updated save state
+          }
+        } catch (error) {
+          console.error("Error saving post:", error);
+        }
+      }
+
+      function toggleComments(postId) {
+        const commentsDiv = document.getElementById(`comments-${postId}`);
+        if (commentsDiv.style.display === "none") {
+          commentsDiv.style.display = "block";
+          loadComments(postId);
+        } else {
+          commentsDiv.style.display = "none";
+        }
+      }
+
+      async function loadComments(postId) {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/community/posts/${postId}?user_id=${USER_ID}`,
+          );
+          const data = await response.json();
+
+          if (data.success && data.data.comments) {
+            const commentsList = document.getElementById(
+              `comments-list-${postId}`,
+            );
+            commentsList.innerHTML = data.data.comments
+              .map(
+                (comment) => `
+                        <div class="comment">
+                            <div class="comment-avatar">${comment.user.avatar ? `<img src="${comment.user.avatar}" style="width:100%; height:100%; border-radius:50%;">` : "👤"}</div>
+                            <div class="comment-content">
+                                <div class="comment-user">${comment.user.name}</div>
+                                <div class="comment-text">${comment.content}</div>
+                                <div class="comment-time">${comment.time_ago}</div>
+                            </div>
+                        </div>
+                    `,
+              )
+              .join("");
+          }
+        } catch (error) {
+          console.error("Error loading comments:", error);
+        }
+      }
+
+      async function addComment(postId) {
+        const input = document.getElementById(`comment-input-${postId}`);
+        const content = input.value.trim();
+
+        if (!content) return;
+
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/community/posts/${postId}/comments?user_id=${USER_ID}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content }),
+            },
+          );
+
+          if (response.ok) {
+            input.value = "";
+            loadComments(postId);
+            showToast("Comment added! 💬");
+          }
+        } catch (error) {
+          console.error("Error adding comment:", error);
+        }
+      }
+
+      function openCreatePostModal() {
+        document.getElementById("createPostModal").classList.add("active");
+      }
+
+      function closeCreatePostModal() {
+        document.getElementById("createPostModal").classList.remove("active");
+        // Clear form
+        document.getElementById("postTitle").value = "";
+        document.getElementById("postContent").value = "";
+        document.getElementById("postTags").value = "";
+        document.getElementById("postAnonymous").checked = false;
+      }
+
+      async function submitPost() {
+        const postData = {
+          post_type: document.getElementById("postType").value,
+          title: document.getElementById("postTitle").value.trim(),
+          content: document.getElementById("postContent").value.trim(),
+          tags: document
+            .getElementById("postTags")
+            .value.split(",")
+            .map((t) => t.trim())
+            .filter((t) => t),
+          is_anonymous: document.getElementById("postAnonymous").checked,
+        };
+
+        if (!postData.title || !postData.content) {
+          showToast("Please fill in title and content!");
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/community/posts?user_id=${USER_ID}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(postData),
+            },
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            closeCreatePostModal();
+            loadFeed();
+            showToast("Post created successfully! 🎉");
+          }
+        } catch (error) {
+          console.error("Error creating post:", error);
+          showToast("Error creating post. Please try again.");
+        }
+      }
+
+      function switchTab(tab) {
+        currentTab = tab;
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        event.target.classList.add("active");
+        loadFeed();
+      }
+
+      async function loadTrending() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/community/trending`);
+          const data = await response.json();
+
+          if (data.success && data.data.topics) {
+            const trendingList = document.getElementById("trendingList");
+            trendingList.innerHTML = data.data.topics
+              .slice(0, 5)
+              .map(
+                (topic, index) => `
+                        <div class="trending-topic">
+                            <span class="trending-rank">#${index + 1}</span>
+                            <span class="trending-name">${topic.topic}</span>
+                            <span class="trending-count">${topic.post_count} posts</span>
+                        </div>
+                    `,
+              )
+              .join("");
+          }
+        } catch (error) {
+          console.error("Error loading trending:", error);
+        }
+      }
+
+      async function loadLeaderboard() {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/streak/leaderboard?limit=5`,
+          );
+          const data = await response.json();
+
+          if (data) {
+            const leaderboardDiv = document.getElementById("leaderboard");
+            leaderboardDiv.innerHTML = data
+              .map(
+                (user, index) => `
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">${index + 1}</div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">${user.user_id.slice(0, 6)}...</div>
+                                <div class="leaderboard-score">${user.score} pts</div>
+                            </div>
+                            ${index === 0 ? "<span>👑</span>" : ""}
+                        </div>
+                    `,
+              )
+              .join("");
+          }
+        } catch (error) {
+          console.error("Error loading leaderboard:", error);
+        }
+      }
+
+      function sharePost(postId) {
+        if (navigator.share) {
+          navigator.share({
+            title: "Check out this post!",
+            url: `${window.location.origin}/community/post/${postId}`,
+          });
+        } else {
+          navigator.clipboard.writeText(
+            `${window.location.origin}/community/post/${postId}`,
+          );
+          showToast("Link copied to clipboard!");
+        }
+      }
+
+      function showLoading() {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("feedPosts").style.display = "none";
+      }
+
+      function hideLoading() {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("feedPosts").style.display = "block";
+      }
+
+      function showToast(message) {
+        const toast = document.createElement("div");
+        toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #333;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                animation: slideIn 0.3s ease;
+                z-index: 1001;
+            `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      }
+
+      // Add animation style
+      const style = document.createElement("style");
+      style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>

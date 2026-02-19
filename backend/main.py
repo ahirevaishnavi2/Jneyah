@@ -10,6 +10,7 @@ from pathlib import Path
 from citizen_mode.citizen_controller import router as citizen_router
 from citizen_mode import citizen_controller
 from citizen_mode import chatbot_controller 
+from community.community_controller import router as community_router
 from datetime import datetime
 from citizen_mode.ingredient_day_controller import router as ingredient_day_router
 from database.db_connection import Database
@@ -67,6 +68,7 @@ app.include_router(citizen_router)
 app.include_router(scan_controller.router)
 app.include_router(chatbot_controller.router)  # Now this works
 app.include_router(ingredient_day_router)
+app.include_router(community_router)
 # ===== ADD CHATBOT ROUTER =====
 app.include_router(chatbot_router)  # Add chatbot routes
 # ===============================
