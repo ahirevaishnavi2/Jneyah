@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingredient of the Day - SafeIngredient AI</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Poppins + Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            /* Light theme - matching dashboard */
+            --primary: #4158D0;
+            --primary-light: #C850C0;
+            --secondary: #FFCC70;
+            --accent: #FF6B6B;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --info: #74b9ff;
+            
+            --bg-gradient-start: #f9f0ff;
+            --bg-gradient-end: #e3f2fd;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --text-light: #b2bec3;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.35);
+            --profile-item-bg: rgba(255, 255, 255, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-shadow: rgba(65, 88, 208, 0.3);
+            --badge-bg: rgba(255, 255, 255, 0.3);
+            --glass-highlight: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme - matching dashboard */
+            --primary: #6C5CE7;
+            --primary-light: #a463f5;
+            --secondary: #fdcb6e;
+            --accent: #ff7675;
+            --success: #00cec9;
+            --warning: #f39c12;
+            --danger: #d63031;
+            --info: #0984e3;
+            
+            --bg-gradient-start: #0f0c1f;
+            --bg-gradient-end: #1a1a2e;
+            --text-primary: #f5f6fa;
+            --text-secondary: #dfe6e9;
+            --text-light: #b2bec3;
+            --card-bg: rgba(20, 20, 40, 0.8);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --profile-item-bg: rgba(30, 30, 50, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --hover-shadow: rgba(108, 92, 231, 0.4);
+            --badge-bg: rgba(0, 0, 0, 0.4);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.3s ease, 
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        body {
+            background: radial-gradient(circle at 0% 0%, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200vmax;
+            height: 200vmax;
+            top: -50vmax;
+            left: -50vmax;
+            background: radial-gradient(circle at center, 
+                        rgba(65, 88, 208, 0.05) 0%, 
+                        rgba(200, 80, 192, 0.05) 30%,
+                        transparent 70%);
+            animation: rotate 60s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* HEADER - FIXED SINGLE LINE NAVIGATION */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0.7rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px var(--shadow-color);
+            margin-bottom: 2rem;
+            flex-wrap: nowrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 20px var(--hover-shadow);
+            transform: rotate(-5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 2px;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .nav-links::-webkit-scrollbar-track {
+            background: var(--card-border);
+            border-radius: 10px;
+        }
+
+        .nav-links::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a:hover {
+            background: var(--card-bg);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 5px 15px var(--hover-shadow);
+        }
+
+        .nav-links a i {
+            font-size: 0.9rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            margin-left: 5px;
+            flex-shrink: 0;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 56px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            transition: .4s;
+            border-radius: 28px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(28px);
+        }
+
+        .slider i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            z-index: 1;
+        }
+
+        .slider .fa-sun {
+            left: 7px;
+            color: #f1c40f;
+        }
+
+        .slider .fa-moon {
+            right: 7px;
+            color: #f5f6fa;
+            opacity: 0.5;
+        }
+
+        input:checked + .slider .fa-sun {
+            opacity: 0.3;
+        }
+
+        input:checked + .slider .fa-moon {
+            opacity: 1;
+            color: #f1c40f;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* STREAK NOTIFICATION */
+        .streak-notification {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 30px var(--hover-shadow);
+            border: 1px solid var(--glass-highlight);
+            backdrop-filter: blur(10px);
+            animation: pulse 2s infinite;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* MAIN CARD */
+        .ingredient-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 2.5rem;
+            box-shadow: 0 30px 60px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ingredient-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at top right, 
+                        var(--primary) 0%, 
+                        transparent 50%);
+            opacity: 0.05;
+            animation: rotate 30s linear infinite;
+        }
+
+        .date-badge {
+            background: var(--profile-item-bg);
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .ingredient-name {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+            position: relative;
+            display: inline-block;
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .fun-tagline {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 2px dashed var(--card-border);
+        }
+
+        /* RISK METER */
+        .risk-meter {
+            background: var(--profile-item-bg);
+            padding: 1.2rem;
+            border-radius: 25px;
+            margin: 1.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        .risk-emoji {
+            font-size: 3rem;
+        }
+
+        .risk-info {
+            flex: 1;
+        }
+
+        .risk-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .risk-level {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .risk-level.high {
+            color: var(--danger);
+        }
+        .risk-level.medium {
+            color: #e1a21e;
+        }
+        .risk-level.low {
+            color: var(--success);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--card-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        /* FUN FACTS GRID */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2rem;
+            margin: 2rem 0;
+        }
+
+        .fact-card {
+            background: var(--profile-item-bg);
+            padding: 1.2rem;
+            border-radius: 20px;
+            border-left: 4px solid var(--primary);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px var(--hover-shadow);
+        }
+
+        .fact-emoji {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .fact-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .fact-text {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        /* JOKE SECTION */
+        .joke-section {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(253, 203, 110, 0.1));
+            padding: 1.5rem;
+            border-radius: 25px;
+            margin: 2rem 0;
+            border: 2px dashed var(--warning);
+            backdrop-filter: blur(5px);
+        }
+
+        .joke-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.8rem;
+        }
+
+        .joke-emoji {
+            font-size: 1.8rem;
+        }
+
+        .joke-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--warning);
+        }
+
+        .joke-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        .joke-punchline {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--warning);
+            margin-top: 0.8rem;
+            text-align: right;
+        }
+
+        /* LISTS CONTAINER */
+        .lists-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin: 2rem 0;
+        }
+
+        .benefits-list,
+        .side-effects-list {
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 15px 30px var(--shadow-color);
+        }
+
+        .benefits-list {
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 4px solid var(--success);
+        }
+
+        .side-effects-list {
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid var(--danger);
+        }
+
+        .list-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+
+        .list-item {
+            padding: 0.7rem 1rem;
+            background: var(--profile-item-bg);
+            border-radius: 12px;
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        /* CELEBRITY SECTION */
+        .celebrity-section {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1), rgba(0, 184, 148, 0.1));
+            padding: 1.2rem;
+            border-radius: 20px;
+            margin: 1.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-left: 4px solid var(--info);
+            border: 1px solid var(--card-border);
+        }
+
+        .celebrity-emoji {
+            font-size: 2.5rem;
+        }
+
+        .celebrity-text {
+            flex: 1;
+        }
+
+        .celebrity-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .celebrity-reason {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        /* DID YOU KNOW */
+        .didyouknow {
+            background: rgba(116, 185, 255, 0.1);
+            padding: 1.2rem;
+            border-radius: 20px;
+            margin: 1.8rem 0;
+            border-left: 4px solid var(--info);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .didyouknow strong {
+            color: var(--info);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-highlight);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px var(--hover-shadow);
+        }
+
+        .like-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, #4ecdc4, #45b7af);
+            color: white;
+        }
+
+        .learn-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        /* NAVIGATION ARROWS */
+        .nav-arrows {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.2rem;
+        }
+
+        .nav-arrow {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .nav-arrow:hover {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            transform: scale(1.1);
+            border-color: transparent;
+        }
+
+        /* FOOTER */
+        .footer-text {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* TOAST */
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+            font-size: 0.9rem;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-links a {
+                padding: 5px 10px;
+                font-size: 0.85rem;
+            }
+            
+            .logo-text {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .header {
+                padding: 0.7rem 1rem;
+            }
+            
+            .nav-links {
+                gap: 0.3rem;
+            }
+            
+            .nav-links a {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .header {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .ingredient-name {
+                font-size: 2.2rem;
+            }
+
+            .facts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .lists-container {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .risk-meter {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- HEADER - FIXED SINGLE LINE NAVIGATION -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="logo-text">SafeIngredient AI</div>
+        </div>
+        
+        <div class="nav-links">
+            <a href="CitizenHome.html"><i class="fas fa-home"></i> Home</a>
+            <a href="UploadAndKnow.html"><i class="fas fa-camera"></i> Upload</a>
+            <a href="EnterIngredients.html"><i class="fas fa-keyboard"></i> Enter</a>
+            <a href="IngredientOfTheDay.html" class="active"><i class="fas fa-lightbulb"></i> Daily</a>
+            <a href="Community.html"><i class="fas fa-users"></i> Community</a>
+            <a href="Chatbot.html"><i class="fas fa-robot"></i> AI Assistant</a>
+            <a href="Streaks.html"><i class="fas fa-fire"></i> Streaks</a>
+            <a href="Profile.html"><i class="fas fa-user"></i> Profile</a>
+            
+            <!-- Theme Toggle -->
+            <div class="theme-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Streak Notification -->
+        <div class="streak-notification" id="streakNotification">
+            <i class="fas fa-fire"></i> You're on a 5-day learning streak! Keep it up! <i class="fas fa-fire"></i>
+        </div>
+
+        <!-- Main Card -->
+        <div class="ingredient-card" id="ingredientCard">
+            <div class="date-badge" id="dateBadge">
+                <i class="fas fa-calendar-alt"></i> Tuesday, February 19, 2026
+            </div>
+
+            <h1 class="ingredient-name" id="ingredientName">Retinol</h1>
+            <div class="fun-tagline" id="funTagline">
+                "The Benjamin Button of skincare - ages backwards, but drama follows!"
+            </div>
+
+            <!-- Risk Meter -->
+            <div class="risk-meter">
+                <div class="risk-emoji" id="riskEmoji">😅</div>
+                <div class="risk-info">
+                    <div class="risk-label">
+                        <i class="fas fa-chart-line"></i> Risk Level (on a scale of "meh" to "run!")
+                    </div>
+                    <div class="risk-level medium" id="riskLevel">
+                        MEDIUM - Handle with care! 🧤
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="riskProgress" style="width: 55%; background-color: #fdcb6e"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fun Facts Grid -->
+            <div class="facts-grid">
+                <div class="fact-card">
+                    <div class="fact-emoji">🎭</div>
+                    <div class="fact-title">Dual Personality</div>
+                    <div class="fact-text" id="fact1">
+                        By day: Vitamin A. By night: Cell turnover superhero. Shh, don't tell its day job!
+                    </div>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-emoji">⏰</div>
+                    <div class="fact-title">Drama Queen Alert</div>
+                    <div class="fact-text" id="fact2">
+                        It WILL make you peel like a sunburned potato before giving you glass skin. Trust the process!
+                    </div>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-emoji">🌞</div>
+                    <div class="fact-title">Vampire Hours</div>
+                    <div class="fact-text" id="fact3">
+                        Hates sunlight more than a vampire. Use at night or become crispy fries!
+                    </div>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-emoji">🤰</div>
+                    <div class="fact-title">Baby on Board?</div>
+                    <div class="fact-text" id="fact4">
+                        Pregnant? Retinol says "bye, felicia!" Not safe for baby baking.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Joke Section -->
+            <div class="joke-section">
+                <div class="joke-header">
+                    <span class="joke-emoji">😂</span>
+                    <span class="joke-title">Knock Knock! Who's there? Retinol.</span>
+                </div>
+                <div class="joke-text" id="jokeSetup">
+                    "Why did Retinol break up with Sunscreen?"
+                </div>
+                <div class="joke-punchline" id="jokePunchline">
+                    "Because it needed some space! (Get it? SPF? Space? No? Okay, we tried...) 🌞🚀"
+                </div>
+            </div>
+
+            <!-- Benefits & Side Effects -->
+            <div class="lists-container">
+                <div class="benefits-list">
+                    <div class="list-title">
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i> The Good Stuff
+                    </div>
+                    <div id="benefits">
+                        <div class="list-item">
+                            <i class="fas fa-star" style="color: var(--success);"></i> ✨ Erases wrinkles like a digital photo editor
+                        </div>
+                        <div class="list-item">
+                            <i class="fas fa-star" style="color: var(--success);"></i> 🚀 Speeds up cell turnover
+                        </div>
+                        <div class="list-item">
+                            <i class="fas fa-star" style="color: var(--success);"></i> 🌟 Boosts collagen production
+                        </div>
+                        <div class="list-item">
+                            <i class="fas fa-star" style="color: var(--success);"></i> 🎯 Unclogs pores effectively
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-effects-list">
+                    <div class="list-title">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> The Drama
+                    </div>
+                    <div id="sideEffects">
+                        <div class="list-item">
+                            <i class="fas fa-times-circle" style="color: var(--danger);"></i> 😱 Peeling (temporary!)
+                        </div>
+                        <div class="list-item">
+                            <i class="fas fa-times-circle" style="color: var(--danger);"></i> 🔥 Redness and irritation
+                        </div>
+                        <div class="list-item">
+                            <i class="fas fa-times-circle" style="color: var(--danger);"></i> ☀️ Sun sensitivity
+                        </div>
+                        <div class="list-item">
+                            <i class="fas fa-times-circle" style="color: var(--danger);"></i> 💀 The "retinol uglies"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Celebrity Look-alike -->
+            <div class="celebrity-section">
+                <div class="celebrity-emoji">🌟</div>
+                <div class="celebrity-text">
+                    <div class="celebrity-name" id="celebrityName">
+                        <i class="fas fa-star" style="color: var(--warning);"></i> Celebrity Look-alike: Ross Geller
+                    </div>
+                    <div class="celebrity-reason" id="celebrityReason">
+                        "WE WERE ON A BREAK!" - Dramatic, effective, takes time to see results.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Did You Know -->
+            <div class="didyouknow" id="didYouKnow">
+                <strong><i class="fas fa-flask"></i> Nerdy Corner:</strong> Retinol was discovered in 1931. It's part of the retinoid family - famous, effective, and everyone has an opinion.
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn like-btn" onclick="likeIngredient()">
+                    <i class="fas fa-heart"></i> Like (<span id="likeCount">127</span>)
+                </button>
+                <button class="action-btn share-btn" onclick="shareIngredient()">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+                <button class="action-btn learn-btn" onclick="learnMore()">
+                    <i class="fas fa-flask"></i> Deep Dive
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <div class="nav-arrows">
+            <button class="nav-arrow" onclick="previousIngredient()"><i class="fas fa-chevron-left"></i></button>
+            <button class="nav-arrow" onclick="nextIngredient()"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <!-- Footer -->
+        <p class="footer-text">
+            <i class="fas fa-lightbulb"></i> New ingredient every day! Learn, laugh, and level up your skincare game.
+        </p>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        themeToggle.checked = savedTheme === 'dark';
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Configuration
+        const API_BASE_URL = "http://localhost:8000";
+        const USER_ID = localStorage.getItem("user_id") || "user_" + Math.random().toString(36).substr(2, 9);
+
+        // Ingredient database
+        const ingredients = [
+            {
+                name: "Retinol",
+                tagline: "The Benjamin Button of skincare - ages backwards, but drama follows!",
+                riskLevel: "MEDIUM - Handle with care! 🧤",
+                riskScore: 55,
+                riskColor: "#fdcb6e",
+                riskEmoji: "😅",
+                fact1: "By day: Vitamin A. By night: Cell turnover superhero.",
+                fact2: "Makes you peel before giving you glass skin.",
+                fact3: "Hates sunlight. Use at night only!",
+                fact4: "Not safe during pregnancy.",
+                jokeSetup: "Why did Retinol break up with Sunscreen?",
+                jokePunchline: "Because it needed some space! 🌞🚀",
+                benefits: [
+                    "✨ Erases wrinkles",
+                    "🚀 Speeds cell turnover",
+                    "🌟 Boosts collagen",
+                    "🎯 Unclogs pores",
+                ],
+                sideEffects: [
+                    "😱 Peeling",
+                    "🔥 Redness",
+                    "☀️ Sun sensitivity",
+                    "💀 Retinol uglies",
+                ],
+                celebrityName: "Celebrity Look-alike: Ross Geller",
+                celebrityReason: "Dramatic, effective, takes time to see results.",
+                didYouKnow: "Retinol was discovered in 1931. It's part of the retinoid family.",
+                likes: 127,
+            },
+            {
+                name: "Hyaluronic Acid",
+                tagline: "Holds 1000x its weight in water. Basic? Never.",
+                riskLevel: "LOW - Chill as a cucumber 🥒",
+                riskScore: 5,
+                riskColor: "#00b894",
+                riskEmoji: "💧",
+                fact1: "Holds 1000x its weight in water!",
+                fact2: "Found naturally in your body.",
+                fact3: "Works best on damp skin.",
+                fact4: "Comes in different molecular sizes.",
+                jokeSetup: "What did Hyaluronic Acid say to dry skin?",
+                jokePunchline: "Quit being so thirsty, I got you! 💧",
+                benefits: [
+                    "💦 Deep hydration",
+                    "🎈 Plumps skin",
+                    "✨ Reduces fine lines",
+                    "🌍 For all skin types",
+                ],
+                sideEffects: [
+                    "💸 Can be expensive",
+                    "🏜️ May draw moisture in dry climates",
+                    "🤷‍♀️ Can pill",
+                    "😌 Too gentle sometimes",
+                ],
+                celebrityName: "Celebrity Look-alike: Elle Woods",
+                celebrityReason: "Works hard, stays hydrated, always fabulous.",
+                didYouKnow: "Hyaluronic Acid can hold 1000x its weight in water!",
+                likes: 342,
+            },
+            {
+                name: "Niacinamide",
+                tagline: "The friend who solves all your problems.",
+                riskLevel: "LOW - Sweet angel baby 😇",
+                riskScore: 10,
+                riskColor: "#00b894",
+                riskEmoji: "😇",
+                fact1: "Also known as Vitamin B3.",
+                fact2: "Plays well with others.",
+                fact3: "Reduces redness.",
+                fact4: "Controls oil production.",
+                jokeSetup: "Why did Niacinamide get invited to every party?",
+                jokePunchline: "Because it gets along with EVERYONE! 🎉",
+                benefits: [
+                    "🎭 Reduces redness",
+                    "⚡ Controls oil",
+                    "🧱 Strengthens barrier",
+                    "✨ Minimizes pores",
+                ],
+                sideEffects: [
+                    "😬 Mild tingling",
+                    "🧪 Flushing in high doses",
+                    "🤔 Works slowly",
+                    "💊 Vitamin smell",
+                ],
+                celebrityName: "Celebrity Look-alike: Keanu Reeves",
+                celebrityReason: "Wholesome, good for everyone, secretly powerful.",
+                didYouKnow: "Niacinamide is the Switzerland of skincare - neutral and friends with everyone.",
+                likes: 256,
+            },
+            {
+                name: "Vitamin C",
+                tagline: "Morning sunshine for your face.",
+                riskLevel: "LOW-MEDIUM - High maintenance 💅",
+                riskScore: 25,
+                riskColor: "#fd7e14",
+                riskEmoji: "🍊",
+                fact1: "Oxidizes quickly - keep it in the dark!",
+                fact2: "L-ascorbic acid = Harry Potter spell name.",
+                fact3: "Works best in morning.",
+                fact4: "Brightens like crazy.",
+                jokeSetup: "Why did Vitamin C break up with sunlight?",
+                jokePunchline: "Needed a stable relationship! 🌞💔",
+                benefits: [
+                    "✨ Brightens skin",
+                    "🛡️ Protects from pollution",
+                    "🌟 Boosts collagen",
+                    "🎯 Fades dark spots",
+                ],
+                sideEffects: [
+                    "😬 Can sting",
+                    "🧪 Turns orange when oxidized",
+                    "💸 Expensive",
+                    "🤷‍♀️ Picky about pH",
+                ],
+                celebrityName: "Celebrity Look-alike: Cher",
+                celebrityReason: "Timeless, bright, been around forever.",
+                didYouKnow: "Use Vitamin C in your AM routine for maximum benefits!",
+                likes: 189,
+            },
+        ];
+
+        let currentIndex = 0;
+
+        // DOM Elements
+        const dateBadge = document.getElementById("dateBadge");
+        const ingredientName = document.getElementById("ingredientName");
+        const funTagline = document.getElementById("funTagline");
+        const riskEmoji = document.getElementById("riskEmoji");
+        const riskLevel = document.getElementById("riskLevel");
+        const riskProgress = document.getElementById("riskProgress");
+        const fact1 = document.getElementById("fact1");
+        const fact2 = document.getElementById("fact2");
+        const fact3 = document.getElementById("fact3");
+        const fact4 = document.getElementById("fact4");
+        const jokeSetup = document.getElementById("jokeSetup");
+        const jokePunchline = document.getElementById("jokePunchline");
+        const benefits = document.getElementById("benefits");
+        const sideEffects = document.getElementById("sideEffects");
+        const celebrityName = document.getElementById("celebrityName");
+        const celebrityReason = document.getElementById("celebrityReason");
+        const didYouKnow = document.getElementById("didYouKnow");
+        const likeCount = document.getElementById("likeCount");
+
+        // Initialize
+        function init() {
+            updateDate();
+            loadIngredient(0);
+            loadStreak();
+        }
+
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+            dateBadge.innerHTML = `<i class="fas fa-calendar-alt"></i> ${now.toLocaleDateString("en-US", options)}`;
+        }
+
+        function loadIngredient(index) {
+            const ing = ingredients[index];
+
+            ingredientName.textContent = ing.name;
+            funTagline.textContent = ing.tagline;
+            riskEmoji.textContent = ing.riskEmoji;
+            riskLevel.textContent = ing.riskLevel;
+            riskLevel.className = `risk-level ${ing.riskLevel.split(" ")[0].toLowerCase()}`;
+            riskProgress.style.width = `${ing.riskScore}%`;
+            riskProgress.style.backgroundColor = ing.riskColor;
+
+            fact1.textContent = ing.fact1;
+            fact2.textContent = ing.fact2;
+            fact3.textContent = ing.fact3;
+            fact4.textContent = ing.fact4;
+
+            jokeSetup.textContent = ing.jokeSetup;
+            jokePunchline.textContent = ing.jokePunchline;
+
+            benefits.innerHTML = ing.benefits
+                .map(b => `<div class="list-item"><i class="fas fa-star" style="color: var(--success);"></i> ${b}</div>`)
+                .join("");
+
+            sideEffects.innerHTML = ing.sideEffects
+                .map(s => `<div class="list-item"><i class="fas fa-times-circle" style="color: var(--danger);"></i> ${s}</div>`)
+                .join("");
+
+            celebrityName.innerHTML = `<i class="fas fa-star" style="color: var(--warning);"></i> ${ing.celebrityName}`;
+            celebrityReason.textContent = ing.celebrityReason;
+
+            didYouKnow.innerHTML = `<strong><i class="fas fa-flask"></i> Nerdy Corner:</strong> ${ing.didYouKnow}`;
+
+            likeCount.textContent = ing.likes;
+        }
+
+        function previousIngredient() {
+            currentIndex = (currentIndex - 1 + ingredients.length) % ingredients.length;
+            loadIngredient(currentIndex);
+            logActivity("previous");
+        }
+
+        function nextIngredient() {
+            currentIndex = (currentIndex + 1) % ingredients.length;
+            loadIngredient(currentIndex);
+            logActivity("next");
+        }
+
+        function likeIngredient() {
+            const ing = ingredients[currentIndex];
+            ing.likes++;
+            likeCount.textContent = ing.likes;
+            showToast(`❤️ You liked ${ing.name}!`);
+            logActivity("like");
+        }
+
+        function shareIngredient() {
+            const ing = ingredients[currentIndex];
+            if (navigator.share) {
+                navigator.share({
+                    title: `Ingredient of the Day: ${ing.name}`,
+                    text: `${ing.tagline} - Check it out!`,
+                    url: window.location.href,
+                });
+            } else {
+                navigator.clipboard.writeText(`${ing.name}: ${ing.tagline} ${window.location.href}`);
+                showToast("📋 Copied to clipboard!");
+            }
+            logActivity("share");
+        }
+
+        function learnMore() {
+            window.location.href = `EnterIngredients.html?ingredient=${ingredients[currentIndex].name}`;
+        }
+
+        async function loadStreak() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/streak/dashboard/${USER_ID}`);
+                const data = await response.json();
+                const streak = data.streaks?.find(s => s.streak_type === "learning")?.current_count || 5;
+                document.getElementById("streakNotification").innerHTML = 
+                    `<i class="fas fa-fire"></i> You're on a ${streak}-day learning streak! Keep it up! <i class="fas fa-fire"></i>`;
+            } catch (error) {
+                console.error("Error loading streak:", error);
+            }
+        }
+
+        async function logActivity(action) {
+            try {
+                await fetch(`${API_BASE_URL}/streak/activity/log?user_id=${USER_ID}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        activity_type: "ingredient_learn",
+                        description: `Checked out ${ingredients[currentIndex].name} (${action})`,
+                        metadata: { ingredient: ingredients[currentIndex].name, action },
+                    }),
+                });
+            } catch (error) {
+                console.error("Error logging activity:", error);
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "toast-message";
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeIngredient AI · Intelligence Platform</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Poppins + Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            /* Light theme - matching dashboard */
+            --primary: #4158D0;
+            --primary-light: #C850C0;
+            --secondary: #FFCC70;
+            --accent: #FF6B6B;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --info: #74b9ff;
+            
+            --bg-gradient-start: #f9f0ff;
+            --bg-gradient-end: #e3f2fd;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --text-light: #b2bec3;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.35);
+            --profile-item-bg: rgba(255, 255, 255, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-shadow: rgba(65, 88, 208, 0.3);
+            --badge-bg: rgba(255, 255, 255, 0.3);
+            --glass-highlight: rgba(255, 255, 255, 0.5);
+            --modal-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme - matching dashboard */
+            --primary: #6C5CE7;
+            --primary-light: #a463f5;
+            --secondary: #fdcb6e;
+            --accent: #ff7675;
+            --success: #00cec9;
+            --warning: #f39c12;
+            --danger: #d63031;
+            --info: #0984e3;
+            
+            --bg-gradient-start: #0f0c1f;
+            --bg-gradient-end: #1a1a2e;
+            --text-primary: #f5f6fa;
+            --text-secondary: #dfe6e9;
+            --text-light: #b2bec3;
+            --card-bg: rgba(20, 20, 40, 0.8);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --profile-item-bg: rgba(30, 30, 50, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --hover-shadow: rgba(108, 92, 231, 0.4);
+            --badge-bg: rgba(0, 0, 0, 0.4);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --modal-bg: rgba(30, 30, 50, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.3s ease, 
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        body {
+            background: radial-gradient(circle at 0% 0%, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200vmax;
+            height: 200vmax;
+            top: -50vmax;
+            left: -50vmax;
+            background: radial-gradient(circle at center, 
+                        rgba(65, 88, 208, 0.05) 0%, 
+                        rgba(200, 80, 192, 0.05) 30%,
+                        transparent 70%);
+            animation: rotate 60s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* CONTAINER - Premium Glassmorphism */
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 50px;
+            padding: 3rem;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 30px 60px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at top right, 
+                        var(--primary) 0%, 
+                        transparent 50%);
+            opacity: 0.05;
+            animation: rotate 30s linear infinite;
+            pointer-events: none;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 15px 30px var(--hover-shadow);
+            transform: rotate(-5deg);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: rotate(-5deg) translateY(0); }
+            50% { transform: rotate(-5deg) translateY(-10px); }
+        }
+
+        .logo-text {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        h1 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            font-family: 'Playfair Display', serif;
+            position: relative;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 400;
+            position: relative;
+        }
+
+        /* MODE SELECTOR */
+        .mode-selector {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .mode-card {
+            flex: 1;
+            background: var(--profile-item-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            box-shadow: 0 20px 40px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 480px;
+        }
+
+        .mode-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 40px 70px var(--hover-shadow);
+        }
+
+        .mode-card:hover::after {
+            opacity: 0.05;
+        }
+
+        .mode-card:first-child {
+            border-top: 4px solid var(--primary);
+        }
+
+        .mode-card:last-child {
+            border-top: 4px solid var(--success);
+        }
+
+        .mode-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mode-card:first-child .mode-icon {
+            color: var(--primary);
+        }
+
+        .mode-card:last-child .mode-icon {
+            color: var(--success);
+        }
+
+        .mode-title {
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .mode-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .btn-container {
+            position: relative;
+            z-index: 1;
+            margin: 1rem 0 0.5rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            width: 100%;
+            max-width: 260px;
+            min-width: 220px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px var(--hover-shadow);
+            border: 1px solid var(--glass-highlight);
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 25px 40px var(--hover-shadow);
+        }
+
+        .btn-expert {
+            background: linear-gradient(135deg, var(--success), #00cec9);
+            box-shadow: 0 15px 30px rgba(0,184,148,0.3);
+        }
+
+        .btn-expert:hover {
+            box-shadow: 0 25px 40px rgba(0,184,148,0.4);
+        }
+
+        .guest-note {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .guest-note i {
+            color: var(--success);
+        }
+
+        /* AUTH MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 2.5rem;
+            max-width: 460px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 40px 80px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,107,107,0.1);
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid var(--card-border);
+            border-radius: 15px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: var(--profile-item-bg);
+            color: var(--text-primary);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--hover-shadow);
+            transform: translateY(-2px);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-light);
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .form-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .form-switch a:hover {
+            color: var(--primary-light);
+            text-decoration: underline;
+        }
+
+        .error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            display: none;
+            padding-left: 4px;
+            background: rgba(255,107,107,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--danger);
+        }
+
+        .error.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn[type="submit"] {
+            width: 100%;
+            max-width: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            font-size: 1rem;
+        }
+
+        /* Theme Toggle (floating) */
+        .theme-toggle-floating {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .theme-toggle-floating .switch {
+            position: relative;
+            display: inline-block;
+            width: 70px;
+            height: 34px;
+        }
+
+        .theme-toggle-floating .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-toggle-floating .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            transition: .4s;
+            border-radius: 34px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .theme-toggle-floating .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .theme-toggle-floating input:checked + .slider {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+
+        .theme-toggle-floating input:checked + .slider:before {
+            transform: translateX(36px);
+        }
+
+        .theme-toggle-floating .slider i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            z-index: 1;
+        }
+
+        .theme-toggle-floating .slider .fa-sun {
+            left: 8px;
+            color: #f1c40f;
+        }
+
+        .theme-toggle-floating .slider .fa-moon {
+            right: 8px;
+            color: #f5f6fa;
+            opacity: 0.5;
+        }
+
+        .theme-toggle-floating input:checked + .slider .fa-sun {
+            opacity: 0.3;
+        }
+
+        .theme-toggle-floating input:checked + .slider .fa-moon {
+            opacity: 1;
+            color: #f1c40f;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container { 
+                padding: 2rem; 
+            }
+            
+            .mode-selector { 
+                flex-direction: column; 
+                gap: 1.5rem;
+            }
+            
+            h1 { 
+                font-size: 2rem; 
+            }
+            
+            .logo-text { 
+                font-size: 1.8rem; 
+            }
+            
+            .logo-icon { 
+                width: 50px; 
+                height: 50px; 
+                font-size: 1.5rem; 
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .modal-title {
+                font-size: 1.6rem;
+            }
+
+            .mode-card {
+                min-height: auto;
+            }
+
+            .btn {
+                max-width: 100%;
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .logo-text {
+                font-size: 1.4rem;
+            }
+
+            .mode-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Floating Theme Toggle -->
+    <div class="theme-toggle-floating">
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </span>
+        </label>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="logo-text">SafeIngredient AI</div>
+            </div>
+            <h1>Ingredient Safety Intelligence Platform</h1>
+            <p class="subtitle">
+                Analyze skincare & food ingredients with AI-powered safety insights.
+                Detect interactions, build healthy habits, and make informed choices.
+            </p>
+        </div>
+
+        <div class="mode-selector">
+            <!-- Citizen Mode -->
+            <div class="mode-card" onclick="showAuthModal('signup')">
+                <div class="mode-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <h3 class="mode-title">Citizen Mode</h3>
+                <p class="mode-desc">
+                    Simple, personalized safety checks for your daily products.
+                    Track ingredients and get instant alerts.
+                </p>
+                <div class="btn-container">
+                    <button class="btn">
+                        <i class="fas fa-user-plus"></i> Create Free Account
+                    </button>
+                </div>
+                <div class="guest-note">
+                    <i class="fas fa-check-circle"></i> Personalized for your needs
+                </div>
+            </div>
+
+            <!-- Expert Mode -->
+            <div class="mode-card" onclick="window.location.href = '/expert/ExpertHome.html'">
+                <div class="mode-icon">
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <h3 class="mode-title">Expert Mode</h3>
+                <p class="mode-desc">
+                    Advanced analytics and research tools for professionals.
+                    Deep ingredient insights and interaction analysis.
+                </p>
+                <div class="btn-container">
+                    <button class="btn btn-expert">
+                        <i class="fas fa-arrow-right"></i> Enter Expert Mode
+                    </button>
+                </div>
+                <div class="guest-note">
+                    <i class="fas fa-user-check"></i> No account required
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Create Account</h2>
+                <button class="close-btn" onclick="closeAuthModal()">&times;</button>
+            </div>
+
+            <!-- Signup Form -->
+            <form id="signupForm" onsubmit="handleSignup(event)" style="display: none">
+                <div class="form-group">
+                    <input type="text" id="fullName" placeholder="Full Name" required />
+                    <div class="error" id="nameError"></div>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Email Address" required />
+                    <div class="error" id="emailError"></div>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password (min 6 characters)" required />
+                    <div class="error" id="passwordError"></div>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+                    <div class="error" id="confirmError"></div>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+                <div class="form-switch">
+                    Already have an account?
+                    <a href="#" onclick="showLoginForm()">Login here</a>
+                </div>
+            </form>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email Address" required />
+                    <div class="error" id="loginEmailError"></div>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required />
+                    <div class="error" id="loginPasswordError"></div>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div class="form-switch">
+                    New user?
+                    <a href="#" onclick="showSignupForm()">Create account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        themeToggle.checked = savedTheme === 'dark';
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        const API_BASE = "http://localhost:8000/api";
+
+        // Show auth modal
+        function showAuthModal(formType) {
+            const modal = document.getElementById("authModal");
+            const modalTitle = document.getElementById("modalTitle");
+            const signupForm = document.getElementById("signupForm");
+            const loginForm = document.getElementById("loginForm");
+
+            modal.classList.add("active");
+
+            if (formType === "signup") {
+                modalTitle.textContent = "Create Account";
+                signupForm.style.display = "block";
+                loginForm.style.display = "none";
+            } else {
+                modalTitle.textContent = "Login";
+                signupForm.style.display = "none";
+                loginForm.style.display = "block";
+            }
+        }
+
+        // Close auth modal
+        function closeAuthModal() {
+            document.getElementById("authModal").classList.remove("active");
+            clearErrors();
+        }
+
+        // Switch between forms
+        function showLoginForm() {
+            document.getElementById("modalTitle").textContent = "Login";
+            document.getElementById("signupForm").style.display = "none";
+            document.getElementById("loginForm").style.display = "block";
+            clearErrors();
+        }
+
+        function showSignupForm() {
+            document.getElementById("modalTitle").textContent = "Create Account";
+            document.getElementById("signupForm").style.display = "block";
+            document.getElementById("loginForm").style.display = "none";
+            clearErrors();
+        }
+
+        // Clear error messages
+        function clearErrors() {
+            document.querySelectorAll(".error").forEach((el) => {
+                el.classList.remove("show");
+                el.textContent = "";
+            });
+        }
+
+        // Show error message
+        function showError(elementId, message) {
+            const errorEl = document.getElementById(elementId);
+            errorEl.textContent = message;
+            errorEl.classList.add("show");
+        }
+
+        // Handle signup
+        async function handleSignup(event) {
+            event.preventDefault();
+            clearErrors();
+
+            const fullName = document.getElementById("fullName").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            // Validation
+            let isValid = true;
+
+            if (!fullName.trim()) {
+                showError("nameError", "Full name is required");
+                isValid = false;
+            }
+
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                showError("emailError", "Please enter a valid email");
+                isValid = false;
+            }
+
+            if (password.length < 6) {
+                showError("passwordError", "Password must be at least 6 characters");
+                isValid = false;
+            }
+
+            if (password !== confirmPassword) {
+                showError("confirmError", "Passwords do not match");
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        full_name: fullName,
+                        email: email,
+                        password: password,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem("access_token", data.access_token);
+                    localStorage.setItem("refresh_token", data.refresh_token);
+                    window.location.href = data.redirect;
+                } else {
+                    showError("emailError", data.message || "Registration failed");
+                }
+            } catch (error) {
+                showError("emailError", "An error occurred during signup");
+            }
+        }
+
+        // Handle login
+        async function handleLogin(event) {
+            event.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+
+            if (!email || !password) {
+                showError("loginEmailError", "Please fill in all fields");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem("access_token", data.access_token);
+                    localStorage.setItem("refresh_token", data.refresh_token);
+                    window.location.href = data.redirect;
+                } else {
+                    showError("loginEmailError", data.message || "Login failed");
+                }
+            } catch (error) {
+                showError("loginEmailError", "An error occurred during login");
+            }
+        }
+
+        // Close modal on outside click
+        document.getElementById("authModal").addEventListener("click", function (e) {
+            if (e.target === this) {
+                closeAuthModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Ingredient - SafeIngredient AI</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Poppins + Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            /* Light theme - matching dashboard */
+            --primary: #4158D0;
+            --primary-light: #C850C0;
+            --secondary: #FFCC70;
+            --accent: #FF6B6B;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --info: #74b9ff;
+            
+            --bg-gradient-start: #f9f0ff;
+            --bg-gradient-end: #e3f2fd;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --text-light: #b2bec3;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.35);
+            --profile-item-bg: rgba(255, 255, 255, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-shadow: rgba(65, 88, 208, 0.3);
+            --badge-bg: rgba(255, 255, 255, 0.3);
+            --glass-highlight: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme - matching dashboard */
+            --primary: #6C5CE7;
+            --primary-light: #a463f5;
+            --secondary: #fdcb6e;
+            --accent: #ff7675;
+            --success: #00cec9;
+            --warning: #f39c12;
+            --danger: #d63031;
+            --info: #0984e3;
+            
+            --bg-gradient-start: #0f0c1f;
+            --bg-gradient-end: #1a1a2e;
+            --text-primary: #f5f6fa;
+            --text-secondary: #dfe6e9;
+            --text-light: #b2bec3;
+            --card-bg: rgba(20, 20, 40, 0.8);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --profile-item-bg: rgba(30, 30, 50, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --hover-shadow: rgba(108, 92, 231, 0.4);
+            --badge-bg: rgba(0, 0, 0, 0.4);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.3s ease, 
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        body {
+            background: radial-gradient(circle at 0% 0%, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200vmax;
+            height: 200vmax;
+            top: -50vmax;
+            left: -50vmax;
+            background: radial-gradient(circle at center, 
+                        rgba(65, 88, 208, 0.05) 0%, 
+                        rgba(200, 80, 192, 0.05) 30%,
+                        transparent 70%);
+            animation: rotate 60s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* HEADER - matching dashboard */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px var(--shadow-color);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 15px 30px var(--hover-shadow);
+            transform: rotate(-5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--card-bg);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 8px 20px var(--hover-shadow);
+        }
+
+        .nav-links a i {
+            margin-right: 6px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            margin-left: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 70px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(36px);
+        }
+
+        .slider i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            z-index: 1;
+        }
+
+        .slider .fa-sun {
+            left: 8px;
+            color: #f1c40f;
+        }
+
+        .slider .fa-moon {
+            right: 8px;
+            color: #f5f6fa;
+            opacity: 0.5;
+        }
+
+        input:checked + .slider .fa-sun {
+            opacity: 0.3;
+        }
+
+        input:checked + .slider .fa-moon {
+            opacity: 1;
+            color: #f1c40f;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* MAIN CARD - Premium Glassmorphism */
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 3rem;
+            box-shadow: 0 30px 60px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at top right, 
+                        var(--primary) 0%, 
+                        transparent 50%);
+            opacity: 0.1;
+            animation: rotate 30s linear infinite;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            font-family: 'Playfair Display', serif;
+            position: relative;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        /* SEARCH CONTAINER */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+
+        #ingredientInput {
+            flex: 1;
+            padding: 18px 20px;
+            font-size: 1rem;
+            background: var(--profile-item-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        #ingredientInput:focus {
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px var(--hover-shadow);
+            transform: translateY(-2px);
+        }
+
+        #ingredientInput::placeholder {
+            color: var(--text-light);
+        }
+
+        #analyzeBtn {
+            padding: 18px 35px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px var(--hover-shadow);
+            border: 1px solid var(--glass-highlight);
+            min-width: 140px;
+        }
+
+        #analyzeBtn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 40px var(--hover-shadow);
+        }
+
+        #analyzeBtn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #analyzeBtn i {
+            margin-right: 8px;
+        }
+
+        /* SUGGESTIONS BOX */
+        .suggestions-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--profile-item-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            margin-top: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        .suggestion-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: var(--card-bg);
+            transform: translateX(5px);
+        }
+
+        .suggestion-risk {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+
+        .risk-high {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .risk-medium {
+            background: rgba(253, 203, 110, 0.2);
+            color: #e1a21e;
+            border: 1px solid rgba(253, 203, 110, 0.3);
+        }
+
+        .risk-low {
+            background: rgba(0, 184, 148, 0.2);
+            color: var(--success);
+            border: 1px solid rgba(0, 184, 148, 0.3);
+        }
+
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+
+        .spinner {
+            border: 4px solid var(--card-border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: var(--text-secondary);
+        }
+
+        /* RESULT CARD */
+        .result-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 2.5rem;
+            box-shadow: 0 30px 60px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            margin-top: 2rem;
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(65,88,208,0.1) 0%, transparent 60%);
+            animation: shimmer 8s linear infinite;
+        }
+
+        @keyframes shimmer {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--card-border);
+            position: relative;
+        }
+
+        .ingredient-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .risk-badge {
+            padding: 10px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-highlight);
+        }
+
+        .risk-badge.high {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        .risk-badge.medium {
+            background: rgba(253, 203, 110, 0.2);
+            color: #e1a21e;
+        }
+
+        .risk-badge.low {
+            background: rgba(0, 184, 148, 0.2);
+            color: var(--success);
+        }
+
+        .risk-badge.unknown {
+            background: var(--badge-bg);
+            color: var(--text-secondary);
+        }
+
+        /* SCORE CONTAINER */
+        .score-container {
+            margin: 2rem 0;
+            background: var(--profile-item-bg);
+            padding: 1.5rem;
+            border-radius: 25px;
+            border: 1px solid var(--card-border);
+        }
+
+        .score-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--card-border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+
+        /* GRID */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-section {
+            background: var(--profile-item-bg);
+            padding: 1.8rem;
+            border-radius: 25px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .info-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--hover-shadow);
+        }
+
+        .info-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-section h3 i {
+            font-size: 1.3rem;
+        }
+
+        /* BADGES */
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .badge {
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            transform: translateY(-2px);
+        }
+
+        .badge.benefit {
+            background: rgba(0, 184, 148, 0.15);
+            color: var(--success);
+            border-color: rgba(0, 184, 148, 0.3);
+        }
+
+        .badge.side-effect {
+            background: rgba(255, 107, 107, 0.15);
+            color: var(--danger);
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+
+        .badge i {
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+
+        /* WARNING BOX */
+        .warning-box {
+            background: linear-gradient(135deg, 
+                        rgba(253, 203, 110, 0.15), 
+                        rgba(255, 107, 107, 0.15));
+            border-left: 4px solid var(--warning);
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+        }
+
+        .warning-box h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .warning-box h3 i {
+            color: var(--warning);
+        }
+
+        .warning-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .warning-box li {
+            color: var(--text-secondary);
+            margin: 0.8rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+        }
+
+        .warning-box li::before {
+            content: '•';
+            color: var(--warning);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .print-btn,
+        .share-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--glass-highlight);
+            backdrop-filter: blur(10px);
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, #0984e3, #74b9ff);
+            color: white;
+        }
+
+        .print-btn:hover,
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px var(--hover-shadow);
+        }
+
+        /* ERROR MESSAGE */
+        .error-message {
+            background: rgba(255, 107, 107, 0.15);
+            border-left: 4px solid var(--danger);
+            padding: 2rem;
+            border-radius: 25px;
+            margin: 1.5rem 0;
+        }
+
+        .error-message h3 {
+            color: var(--danger);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-message p {
+            color: var(--text-secondary);
+        }
+
+        /* DESCRIPTION TEXT */
+        .description-text {
+            margin: 1.5rem 0;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            background: var(--profile-item-bg);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+        }
+
+        /* TIMESTAMP */
+        .timestamp {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            margin-top: 2rem;
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .timestamp i {
+            margin-right: 5px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            #analyzeBtn {
+                width: 100%;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .result-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+        }
+
+        /* ANIMATIONS */
+        .animate__animated {
+            animation-duration: 0.6s;
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- HEADER - matching dashboard -->
+    <header class="header animate__animated animate__fadeInDown">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="logo-text">SafeIngredient AI</div>
+        </div>
+        <div class="nav-links">
+            <a href="CitizenHome.html"><i class="fas fa-home"></i> Home</a>
+            <a href="UploadAndKnow.html"><i class="fas fa-camera"></i> Upload</a>
+            <a href="EnterIngredients.html" class="active"><i class="fas fa-keyboard"></i> Enter</a>
+            <a href="IngredientOfTheDay.html"><i class="fas fa-lightbulb"></i> Daily</a>
+            <a href="Community.html"><i class="fas fa-users"></i> Community</a>
+            <a href="Profile.html"><i class="fas fa-user"></i> Profile</a>
+            
+            <!-- Theme Toggle -->
+            <div class="theme-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-card animate__animated animate__fadeInUp">
+            <h1>🔎 Enter Ingredient & Know</h1>
+            <p class="subtitle">
+                Type any ingredient name to get detailed safety analysis, benefits, and side effects
+            </p>
+
+            <div class="search-container">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        id="ingredientInput"
+                        placeholder="e.g., Paraben, Vitamin C, Retinol, Niacinamide"
+                        autocomplete="off"
+                    />
+                    <button id="analyzeBtn" onclick="analyzeIngredient()">
+                        <i class="fas fa-flask"></i> Analyze
+                    </button>
+                </div>
+                <div id="suggestions" class="suggestions-box"></div>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Analyzing ingredient...</p>
+            </div>
+        </div>
+
+        <div id="result" class="result-card animate__animated animate__fadeInUp"></div>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        themeToggle.checked = savedTheme === 'dark';
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Mock ingredient database
+        const MOCK_INGREDIENT_DATA = {
+            paraben: {
+                name: "Paraben",
+                description: "Parabens are preservatives used in cosmetics to prevent bacterial growth. They are absorbed through skin and have been found in breast cancer tissues, though direct causation hasn't been proven.",
+                risk_level: "High",
+                risk_score: 85,
+                benefits: ["Extends product shelf life", "Prevents microbial growth", "Effective preservative"],
+                side_effects: ["Skin irritation", "Allergic reactions", "Potential endocrine disruption", "May accumulate in body tissues"],
+            },
+            "vitamin c": {
+                name: "Vitamin C",
+                description: "Vitamin C (Ascorbic Acid) is a powerful antioxidant that brightens skin, boosts collagen production, and protects against environmental damage.",
+                risk_level: "Low",
+                risk_score: 15,
+                benefits: ["Brightens skin", "Boosts collagen", "Antioxidant protection", "Reduces hyperpigmentation"],
+                side_effects: ["Mild tingling", "Oxidizes quickly", "May cause irritation in high concentrations"],
+            },
+            retinol: {
+                name: "Retinol",
+                description: "Retinol is a vitamin A derivative that accelerates skin cell turnover and stimulates collagen production for anti-aging benefits.",
+                risk_level: "Medium",
+                risk_score: 55,
+                benefits: ["Reduces fine lines", "Improves skin texture", "Unclogs pores", "Boosts collagen"],
+                side_effects: ["Initial purging", "Dryness and peeling", "Sun sensitivity", "Not safe during pregnancy"],
+            },
+            "hyaluronic acid": {
+                name: "Hyaluronic Acid",
+                description: "Hyaluronic Acid is a humectant that attracts and retains moisture, keeping skin hydrated and plump.",
+                risk_level: "Low",
+                risk_score: 5,
+                benefits: ["Deep hydration", "Plumps skin", "Reduces fine lines", "Suitable for all skin types"],
+                side_effects: ["Rare irritation", "May pill with other products"],
+            },
+            niacinamide: {
+                name: "Niacinamide",
+                description: "Niacinamide (Vitamin B3) helps build proteins in the skin and locks in moisture to prevent environmental damage.",
+                risk_level: "Low",
+                risk_score: 10,
+                benefits: ["Reduces inflammation", "Minimizes pores", "Regulates oil", "Brightens skin"],
+                side_effects: ["Mild flushing in high concentrations"],
+            },
+            fragrance: {
+                name: "Fragrance",
+                description: "Fragrance in products can be synthetic or natural and is often a mix of many chemicals. Common allergen for many people.",
+                risk_level: "Medium",
+                risk_score: 60,
+                benefits: ["Pleasant scent", "Enhances user experience"],
+                side_effects: ["Allergic reactions", "Contact dermatitis", "Headaches", "Respiratory sensitivity"],
+            },
+            alcohol: {
+                name: "Alcohol",
+                description: "Alcohol (Ethanol, SD Alcohol) is used as a solvent and to help products penetrate. Can be drying and irritating.",
+                risk_level: "Medium",
+                risk_score: 50,
+                benefits: ["Helps absorption", "Quick-drying", "Preservative properties"],
+                side_effects: ["Dryness", "Irritation", "Strips natural oils"],
+            },
+        };
+
+        // Configuration
+        const API_BASE_URL = "http://localhost:8000";
+        let USE_MOCK = false;
+
+        // DOM Elements
+        const input = document.getElementById("ingredientInput");
+        const suggestionsBox = document.getElementById("suggestions");
+        const loading = document.getElementById("loading");
+        const resultDiv = document.getElementById("result");
+
+        // Event Listeners
+        input.addEventListener("input", debounce(handleInput, 300));
+        input.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                analyzeIngredient();
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!suggestionsBox.contains(e.target) && e.target !== input) {
+                suggestionsBox.style.display = "none";
+            }
+        });
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Handle input for suggestions
+        async function handleInput() {
+            const query = input.value.trim().toLowerCase();
+
+            if (query.length < 2) {
+                suggestionsBox.style.display = "none";
+                return;
+            }
+
+            // Mock suggestions
+            const suggestions = Object.keys(MOCK_INGREDIENT_DATA)
+                .filter((key) => key.includes(query))
+                .map((key) => ({
+                    name: MOCK_INGREDIENT_DATA[key].name,
+                    risk_level: MOCK_INGREDIENT_DATA[key].risk_level,
+                }));
+
+            displaySuggestions(suggestions);
+        }
+
+        // Display suggestions
+        function displaySuggestions(suggestions) {
+            if (suggestions.length === 0) {
+                suggestionsBox.style.display = "none";
+                return;
+            }
+
+            suggestionsBox.innerHTML = "";
+
+            suggestions.forEach((suggestion) => {
+                const div = document.createElement("div");
+                div.className = "suggestion-item";
+
+                let riskClass = "risk-";
+                if (suggestion.risk_level.toLowerCase() === "high") riskClass += "high";
+                else if (suggestion.risk_level.toLowerCase() === "medium") riskClass += "medium";
+                else riskClass += "low";
+
+                div.innerHTML = `
+                    <span>${suggestion.name}</span>
+                    <span class="suggestion-risk ${riskClass}">${suggestion.risk_level}</span>
+                `;
+
+                div.onclick = () => {
+                    input.value = suggestion.name;
+                    suggestionsBox.style.display = "none";
+                    analyzeIngredient();
+                };
+
+                suggestionsBox.appendChild(div);
+            });
+
+            suggestionsBox.style.display = "block";
+        }
+
+        // Main analyze function
+        async function analyzeIngredient() {
+            const name = input.value.trim();
+
+            if (!name) {
+                alert("Please enter an ingredient name");
+                return;
+            }
+
+            // Hide previous results and show loading
+            resultDiv.style.display = "none";
+            loading.style.display = "block";
+            suggestionsBox.style.display = "none";
+
+            try {
+                let data;
+
+                if (USE_MOCK) {
+                    // Use mock data
+                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    const mockKey = Object.keys(MOCK_INGREDIENT_DATA).find(
+                        (key) => name.toLowerCase().includes(key) || key.includes(name.toLowerCase()),
+                    );
+
+                    if (mockKey) {
+                        data = { analysis: MOCK_INGREDIENT_DATA[mockKey] };
+                    } else {
+                        // Unknown ingredient
+                        data = {
+                            analysis: {
+                                name: name,
+                                description: "Ingredient not found in database. Please verify the name or consult a dermatologist.",
+                                risk_level: "Unknown",
+                                risk_score: 40,
+                                benefits: ["Information not available"],
+                                side_effects: ["Please consult professional sources"],
+                            },
+                        };
+                    }
+                } else {
+                    // Try backend
+                    const response = await fetch(`${API_BASE_URL}/citizen/ingredient/analyze`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name: name }),
+                    });
+
+                    if (!response.ok) throw new Error("Backend not available");
+                    data = await response.json();
+                }
+
+                // Display the detailed report
+                displayDetailedReport(data.analysis || data, name);
+            } catch (error) {
+                console.error("Error:", error);
+
+                // Fallback to mock on error
+                USE_MOCK = true;
+
+                const mockKey = Object.keys(MOCK_INGREDIENT_DATA).find(
+                    (key) => name.toLowerCase().includes(key) || key.includes(name.toLowerCase()),
+                );
+
+                if (mockKey) {
+                    displayDetailedReport(MOCK_INGREDIENT_DATA[mockKey], name);
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error-message animate__animated animate__fadeIn">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Error Analyzing Ingredient</h3>
+                            <p>${error.message}</p>
+                            <p>Please try again or check your connection.</p>
+                        </div>
+                    `;
+                    resultDiv.style.display = "block";
+                }
+            } finally {
+                loading.style.display = "none";
+            }
+        }
+
+        // Display detailed report
+        function displayDetailedReport(analysis, searchedName) {
+            // Determine risk class
+            let riskClass = "unknown";
+            if (analysis.risk_level.toLowerCase() === "high") riskClass = "high";
+            else if (analysis.risk_level.toLowerCase() === "medium") riskClass = "medium";
+            else if (analysis.risk_level.toLowerCase() === "low") riskClass = "low";
+
+            // Progress bar color
+            let progressColor = "var(--success)";
+            if (analysis.risk_level.toLowerCase() === "high") progressColor = "var(--danger)";
+            else if (analysis.risk_level.toLowerCase() === "medium") progressColor = "var(--warning)";
+
+            const html = `
+                <div class="result-header">
+                    <h2 class="ingredient-name">${analysis.name}</h2>
+                    <span class="risk-badge ${riskClass}">${analysis.risk_level} Risk</span>
+                </div>
+
+                <div class="score-container">
+                    <div class="score-label">
+                        <span><i class="fas fa-chart-line" style="color: var(--primary); margin-right: 5px;"></i>Risk Score: ${analysis.risk_score}/100</span>
+                        <span>${analysis.risk_score < 30 ? "Low Concern" : analysis.risk_score < 60 ? "Moderate Concern" : "High Concern"}</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${analysis.risk_score}%; background-color: ${progressColor};"></div>
+                    </div>
+                </div>
+
+                <div class="description-text">
+                    <i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i>
+                    ${analysis.description}
+                </div>
+
+                <div class="grid-2">
+                    <div class="info-section">
+                        <h3><i class="fas fa-check-circle" style="color: var(--success);"></i> Benefits</h3>
+                        <div class="badge-container">
+                            ${analysis.benefits && analysis.benefits.length > 0
+                                ? analysis.benefits.map(b => `<span class="badge benefit"><i class="fas fa-plus"></i> ${b}</span>`).join("")
+                                : "<p style='color: var(--text-secondary);'>No specific benefits documented</p>"
+                            }
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h3><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> Side Effects</h3>
+                        <div class="badge-container">
+                            ${analysis.side_effects && analysis.side_effects.length > 0
+                                ? analysis.side_effects.map(e => `<span class="badge side-effect"><i class="fas fa-times"></i> ${e}</span>`).join("")
+                                : "<p style='color: var(--text-secondary);'>No known side effects</p>"
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h3><i class="fas fa-lightbulb" style="color: var(--warning);"></i> Safe Usage Tips</h3>
+                    <ul>
+                        <li>Always perform a patch test before regular use</li>
+                        <li>Introduce one new product at a time</li>
+                        <li>Consult a dermatologist for personalized advice</li>
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i> Print Report</button>
+                    <button class="share-btn" onclick="shareReport('${analysis.name}')"><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+
+                <div class="timestamp">
+                    <i class="fas fa-clock"></i> Analysis generated: ${new Date().toLocaleString()}<br>
+                    <i class="fas fa-info-circle"></i> For educational purposes only
+                </div>
+            `;
+
+            resultDiv.innerHTML = html;
+            resultDiv.style.display = "block";
+            resultDiv.scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Share function
+        function shareReport(ingredientName) {
+            if (navigator.share) {
+                navigator.share({
+                    title: `Ingredient Analysis: ${ingredientName}`,
+                    text: `Check out the safety analysis for ${ingredientName} on SafeIngredient AI`,
+                    url: window.location.href,
+                }).catch(() => alert("Share cancelled"));
+            } else {
+                // Fallback
+                const summary = document.querySelector('.description-text').textContent;
+                navigator.clipboard.writeText(`${ingredientName}: ${summary}`).then(() => {
+                    alert("Analysis copied to clipboard!");
+                });
+            }
+        }
+    </script>
+</body>
+</html>

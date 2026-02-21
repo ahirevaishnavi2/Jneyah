@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaks & Rewards - SafeIngredient AI</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Poppins + Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            /* Light theme - matching dashboard */
+            --primary: #4158D0;
+            --primary-light: #C850C0;
+            --secondary: #FFCC70;
+            --accent: #FF6B6B;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --info: #74b9ff;
+            
+            --bg-gradient-start: #f9f0ff;
+            --bg-gradient-end: #e3f2fd;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --text-light: #b2bec3;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.35);
+            --profile-item-bg: rgba(255, 255, 255, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-shadow: rgba(65, 88, 208, 0.3);
+            --badge-bg: rgba(255, 255, 255, 0.3);
+            --glass-highlight: rgba(255, 255, 255, 0.5);
+            --eco-gradient: linear-gradient(135deg, #00b894, #00cec9);
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme - matching dashboard */
+            --primary: #6C5CE7;
+            --primary-light: #a463f5;
+            --secondary: #fdcb6e;
+            --accent: #ff7675;
+            --success: #00cec9;
+            --warning: #f39c12;
+            --danger: #d63031;
+            --info: #0984e3;
+            
+            --bg-gradient-start: #0f0c1f;
+            --bg-gradient-end: #1a1a2e;
+            --text-primary: #f5f6fa;
+            --text-secondary: #dfe6e9;
+            --text-light: #b2bec3;
+            --card-bg: rgba(20, 20, 40, 0.8);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --profile-item-bg: rgba(30, 30, 50, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --hover-shadow: rgba(108, 92, 231, 0.4);
+            --badge-bg: rgba(0, 0, 0, 0.4);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --eco-gradient: linear-gradient(135deg, #00b894, #00cec9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.3s ease, 
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        body {
+            background: radial-gradient(circle at 0% 0%, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200vmax;
+            height: 200vmax;
+            top: -50vmax;
+            left: -50vmax;
+            background: radial-gradient(circle at center, 
+                        rgba(65, 88, 208, 0.05) 0%, 
+                        rgba(200, 80, 192, 0.05) 30%,
+                        transparent 70%);
+            animation: rotate 60s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* HEADER - matching dashboard */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0.7rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px var(--shadow-color);
+            margin-bottom: 2rem;
+            border-radius: 60px;
+            flex-wrap: nowrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 20px var(--hover-shadow);
+            transform: rotate(-5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 2px;
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .nav-links::-webkit-scrollbar-track {
+            background: var(--card-border);
+            border-radius: 10px;
+        }
+
+        .nav-links::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-links a:hover {
+            background: var(--card-bg);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 5px 15px var(--hover-shadow);
+        }
+
+        .nav-links a i {
+            font-size: 0.9rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            margin-left: 5px;
+            flex-shrink: 0;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 56px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            transition: .4s;
+            border-radius: 28px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(28px);
+        }
+
+        .slider i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            z-index: 1;
+        }
+
+        .slider .fa-sun {
+            left: 7px;
+            color: #f1c40f;
+        }
+
+        .slider .fa-moon {
+            right: 7px;
+            color: #f5f6fa;
+            opacity: 0.5;
+        }
+
+        input:checked + .slider .fa-sun {
+            opacity: 0.3;
+        }
+
+        input:checked + .slider .fa-moon {
+            opacity: 1;
+            color: #f1c40f;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* WELCOME SECTION */
+        .welcome-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 30px 60px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(65,88,208,0.1) 0%, transparent 60%);
+            animation: shimmer 8s linear infinite;
+        }
+
+        @keyframes shimmer {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .welcome-text {
+            position: relative;
+        }
+
+        .welcome-text h1 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .welcome-text p {
+            color: var(--text-secondary);
+        }
+
+        .level-badge {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 15px 30px var(--hover-shadow);
+            border: 1px solid var(--glass-highlight);
+            position: relative;
+        }
+
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 40px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px var(--hover-shadow);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 10px 20px var(--hover-shadow);
+        }
+
+        .stat-info h3 {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-info .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .stat-info .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* LEVEL PROGRESS */
+        .level-progress {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--card-border);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transition: width 0.3s ease;
+            border-radius: 5px;
+        }
+
+        /* MAIN GRID */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* STREAKS SECTION */
+        .streaks-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header span {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .streak-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .streak-item {
+            background: var(--profile-item-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .streak-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--hover-shadow);
+        }
+
+        .streak-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .streak-icon {
+            font-size: 2rem;
+        }
+
+        .streak-count {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .streak-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .streak-multiplier {
+            color: var(--success);
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(0, 184, 148, 0.1);
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+        }
+
+        .streak-message {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0.8rem 0;
+        }
+
+        .streak-calendar {
+            display: flex;
+            gap: 0.3rem;
+            margin-top: 1rem;
+        }
+
+        .cal-day {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .cal-day.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+        }
+
+        /* QUICK ACTIONS */
+        .quick-actions {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            background: var(--profile-item-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 15px;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(65,88,208,0.1), rgba(200,80,192,0.1));
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px var(--hover-shadow);
+        }
+
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .action-points {
+            color: var(--success);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* BADGES SECTION */
+        .badges-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .badge-item {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: var(--profile-item-bg);
+            border-radius: 15px;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .badge-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--hover-shadow);
+        }
+
+        .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .badge-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-level {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .level-bronze {
+            background: linear-gradient(135deg, #cd7f32, #b06d2a);
+            color: white;
+        }
+        .level-silver {
+            background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
+            color: #333;
+        }
+        .level-gold {
+            background: linear-gradient(135deg, #ffd700, #e6c200);
+            color: #333;
+        }
+        .level-platinum {
+            background: linear-gradient(135deg, #e5e4e2, #d3d3d3);
+            color: #333;
+        }
+        .level-diamond {
+            background: linear-gradient(135deg, #b9f2ff, #9ad9e6);
+            color: #333;
+        }
+
+        /* ALERTS SECTION */
+        .alerts-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        .alert-item {
+            background: var(--profile-item-bg);
+            border-left: 4px solid;
+            padding: 1.2rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .alert-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+
+        .alert-item.warning {
+            border-left-color: var(--warning);
+        }
+        .alert-item.info {
+            border-left-color: var(--info);
+        }
+        .alert-item.danger {
+            border-left-color: var(--danger);
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .alert-time {
+            font-size: 0.7rem;
+            color: var(--text-light);
+        }
+
+        .alert-message {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .alert-action {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .alert-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--hover-shadow);
+        }
+
+        /* ECO SECTION */
+        .eco-section {
+            background: var(--eco-gradient);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,184,148,0.3);
+        }
+
+        .eco-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            animation: shimmer 8s linear infinite;
+        }
+
+        .eco-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .eco-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .eco-score {
+            font-size: 3rem;
+            font-weight: 700;
+            background: rgba(255,255,255,0.2);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .eco-rank {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .eco-stats {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+            position: relative;
+        }
+
+        .eco-stat {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .eco-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .eco-stat-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+
+        /* CHALLENGES SECTION */
+        .challenges-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        .challenge-item {
+            background: var(--profile-item-bg);
+            border-radius: 15px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .challenge-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+
+        .challenge-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .challenge-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .challenge-reward {
+            color: var(--success);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .challenge-complete {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .challenge-complete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px var(--hover-shadow);
+        }
+
+        .challenge-complete.completed {
+            background: var(--success);
+        }
+
+        /* LEADERBOARD */
+        .leaderboard-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            background: var(--profile-item-bg);
+            border-radius: 10px;
+        }
+
+        .rank {
+            width: 40px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-score {
+            color: var(--success);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: var(--profile-item-bg);
+            border-radius: 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state small {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* TOAST */
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .eco-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.7rem 1rem;
+            }
+
+            .welcome-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .streak-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .eco-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .eco-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .badges-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- HEADER - matching dashboard -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="logo-text">SafeIngredient AI</div>
+        </div>
+        
+        <div class="nav-links">
+            <a href="CitizenHome.html"><i class="fas fa-home"></i> Home</a>
+            <a href="UploadAndKnow.html"><i class="fas fa-camera"></i> Upload</a>
+            <a href="EnterIngredients.html"><i class="fas fa-keyboard"></i> Enter</a>
+            <a href="IngredientOfTheDay.html"><i class="fas fa-lightbulb"></i> Daily</a>
+            <a href="Community.html"><i class="fas fa-users"></i> Community</a>
+            <a href="Chatbot.html"><i class="fas fa-robot"></i> AI Assistant</a>
+            <a href="Streaks.html" class="active"><i class="fas fa-fire"></i> Streaks</a>
+            <a href="Profile.html"><i class="fas fa-user"></i> Profile</a>
+            
+            <!-- Theme Toggle -->
+            <div class="theme-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Welcome Section - Dynamic User Name -->
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1>Welcome back, <span id="userName">there</span>! 👋</h1>
+                <p id="streakMessage">Start your journey to healthier choices today!</p>
+            </div>
+            <div class="level-badge" id="levelBadge">
+                <i class="fas fa-star"></i> Level 1 · 0 pts
+            </div>
+        </div>
+
+        <!-- Stats Grid - Starts at 0 -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-tint"></i></div>
+                <div class="stat-info">
+                    <h3>Water Streak</h3>
+                    <div class="stat-value" id="waterStreak">0 days</div>
+                    <div class="stat-label" id="waterBest">Best: 0 days</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-carrot"></i></div>
+                <div class="stat-info">
+                    <h3>Healthy Food</h3>
+                    <div class="stat-value" id="foodStreak">0 days</div>
+                    <div class="stat-label" id="foodBest">Best: 0 days</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-flask"></i></div>
+                <div class="stat-info">
+                    <h3>Safe Products</h3>
+                    <div class="stat-value" id="productStreak">0 days</div>
+                    <div class="stat-label" id="productBest">Best: 0 days</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-globe-asia"></i></div>
+                <div class="stat-info">
+                    <h3>Eco Score</h3>
+                    <div class="stat-value" id="ecoScore">0</div>
+                    <div class="stat-label">Top 100%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level Progress -->
+        <div class="level-progress">
+            <div class="level-header">
+                <span><i class="fas fa-level-up-alt" style="color: var(--primary);"></i> Level <span id="currentLevel">1</span> → <span id="nextLevel">2</span></span>
+                <span id="points">0 / 100 pts</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Streaks Section - Dynamic -->
+            <div class="streaks-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-fire" style="color: var(--warning);"></i> Active Streaks</h2>
+                    <span id="streakMultiplier">1.0x Multiplier</span>
+                </div>
+                <div class="streak-grid" id="streaksGrid">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="section-header">
+                    <h2><i class="fas fa-bolt" style="color: var(--warning);"></i> Quick Actions</h2>
+                    <span>+ Points</span>
+                </div>
+                <div class="action-buttons">
+                    <div class="action-btn" onclick="logActivity('water')">
+                        <div class="action-icon"><i class="fas fa-tint"></i></div>
+                        <div class="action-title">Log Water</div>
+                        <div class="action-points">+5 pts</div>
+                    </div>
+                    <div class="action-btn" onclick="logActivity('food')">
+                        <div class="action-icon"><i class="fas fa-carrot"></i></div>
+                        <div class="action-title">Healthy Food</div>
+                        <div class="action-points">+10 pts</div>
+                    </div>
+                    <div class="action-btn" onclick="logActivity('product')">
+                        <div class="action-icon"><i class="fas fa-flask"></i></div>
+                        <div class="action-title">Safe Product</div>
+                        <div class="action-points">+15 pts</div>
+                    </div>
+                    <div class="action-btn" onclick="logActivity('eco')">
+                        <div class="action-icon"><i class="fas fa-recycle"></i></div>
+                        <div class="action-title">Eco Choice</div>
+                        <div class="action-points">+20 pts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges Section -->
+        <div class="badges-section">
+            <div class="section-header">
+                <h2><i class="fas fa-medal" style="color: var(--warning);"></i> Your Badges (<span id="badgeCount">0</span>)</h2>
+                <span id="newBadges">0 new</span>
+            </div>
+            <div class="badges-grid" id="badgesGrid">
+                <!-- Empty state - no badges yet -->
+                <div class="empty-state" style="grid-column: 1/-1;">
+                    <i class="fas fa-medal"></i>
+                    <p>No badges earned yet</p>
+                    <small>Complete challenges to earn badges!</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="alerts-section">
+            <div class="section-header">
+                <h2><i class="fas fa-bell" style="color: var(--warning);"></i> Gentle Reminders</h2>
+                <span id="alertCount">0 active</span>
+            </div>
+            <div id="alertsList">
+                <!-- No alerts for new users -->
+                <div class="empty-state">
+                    <i class="fas fa-check-circle"></i>
+                    <p>No reminders yet</p>
+                    <small>Start using the app to get personalized alerts!</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Eco Score Section -->
+        <div class="eco-section">
+            <div class="eco-header">
+                <div>
+                    <h2><i class="fas fa-globe-asia"></i> Your Eco Impact</h2>
+                    <p>Start making sustainable choices!</p>
+                </div>
+                <div class="eco-score" id="ecoScoreBig">0</div>
+                <div class="eco-rank" id="ecoRank">Eco Beginner</div>
+            </div>
+            <div class="eco-stats" id="ecoStats">
+                <div class="eco-stat">
+                    <div class="eco-stat-value">0</div>
+                    <div class="eco-stat-label">Sustainable</div>
+                </div>
+                <div class="eco-stat">
+                    <div class="eco-stat-value">0</div>
+                    <div class="eco-stat-label">Recyclable</div>
+                </div>
+                <div class="eco-stat">
+                    <div class="eco-stat-value">0</div>
+                    <div class="eco-stat-label">Plastic-Free</div>
+                </div>
+                <div class="eco-stat">
+                    <div class="eco-stat-value">0</div>
+                    <div class="eco-stat-label">Cruelty-Free</div>
+                </div>
+                <div class="eco-stat">
+                    <div class="eco-stat-value">0</div>
+                    <div class="eco-stat-label">Organic</div>
+                </div>
+                <div class="eco-stat">
+                    <div class="eco-stat-value">Low</div>
+                    <div class="eco-stat-label">Carbon</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Challenges -->
+        <div class="challenges-section">
+            <div class="section-header">
+                <h2><i class="fas fa-tasks" style="color: var(--warning);"></i> Daily Challenges</h2>
+                <span id="challengeReset">Reset in 24h</span>
+            </div>
+            <div id="challengesList">
+                <div class="challenge-item">
+                    <div class="challenge-info">
+                        <h4><i class="fas fa-tint" style="color: var(--info);"></i> Hydration Check</h4>
+                        <p>Log your water intake today</p>
+                        <span class="challenge-reward">+10 pts · 0/1</span>
+                    </div>
+                    <button class="challenge-complete" onclick="completeChallenge(1)">Complete</button>
+                </div>
+                <div class="challenge-item">
+                    <div class="challenge-info">
+                        <h4><i class="fas fa-carrot" style="color: var(--success);"></i> Healthy Choice</h4>
+                        <p>Scan a healthy food product</p>
+                        <span class="challenge-reward">+15 pts · 0/1</span>
+                    </div>
+                    <button class="challenge-complete" onclick="completeChallenge(2)">Complete</button>
+                </div>
+                <div class="challenge-item">
+                    <div class="challenge-info">
+                        <h4><i class="fas fa-recycle" style="color: var(--success);"></i> Eco Choice</h4>
+                        <p>Choose eco-friendly packaging</p>
+                        <span class="challenge-reward">+25 pts · 0/1</span>
+                    </div>
+                    <button class="challenge-complete" onclick="completeChallenge(3)">Complete</button>
+                </div>
+                <div class="challenge-item">
+                    <div class="challenge-info">
+                        <h4><i class="fas fa-lightbulb" style="color: var(--warning);"></i> Learn Something New</h4>
+                        <p>Explore a new ingredient</p>
+                        <span class="challenge-reward">+5 pts · 0/1</span>
+                    </div>
+                    <button class="challenge-complete" onclick="completeChallenge(4)">Complete</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-section">
+            <div class="section-header">
+                <h2><i class="fas fa-trophy" style="color: var(--warning);"></i> This Week's Leaders</h2>
+                <span id="userRank">Your rank: #--</span>
+            </div>
+            <div id="leaderboardList">
+                <!-- Will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        themeToggle.checked = savedTheme === 'dark';
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Configuration
+        const API_BASE_URL = "http://localhost:8000";
+        const USER_ID = localStorage.getItem("user_id") || "user_" + Math.random().toString(36).substr(2, 9);
+
+        // Load user data from localStorage
+        function loadUserData() {
+            const userDataStr = localStorage.getItem("user_data");
+            if (userDataStr) {
+                try {
+                    const userData = JSON.parse(userDataStr);
+                    const userName = userData.first_name || userData.username || 'there';
+                    document.getElementById('userName').textContent = userName;
+                } catch (e) {
+                    console.error("Error parsing user data:", e);
+                }
+            }
+        }
+
+        // Initialize with empty/zero data
+        function initializeEmptyData() {
+            // Welcome message
+            document.getElementById('streakMessage').textContent = 'Start your journey to healthier choices today!';
+            
+            // Stats - all zeros
+            document.getElementById('waterStreak').textContent = '0 days';
+            document.getElementById('waterBest').textContent = 'Best: 0 days';
+            document.getElementById('foodStreak').textContent = '0 days';
+            document.getElementById('foodBest').textContent = 'Best: 0 days';
+            document.getElementById('productStreak').textContent = '0 days';
+            document.getElementById('productBest').textContent = 'Best: 0 days';
+            document.getElementById('ecoScore').textContent = '0';
+            
+            // Level progress
+            document.getElementById('currentLevel').textContent = '1';
+            document.getElementById('nextLevel').textContent = '2';
+            document.getElementById('points').textContent = '0 / 100 pts';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('streakMultiplier').textContent = '1.0x Multiplier';
+            
+            // Badges
+            document.getElementById('badgeCount').textContent = '0';
+            document.getElementById('newBadges').textContent = '0 new';
+            
+            // Alerts
+            document.getElementById('alertCount').textContent = '0 active';
+            
+            // Eco score
+            document.getElementById('ecoScoreBig').textContent = '0';
+            document.getElementById('ecoRank').textContent = 'Eco Beginner';
+            
+            // User rank
+            document.getElementById('userRank').textContent = 'Your rank: #--';
+            
+            // Streaks grid - empty state
+            const streaksGrid = document.getElementById('streaksGrid');
+            streaksGrid.innerHTML = `
+                <div class="empty-state" style="grid-column: 1/-1;">
+                    <i class="fas fa-fire"></i>
+                    <p>No active streaks yet</p>
+                    <small>Complete quick actions to start your streak!</small>
+                </div>
+            `;
+            
+            // Leaderboard - placeholder
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <p>No leaderboard data yet</p>
+                    <small>Start earning points to appear!</small>
+                </div>
+            `;
+        }
+
+        // Log activity
+        async function logActivity(type) {
+            const activities = {
+                water: { type: "water_intake", points: 5, message: "💧 Drank water", icon: "fa-tint" },
+                food: { type: "healthy_food", points: 10, message: "🥗 Ate healthy", icon: "fa-carrot" },
+                product: { type: "safe_product", points: 15, message: "🧴 Used safe product", icon: "fa-flask" },
+                eco: { type: "eco_choice", points: 20, message: "♻️ Made eco choice", icon: "fa-recycle" },
+            };
+
+            const activity = activities[type];
+
+            // Show loading state
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Done!';
+            btn.style.background = 'linear-gradient(135deg, var(--success), #00cec9)';
+            btn.style.color = 'white';
+
+            try {
+                // Call API
+                const response = await fetch(`${API_BASE_URL}/streak/activity/log`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        user_id: USER_ID,
+                        activity_type: activity.type,
+                        description: activity.message,
+                    }),
+                });
+
+                if (response.ok) {
+                    // Show success message
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style.background = '';
+                        btn.style.color = '';
+
+                        // Show toast notification
+                        showToast(`+${activity.points} points earned! 🎉`);
+                        
+                        // Update UI with new data
+                        loadDashboardData();
+                    }, 1500);
+                }
+            } catch (error) {
+                console.error("Error logging activity:", error);
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+                btn.style.color = '';
+                
+                // For demo, still show success
+                showToast(`+${activity.points} points earned! 🎉`);
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 1500);
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/streak/dashboard/${USER_ID}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDashboard(data);
+                }
+            } catch (error) {
+                console.error("Error loading dashboard:", error);
+                // Keep empty state
+            }
+        }
+
+        function updateDashboard(data) {
+            // This would update with real data when backend is ready
+            console.log("Dashboard data:", data);
+        }
+
+        // Complete challenge
+        async function completeChallenge(challengeId) {
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fas fa-check"></i> Completed!';
+            btn.classList.add("completed");
+            btn.disabled = true;
+
+            showToast("Challenge completed! +25 points 🎉");
+            
+            // Refresh data after delay
+            setTimeout(() => {
+                loadDashboardData();
+            }, 1500);
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "toast-message";
+            toast.innerHTML = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = "slideOut 0.3s ease";
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            initializeEmptyData();
+            loadDashboardData();
+        });
+
+        // Check for updates periodically
+        setInterval(() => {
+            loadDashboardData();
+        }, 60000); // Every minute
+    </script>
+</body>
+</html>

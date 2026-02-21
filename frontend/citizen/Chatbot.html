@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - SafeIngredient AI</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Poppins + Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            /* Light theme - matching dashboard */
+            --primary: #4158D0;
+            --primary-light: #C850C0;
+            --secondary: #FFCC70;
+            --accent: #FF6B6B;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --info: #74b9ff;
+            
+            --bg-gradient-start: #f9f0ff;
+            --bg-gradient-end: #e3f2fd;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --text-light: #b2bec3;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.35);
+            --profile-item-bg: rgba(255, 255, 255, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-shadow: rgba(65, 88, 208, 0.3);
+            --badge-bg: rgba(255, 255, 255, 0.3);
+            --glass-highlight: rgba(255, 255, 255, 0.5);
+            --message-user-bg: linear-gradient(135deg, var(--primary), var(--primary-light));
+            --message-bot-bg: var(--profile-item-bg);
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme - matching dashboard */
+            --primary: #6C5CE7;
+            --primary-light: #a463f5;
+            --secondary: #fdcb6e;
+            --accent: #ff7675;
+            --success: #00cec9;
+            --warning: #f39c12;
+            --danger: #d63031;
+            --info: #0984e3;
+            
+            --bg-gradient-start: #0f0c1f;
+            --bg-gradient-end: #1a1a2e;
+            --text-primary: #f5f6fa;
+            --text-secondary: #dfe6e9;
+            --text-light: #b2bec3;
+            --card-bg: rgba(20, 20, 40, 0.8);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --profile-item-bg: rgba(30, 30, 50, 0.9);
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --hover-shadow: rgba(108, 92, 231, 0.4);
+            --badge-bg: rgba(0, 0, 0, 0.4);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --message-user-bg: linear-gradient(135deg, var(--primary), #8a6de9);
+            --message-bot-bg: #2a2540;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.3s ease, 
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        body {
+            background: radial-gradient(circle at 0% 0%, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 200vmax;
+            height: 200vmax;
+            top: -50vmax;
+            left: -50vmax;
+            background: radial-gradient(circle at center, 
+                        rgba(65, 88, 208, 0.05) 0%, 
+                        rgba(200, 80, 192, 0.05) 30%,
+                        transparent 70%);
+            animation: rotate 60s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* HEADER - matching dashboard */
+        .header {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px var(--shadow-color);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 15px 30px var(--hover-shadow);
+            transform: rotate(-5deg);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--card-bg);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 8px 20px var(--hover-shadow);
+        }
+
+        .nav-links a i {
+            margin-right: 6px;
+        }
+
+        /* Theme Toggle - ONLY HERE in header */
+        .theme-toggle {
+            margin-left: 10px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 70px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(36px);
+        }
+
+        .slider i {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            z-index: 1;
+        }
+
+        .slider .fa-sun {
+            left: 8px;
+            color: #f1c40f;
+        }
+
+        .slider .fa-moon {
+            right: 8px;
+            color: #f5f6fa;
+            opacity: 0.5;
+        }
+
+        input:checked + .slider .fa-sun {
+            opacity: 0.3;
+        }
+
+        input:checked + .slider .fa-moon {
+            opacity: 1;
+            color: #f1c40f;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            height: calc(100vh - 120px);
+        }
+
+        /* CHAT CONTAINER - Premium Glassmorphism */
+        .chat-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 40px;
+            box-shadow: 0 30px 60px var(--shadow-color);
+            border: 1px solid var(--card-border);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at top right, 
+                        var(--primary) 0%, 
+                        transparent 50%);
+            opacity: 0.05;
+            animation: rotate 30s linear infinite;
+            pointer-events: none;
+        }
+
+        /* CHAT HEADER */
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            animation: shimmer 8s linear infinite;
+        }
+
+        @keyframes shimmer {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .chat-avatar {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 2px solid var(--glass-highlight);
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .chat-title {
+            flex: 1;
+            position: relative;
+        }
+
+        .chat-title h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .chat-title p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+
+        .chat-actions button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--glass-highlight);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 45px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .chat-actions button:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* MESSAGES AREA */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--card-border);
+            border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+        }
+
+        /* MESSAGE BUBBLES */
+        .message {
+            display: flex;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            position: relative;
+            font-size: 0.95rem;
+            word-break: break-word;
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .message.user .message-content {
+            background: var(--message-user-bg);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot .message-content {
+            background: var(--message-bot-bg);
+            color: var(--text-primary);
+            border-bottom-left-radius: 5px;
+            border: 1px solid var(--card-border);
+        }
+
+        .message-time {
+            font-size: 0.65rem;
+            margin-top: 5px;
+            opacity: 0.6;
+            text-align: right;
+        }
+
+        /* INGREDIENT CARD */
+        .ingredient-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 0.5rem 0;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        .ingredient-card strong {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .ingredient-risk {
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0.8rem 0;
+        }
+
+        .risk-high { 
+            background: rgba(255, 107, 107, 0.2); 
+            color: var(--danger); 
+            border-left: 4px solid var(--danger);
+        }
+        
+        .risk-medium { 
+            background: rgba(253, 203, 110, 0.2); 
+            color: #e1a21e; 
+            border-left: 4px solid var(--warning);
+        }
+        
+        .risk-low { 
+            background: rgba(0, 184, 148, 0.2); 
+            color: var(--success); 
+            border-left: 4px solid var(--success);
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 1rem 0;
+        }
+
+        .badge {
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+
+        .badge.benefit { 
+            background: rgba(0, 184, 148, 0.15); 
+            color: var(--success); 
+            border: 1px solid rgba(0, 184, 148, 0.3);
+        }
+        
+        .badge.side-effect { 
+            background: rgba(255, 107, 107, 0.15); 
+            color: var(--danger); 
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .badge.warning { 
+            background: rgba(253, 203, 110, 0.15); 
+            color: #e1a21e; 
+            border: 1px solid rgba(253, 203, 110, 0.3);
+        }
+
+        /* CONCERN BOX */
+        .concern-box {
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid var(--danger);
+            border-radius: 15px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .concern-box strong {
+            color: var(--danger);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ALTERNATIVES BOX */
+        .alternatives-box {
+            background: rgba(0, 184, 148, 0.1);
+            border-left: 4px solid var(--success);
+            border-radius: 15px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .alternatives-box strong {
+            color: var(--success);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* USAGE NOTE */
+        .usage-note {
+            background: rgba(65, 88, 208, 0.1);
+            border-left: 4px solid var(--primary);
+            border-radius: 15px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .empty-state h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.8rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* SUGGESTIONS */
+        .suggestions {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            scrollbar-width: thin;
+        }
+
+        .suggestions::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        .suggestions::-webkit-scrollbar-track {
+            background: var(--card-border);
+        }
+
+        .suggestions::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+        }
+
+        .suggestion-chip {
+            padding: 8px 22px;
+            background: var(--profile-item-bg);
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--card-border);
+            white-space: nowrap;
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        .suggestion-chip:hover {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--hover-shadow);
+            border-color: transparent;
+        }
+
+        .suggestion-chip i {
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+
+        /* CHAT INPUT */
+        .chat-input {
+            display: flex;
+            padding: 1.5rem 2rem;
+            background: var(--card-bg);
+            border-top: 1px solid var(--card-border);
+            gap: 15px;
+            position: relative;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--card-border);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: var(--profile-item-bg);
+            color: var(--text-primary);
+        }
+
+        .chat-input input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--hover-shadow);
+            transform: translateY(-2px);
+        }
+
+        .chat-input input::placeholder {
+            color: var(--text-light);
+        }
+
+        .chat-input button {
+            padding: 0 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px var(--hover-shadow);
+            border: 1px solid var(--glass-highlight);
+        }
+
+        .chat-input button:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 35px var(--hover-shadow);
+        }
+
+        .chat-input button i {
+            margin-right: 8px;
+        }
+
+        /* TYPING INDICATOR */
+        .typing-indicator {
+            display: flex;
+            gap: 8px;
+            padding: 1rem 1.5rem;
+            background: var(--message-bot-bg);
+            border-radius: 30px;
+            width: fit-content;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 1rem;
+                height: calc(100vh - 180px);
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .chat-input button {
+                padding: 0 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- HEADER - matching dashboard with SINGLE theme toggle -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="logo-text">SafeIngredient AI</div>
+        </div>
+        <div class="nav-links">
+            <a href="CitizenHome.html"><i class="fas fa-home"></i> Home</a>
+            <a href="UploadAndKnow.html"><i class="fas fa-camera"></i> Upload</a>
+            <a href="EnterIngredients.html"><i class="fas fa-keyboard"></i> Enter</a>
+            <a href="IngredientOfTheDay.html"><i class="fas fa-lightbulb"></i> Daily</a>
+            <a href="Community.html"><i class="fas fa-users"></i> Community</a>
+            <a href="Chatbot.html" class="active"><i class="fas fa-robot"></i> AI Assistant</a>
+            <a href="Profile.html"><i class="fas fa-user"></i> Profile</a>
+            
+            <!-- SINGLE THEME TOGGLE - ONLY HERE -->
+            <div class="theme-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="chat-container">
+            <!-- Chat Header - NO THEME TOGGLE HERE, only clear chat button -->
+            <div class="chat-header">
+                <div class="chat-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chat-title">
+                    <h2>Ingredient Safety Assistant</h2>
+                    <p><i class="fas fa-shield-alt"></i> Honest analysis • risk assessment • safe alternatives</p>
+                </div>
+                <div class="chat-actions">
+                    <button onclick="clearChat()" title="Clear chat"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chatMessages" class="chat-messages">
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h3>Ask about any ingredient</h3>
+                    <p style="margin-bottom: 1.5rem;">I'll tell you why it might be problematic AND suggest safer options</p>
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <span class="suggestion-chip" onclick="sendQuickMessage('parabens')"><i class="fas fa-flask"></i> parabens</span>
+                        <span class="suggestion-chip" onclick="sendQuickMessage('sodium lauryl sulfate')"><i class="fas fa-flask"></i> SLS</span>
+                        <span class="suggestion-chip" onclick="sendQuickMessage('formaldehyde')"><i class="fas fa-flask"></i> formaldehyde</span>
+                        <span class="suggestion-chip" onclick="sendQuickMessage('phthalates')"><i class="fas fa-flask"></i> phthalates</span>
+                        <span class="suggestion-chip" onclick="sendQuickMessage('oxybenzone')"><i class="fas fa-flask"></i> oxybenzone</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div id="suggestions" class="suggestions"></div>
+
+            <!-- Input Area -->
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="e.g., why are parabens controversial?" onkeypress="handleKeyPress(event)" />
+                <button id="sendButton" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i> Analyze
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Theme toggle - SINGLE instance in header
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', savedTheme);
+            themeToggle.checked = savedTheme === 'dark';
+
+            themeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            const USER_ID = localStorage.getItem('ingr_user') || 'user_' + Math.random().toString(36).substring(2,12);
+            localStorage.setItem('ingr_user', USER_ID);
+
+            const chatMessages = document.getElementById('chatMessages');
+            const emptyState = document.getElementById('emptyState');
+            const messageInput = document.getElementById('messageInput');
+            const suggestionsDiv = document.getElementById('suggestions');
+
+            // Ingredient database with risk explanations + safe alternatives - FIXED PHTHALATES
+            const ingredientDB = {
+                'paraben': {
+                    name: 'Parabens (methylparaben, propylparaben, etc.)',
+                    risk: 'HIGH',
+                    riskLabel: 'high',
+                    concerns: [
+                        '⚠️ Endocrine disruption – can mimic estrogen in the body',
+                        '⚠️ Bioaccumulation – found in breast tissue studies',
+                        '⚠️ Skin sensitization – especially on damaged skin'
+                    ],
+                    safeAlternatives: ['Phenoxyethanol', 'Ethylhexylglycerin', 'Sodium Benzoate', 'Potassium Sorbate'],
+                    description: 'Parabens are preservatives linked to hormone disruption and potential long-term health risks.',
+                    usage: 'Many brands now label "paraben-free". Look for alternative preservatives.'
+                },
+                'sulfate': {
+                    name: 'Sodium Lauryl Sulfate (SLS) / Sulfates',
+                    risk: 'MEDIUM TO HIGH',
+                    riskLabel: 'medium',
+                    concerns: [
+                        '⚠️ Strip natural oils – can damage skin barrier',
+                        '⚠️ Irritation – especially for eczema or rosacea',
+                        '⚠️ Contamination risk – may contain trace 1,4-dioxane'
+                    ],
+                    safeAlternatives: ['Coco-glucoside', 'Decyl glucoside', 'Sodium cocoyl isethionate'],
+                    description: 'Strong detergent that creates foam but can be harsh on skin.',
+                    usage: 'Safe for short contact on healthy skin, but avoid for face and sensitive areas.'
+                },
+                'formaldehyde': {
+                    name: 'Formaldehyde / Formaldehyde-releasers',
+                    risk: 'HIGH (KNOWN CARCINOGEN)',
+                    riskLabel: 'high',
+                    concerns: [
+                        '⚠️ Classified as human carcinogen by IARC',
+                        '⚠️ Allergic reactions – common contact allergen',
+                        '⚠️ Respiratory irritant in high concentrations'
+                    ],
+                    safeAlternatives: ['Phenoxyethanol', 'Benzyl Alcohol', 'Potassium Sorbate'],
+                    description: 'Used as preservative, but safer alternatives exist.',
+                    usage: 'Avoid; check labels for DMDM hydantoin, quaternium-15, imidazolidinyl urea.'
+                },
+                'phthalate': {
+                    name: 'Phthalates (DBP, DEP, DEHP)',
+                    risk: 'HIGH (ENDOCRINE DISRUPTORS)',
+                    riskLabel: 'high',
+                    concerns: [
+                        '⚠️ Reproductive toxicity – linked to hormone disruption and fertility issues',
+                        '⚠️ Banned in EU cosmetics but may hide under "fragrance" on labels',
+                        '⚠️ Accumulate in body – long-term health concerns documented',
+                        '⚠️ Linked to developmental and reproductive harm'
+                    ],
+                    safeAlternatives: ['Phthalate-free fragrances', 'Essential oils (with care)', 'Fragrance-free products'],
+                    description: 'Phthalates are industrial chemicals used to make fragrances last longer. They are known endocrine disruptors with serious health concerns.',
+                    usage: 'Avoid completely. Look for "phthalate-free" on labels and avoid products with vague "fragrance" listings.'
+                },
+                'oxybenzone': {
+                    name: 'Oxybenzone',
+                    risk: 'MODERATE TO HIGH',
+                    riskLabel: 'medium',
+                    concerns: [
+                        '⚠️ Endocrine disruption – detected in blood, urine',
+                        '⚠️ Coral reef toxicity – banned in Hawaii, Key West',
+                        '⚠️ Skin allergy – contact dermatitis possible'
+                    ],
+                    safeAlternatives: ['Zinc Oxide', 'Titanium Dioxide', 'Avobenzone'],
+                    description: 'Common chemical sunscreen ingredient with environmental and health concerns.',
+                    usage: 'Mineral sunscreens are safer for reefs and sensitive skin.'
+                }
+            };
+
+            function analyzeIngredient(query) {
+                const q = query.toLowerCase().trim();
+                
+                for (let key in ingredientDB) {
+                    if (q.includes(key) || (key === 'sulfate' && (q.includes('sls') || q.includes('sles')))) {
+                        return ingredientDB[key];
+                    }
+                }
+
+                // Default response for unknown ingredients
+                return {
+                    name: query,
+                    risk: 'VARIABLE',
+                    riskLabel: 'medium',
+                    concerns: [
+                        '⚠️ Individual sensitivity – always patch test first',
+                        '⚠️ Concentration matters – higher percentages may cause irritation',
+                        '⚠️ Formulation dependent – other ingredients affect safety'
+                    ],
+                    safeAlternatives: ['Start with low concentration', 'Patch test', 'Consult dermatologist'],
+                    description: `Analysis for "${query}" - safety depends on concentration and skin type.`,
+                    usage: 'Always patch test before full application.'
+                };
+            }
+
+            function formatIngredientCard(data) {
+                const riskClass = data.riskLabel === 'high' ? 'risk-high' : (data.riskLabel === 'medium' ? 'risk-medium' : 'risk-low');
+                
+                let html = `<div class="ingredient-card">`;
+                html += `<strong><i class="fas fa-flask" style="color: var(--primary); margin-right: 10px;"></i>${data.name}</strong>`;
+                html += `<div class="ingredient-risk ${riskClass}">RISK: ${data.risk}</div>`;
+                html += `<p style="color: var(--text-secondary); margin: 10px 0;">${data.description}</p>`;
+
+                // WHY THIS MAY BE PROBLEMATIC
+                html += `<div class="concern-box">`;
+                html += `<strong><i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> WHY THIS MAY BE PROBLEMATIC</strong>`;
+                data.concerns.forEach(c => html += `<div style="margin-bottom: 8px; color: var(--text-secondary);">• ${c}</div>`);
+                html += `</div>`;
+
+                // SAFE ALTERNATIVES
+                html += `<div class="alternatives-box">`;
+                html += `<strong><i class="fas fa-check-circle" style="color: var(--success);"></i> SAFER ALTERNATIVES</strong>`;
+                html += `<div class="badge-container">`;
+                data.safeAlternatives.forEach(alt => html += `<span class="badge benefit"><i class="fas fa-leaf"></i> ${alt}</span>`);
+                html += `</div>`;
+                html += `</div>`;
+
+                // usage note
+                html += `<div class="usage-note">`;
+                html += `<i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i> <strong>Usage note:</strong> ${data.usage}`;
+                html += `</div>`;
+                html += `</div>`;
+                
+                return html;
+            }
+
+            function addUserMessage(text) {
+                const div = document.createElement('div');
+                div.className = 'message user';
+                const time = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+                div.innerHTML = `<div class="message-content">${escapeHTML(text)}<div class="message-time">${time}</div></div>`;
+                chatMessages.appendChild(div);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                if (emptyState) emptyState.style.display = 'none';
+            }
+
+            function addBotCard(analysis) {
+                const time = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+                const cardHtml = formatIngredientCard(analysis);
+                const div = document.createElement('div');
+                div.className = 'message bot';
+                div.innerHTML = `<div class="message-content">${cardHtml}<div class="message-time">${time}</div></div>`;
+                chatMessages.appendChild(div);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // generate follow-up suggestions
+                const nameParts = analysis.name.split(' ')[0].toLowerCase();
+                const suggestions = [
+                    `alternatives to ${nameParts}`,
+                    `${nameParts} pregnancy safety`,
+                    `best ${nameParts} products`
+                ];
+                displaySuggestions(suggestions.slice(0,3));
+            }
+
+            function escapeHTML(str) {
+                return String(str).replace(/[&<>"]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[m]));
+            }
+
+            function displaySuggestions(list) {
+                suggestionsDiv.innerHTML = '';
+                list.slice(0,4).forEach(item => {
+                    const chip = document.createElement('span');
+                    chip.className = 'suggestion-chip';
+                    chip.innerHTML = `<i class="fas fa-search"></i> ${item}`;
+                    chip.onclick = () => sendQuickMessage(item);
+                    suggestionsDiv.appendChild(chip);
+                });
+            }
+
+            let typingTimer;
+            function showTyping(show) {
+                const existing = document.getElementById('typingIndicator');
+                if (show && !existing) {
+                    const ind = document.createElement('div');
+                    ind.className = 'message bot';
+                    ind.id = 'typingIndicator';
+                    ind.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+                    chatMessages.appendChild(ind);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } else if (!show && existing) existing.remove();
+            }
+
+            function sendMessage() {
+                const raw = messageInput.value.trim();
+                if (!raw) return;
+                messageInput.value = '';
+                addUserMessage(raw);
+                showTyping(true);
+                if (typingTimer) clearTimeout(typingTimer);
+                typingTimer = setTimeout(() => {
+                    showTyping(false);
+                    const analysis = analyzeIngredient(raw);
+                    addBotCard(analysis);
+                }, 1000);
+            }
+
+            function sendQuickMessage(msg) {
+                messageInput.value = msg;
+                sendMessage();
+            }
+
+            function handleKeyPress(e) {
+                if (e.key === 'Enter') sendMessage();
+            }
+
+            function clearChat() {
+                if (confirm('Start a new conversation?')) {
+                    chatMessages.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    suggestionsDiv.innerHTML = '';
+                    displaySuggestions(['parabens', 'SLS', 'formaldehyde', 'phthalates', 'oxybenzone']);
+                }
+            }
+
+            // Make functions global
+            window.sendMessage = sendMessage;
+            window.sendQuickMessage = sendQuickMessage;
+            window.handleKeyPress = handleKeyPress;
+            window.clearChat = clearChat;
+
+            // Initial suggestions
+            displaySuggestions(['parabens', 'SLS', 'formaldehyde', 'phthalates', 'oxybenzone']);
+        })();
+    </script>
+</body>
+</html>
